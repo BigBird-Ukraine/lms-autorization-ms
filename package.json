@@ -1,0 +1,39 @@
+{
+  "name": "autorization-ms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app:start": "node ./dist/",
+    "start": "rimraf dist && npm run tslint && tsc-watch --outDir ./dist --onSuccess \"npm run app:start\" --onFailure \"'echo Compilation Failed'\"",
+    "build": "rimraf dist && tsc",
+    "tsc": "rimraf dist && npm run tslint && tsc --watch",
+    "tslint": "tslint -c tslint.json 'src/**/*.ts' --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "latest",
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "helmet": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.7",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.2",
+    "@types/helmet": "^0.0.45",
+    "@types/morgan": "^1.7.37",
+    "@types/express-rate-limit": "^3.3.3",
+    "eslint": "^6.1.0",
+    "morgan": "^1.9.1",
+    "rimraf": "^3.0.0",
+    "tsc-watch": "^2.2.1",
+    "tslint": "^5.18.0",
+    "tslint-config-security": "^1.16.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^3.5.3"
+  }
+}
