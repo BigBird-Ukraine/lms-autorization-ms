@@ -1,7 +1,8 @@
 export const config = {
-    DATABASE_NAME: 'someDB',
-    DATABASE_USER: 'mongo user',
-    DATABASE_PASS: 'mongo pass',
+    DATABASE_NAME: 'lms_db',
+    DATABASE_USER: 'root',
+    DATABASE_PASS: 'root',
+    DATABASE_HOST: '127.0.0.1',
     PORT: 3000,
 
     serverRateLimits: {
