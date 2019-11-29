@@ -133,7 +133,11 @@ export default {
         },
         user_id: {
           type: dataTypes.INTEGER(11),
-          allowNull: false
+          allowNull: false,
+          references: {
+            model: DbTablesName.USER,
+            key: 'id'
+          }
         },
         access_token: {
           type: dataTypes.STRING(255),
@@ -155,11 +159,19 @@ export default {
         },
         user_id: {
           type: dataTypes.INTEGER(11),
-          allowNull: false
+          allowNull: false,
+          references: {
+            model: DbTablesName.USER,
+            key: 'id'
+          }
         },
         group_id: {
           type: dataTypes.INTEGER(11),
-          allowNull: false
+          allowNull: false,
+          references: {
+            model: DbTablesName.GROUP,
+            key: 'id'
+          }
         },
         created_at: {
           type: dataTypes.DATE,
