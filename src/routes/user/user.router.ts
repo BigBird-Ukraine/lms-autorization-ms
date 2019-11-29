@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { userController } from '../../controllers';
-import {checkIsEmailPresent} from "../../middlewares";
+import { checkIsEmailPresent } from '../../middlewares';
 
 const router = Router();
 
