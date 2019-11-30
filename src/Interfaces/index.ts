@@ -1,1 +1,1 @@
-export * from "./request-extended.model"
+export * from './request-extended.model';

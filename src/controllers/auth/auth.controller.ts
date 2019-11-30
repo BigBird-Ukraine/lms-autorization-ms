@@ -11,8 +11,31 @@ class UserController {
       console.log(authInfo);
 
       res.json({
-        accessToken: 'Access_token',
-        refreshToken: 'REFRESH_token'
+        data: {
+          accessToken: 'Access_token',
+          refreshToken: 'REFRESH_token'
+        }
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      res.end();
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      res.json({
+        data: {
+          accessToken: 'Access_token',
+          refreshToken: 'REFRESH_token'
+        }
       });
     } catch (e) {
       next(e);
