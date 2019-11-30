@@ -11,8 +11,8 @@ class UserController {
       console.log(authInfo);
 
       res.json({
-        access_token: 'Access_token',
-        refresh_token: 'REFRESH_token'
+        accessToken: 'Access_token',
+        refreshToken: 'REFRESH_token'
       });
     } catch (e) {
       next(e);
