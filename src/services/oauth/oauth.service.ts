@@ -1,7 +1,6 @@
 import { Op, Transaction, WhereOptions } from 'sequelize';
 
-import {IOauthTokenModel, IUser, OauthTokenDBModel, UserDBModel} from "../../database";
-
+import { IOauthTokenModel, IUser, OauthTokenDBModel, UserDBModel } from '../../database';
 
 class OAuthService {
 
@@ -28,7 +27,7 @@ class OAuthService {
             }]
         });
 
-        return dbResponse && dbResponse.user && dbResponse.user.dataValues
+        return dbResponse && dbResponse.user && dbResponse.user.dataValues;
     }
 
     async getUserFromRefreshToken(refresh_token: string): Promise<any> {
@@ -39,7 +38,7 @@ class OAuthService {
                 }
             },
             include: [{
-                model: UserDBModel,
+                model: UserDBModel
             }]
         });
 
