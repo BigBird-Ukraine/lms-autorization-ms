@@ -1,5 +1,5 @@
 export const config = {
-    PORT: process.env.JWT_SECRET || 3001,
+    PORT: process.env.PORT || 3001,
     HOST: 'http://localhost',
 
     JWT_SECRET: process.env.JWT_SECRET || 'uf7e^Wai8efj32-&&620O10fm-32jfdj',
