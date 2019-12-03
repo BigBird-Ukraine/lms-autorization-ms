@@ -5,7 +5,7 @@ import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { oauthService } from '../../services';
-import {IRequestExtended} from '../../Interfaces';
+import { IRequestExtended } from '../../Interfaces';
 
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 

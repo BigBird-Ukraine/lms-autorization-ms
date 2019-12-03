@@ -10,10 +10,10 @@ class OAuthService {
         return newOauthToken.save();
     }
 
-    deleteOauthTokenByParams(params: IOauthTokenModel) {
+    deleteOauthTokenByAccessToken(access_token: string) {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.deleteOne({params})
+        return OauthTokenModel.deleteOne({ access_token });
     }
 
     async getUserFromAccessToken(access_token: string) {

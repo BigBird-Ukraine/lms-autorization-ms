@@ -45,7 +45,7 @@ UserSchema = new Schema({
         required: true
     },
     updated_at: {
-        type: Date,
+        type: Date
     },
     group_id: {
         type: Types.ObjectId,
