@@ -1,5 +1,8 @@
 import { NextFunction, Response } from 'express';
 
+import { UserActionEnum } from '../../constants';
+import { tokenizer } from '../../helpers';
+import { oauthService } from '../../services';
 import { IRequestExtended } from '../../Interfaces';
 
 class UserController {
@@ -7,13 +10,20 @@ class UserController {
   // todo needs transaction here to inster token pair into DB
   async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const authInfo = req.body;
-      console.log(authInfo);
+      const { _id } = req.user;
+
+      const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
+
+      await oauthService.createOauthToken({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user_id: _id
+      });
 
       res.json({
         data: {
-          accessToken: 'Access_token',
-          refreshToken: 'REFRESH_token'
+          accessToken,
+          refreshToken
         }
       });
     } catch (e) {

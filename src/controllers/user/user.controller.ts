@@ -21,7 +21,7 @@ class UserController {
 
             user.password = await HASH_PASSWORD(user.password);
 
-            await userService.createNewUser(user);
+            await userService.createUser(user);
 
             res.status(ResponseStatusCodesEnum.CREATED).end();
         } catch (e) {

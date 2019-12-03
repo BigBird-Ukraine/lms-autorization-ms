@@ -13,8 +13,14 @@ export const config = {
         maxRequests: 10000
     },
 
-    DATABASE_NAME: 'lms_db',
+    DATABASE_NAME: 'QuestionDB',
     DATABASE_USER: 'root',
     DATABASE_PASS: 'root',
-    DATABASE_HOST: '127.0.0.1'
+    DATABASE_IP: '127.0.0.1',
+    DATABASE_PORT: '27017',
+
+    /*Mongo Collections*/
+    USER_COLLECTION_NAME: 'User',
+    GROUP_COLLECTION_NAME: 'Group',
+    OAUTH_TOKEN_COLLECTION_NAME: 'Oauth_token'
 };
