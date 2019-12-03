@@ -33,6 +33,10 @@ class UserController {
 
   async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
+      const accessToken = req.get('Authorization') as string;
+
+      await oauthService.deleteOauthTokenByAccessToken(accessToken);
+
       res.end();
     } catch (e) {
       next(e);
