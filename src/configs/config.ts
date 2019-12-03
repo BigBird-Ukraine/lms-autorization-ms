@@ -1,8 +1,8 @@
 export const config = {
-    PORT: 3001,
+    PORT: process.env.JWT_SECRET || 3001,
     HOST: 'http://localhost',
 
-    JWT_SECRET: process.env.PORT || 'uf7e^Wai8efj32-&&620O10fm-32jfdj',
+    JWT_SECRET: process.env.JWT_SECRET || 'uf7e^Wai8efj32-&&620O10fm-32jfdj',
     ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME || '10m',
 
     JWT_REFRESH_SECRET: process.env.PORT || '3f7e^fdf(*kjsd-&&620O10fm-333222fsd',
