@@ -1,4 +1,5 @@
 export interface IUserSubjectModel {
+    _id: string;
     name: string;
     surname: string;
     role_id: number;
