@@ -1,4 +1,5 @@
 import { Document, Model, model, Schema, Types } from 'mongoose';
+
 import { config } from '../../configs';
 import { IOauthTokenModel } from '../../Interfaces';
 

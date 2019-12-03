@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { authController } from '../../controllers';
-import { checkIsPasswordCorrect, checkIsUserRegistered } from '../../middlewares/oauth';
+import { checkIsPasswordCorrect, checkIsUserRegistered } from '../../middlewares';
 
 const router = Router();
 

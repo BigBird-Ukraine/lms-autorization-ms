@@ -12,7 +12,6 @@ class UserController {
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
             const user  = req.body;
-            console.log(user);
 
             const userValidity = Joi.validate(user, registerDataValidator);
 

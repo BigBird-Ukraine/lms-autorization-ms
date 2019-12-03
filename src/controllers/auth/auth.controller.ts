@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express';
 
-import { UserActionEnum } from '../../constants/enums';
+import { UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
-import { oauthService } from '../../services/oauth';
+import { oauthService } from '../../services';
 import { IRequestExtended } from '../../Interfaces';
 
 class UserController {

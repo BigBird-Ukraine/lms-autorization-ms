@@ -46,7 +46,6 @@ UserSchema = new Schema({
     },
     updated_at: {
         type: Date,
-        default: Date.now
     },
     group_id: {
         type: Types.ObjectId,
