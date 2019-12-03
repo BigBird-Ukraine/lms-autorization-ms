@@ -5,3 +5,4 @@ export * from './course.model';
 export * from './lesson.model';
 export * from './module.model';
 export * from './oauth_token.model';
+export * from './user-subject.model';
