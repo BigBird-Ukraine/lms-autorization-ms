@@ -8,7 +8,7 @@ export const checkIsEmailPresent = async (req: Request, res: Response, next: Nex
     try {
         const { email } = req.body;
         const isUserPresent = await userService.getUserByParams({ email });
-
+        console.log(isUserPresent);
         if (isUserPresent) {
             return next(
                 new ErrorHandler(

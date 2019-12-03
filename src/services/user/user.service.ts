@@ -1,37 +1,18 @@
-import { WhereOptions } from 'sequelize';
+import { model } from 'mongoose';
 
-import { IUserModel, UserDBModel } from '../../database';
-
-const attributes: Array<keyof IUserModel> = [
-    'id',
-    'email',
-    'name',
-    'surname',
-    'password',
-    'role_id',
-    'status_id',
-    'photo_path',
-    'created_at',
-    'updated_at'
-];
+import { User, UserSchema, UserType } from '../../database';
+import { IUser } from '../../Interfaces';
 
 class UserService {
-
-     getAllUsers() {
-        return UserDBModel.findAll();
+    createUser(userValue: IUser): Promise<any> {
+        const newUser = new User(userValue);
+        return newUser.save();
     }
 
-    async getUserByParams(findUser: WhereOptions): Promise<Partial<IUserModel>> {
-         const user = await UserDBModel.findOne({
-             where: findUser,
-             attributes
-         }) as any;
+    getUserByParams(params: Partial<IUser>) {
+        const UserModel = model<UserType>('User', UserSchema);
 
-         return user && user.dataValues;
-    }
-
-    createNewUser(creatingUser: IUserModel) {
-         return UserDBModel.create(creatingUser);
+        return UserModel.findOne(params);
     }
 }
 

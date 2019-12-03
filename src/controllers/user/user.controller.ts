@@ -12,6 +12,7 @@ class UserController {
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
             const user  = req.body;
+            console.log(user);
 
             const userValidity = Joi.validate(user, registerDataValidator);
 
@@ -21,7 +22,7 @@ class UserController {
 
             user.password = await HASH_PASSWORD(user.password);
 
-            await userService.createNewUser(user);
+            await userService.createUser(user);
 
             res.status(ResponseStatusCodesEnum.CREATED).end();
         } catch (e) {

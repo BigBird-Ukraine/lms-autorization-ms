@@ -3,6 +3,7 @@ import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import * as RateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
+import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import { resolve as resolvePath } from 'path';
 
@@ -30,10 +31,18 @@ class App {
         this.app.use(express.static(resolvePath((global as any).appRoot + '/public')));
 
         this.mountRoutes();
+        this.setupDB();
 
         this.app.use(this.logErrors);
         this.app.use(this.clientErrorHandler);
         this.app.use(this.customErrorHandler);
+    }
+
+    private setupDB(): void {
+        const mongoDB = `mongodb://${config.DATABASE_IP}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
+        mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+        const db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'MongoDB Connection error'));
     }
 
     private mountRoutes(): void {

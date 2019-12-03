@@ -1,48 +1,29 @@
-import { Op, Transaction, WhereOptions } from 'sequelize';
+import { model } from 'mongoose';
 
-import { IOauthTokenModel, IUser, OauthTokenDBModel, UserDBModel } from '../../database';
+import { OauthToken, OauthTokenScheme, OauthTokenType } from '../../database';
+import { IOauthTokenModel } from '../../Interfaces';
 
 class OAuthService {
 
-    createOauthToken(createObject: IOauthTokenModel, transaction: Transaction): Promise<void> {
-        return OauthTokenDBModel.create(createObject, { transaction }) as any;
+    createOauthToken(createObject: IOauthTokenModel) {
+        const newOauthToken = new OauthToken(createObject);
+        return newOauthToken.save();
     }
 
-    deleteOathTokenByParams(deleteObject: WhereOptions, transaction: Transaction) {
-        return OauthTokenDBModel.destroy({
-            where: deleteObject,
-            transaction
-        });
+    deleteOauthTokenByParams(params: IOauthTokenModel) {
+        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
+
+        return OauthTokenModel.deleteOne({params})
     }
 
-    async getUserFromAccessToken(access_token: string): Promise<IUser> {
-        const dbResponse: any = await OauthTokenDBModel.findOne({
-            where: {
-                access_token: {
-                    [Op.like]: access_token
-                }
-            },
-            include: [{
-                model: UserDBModel
-            }]
-        });
+    async getUserFromAccessToken(access_token: string) {
+        const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return dbResponse && dbResponse.user && dbResponse.user.dataValues;
+        return OauthTokenModel.findOne(access_token).populate('user_id').select({ user_id: 1 });
     }
 
-    async getUserFromRefreshToken(refresh_token: string): Promise<any> {
-        const dbResponse: any = await OauthTokenDBModel.findOne({
-            where: {
-                refresh_token: {
-                    [Op.like]: refresh_token
-                }
-            },
-            include: [{
-                model: UserDBModel
-            }]
-        });
+    async getUserFromRefreshToken() {
 
-        return dbResponse && dbResponse.user && dbResponse.user.dataValues;
     }
 
 }
