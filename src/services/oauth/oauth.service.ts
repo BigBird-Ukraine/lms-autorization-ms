@@ -19,7 +19,7 @@ class OAuthService {
     async getUserFromAccessToken(access_token: string) {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.findOne(access_token).populate('user_id').select({ user_id: 1 });
+        return OauthTokenModel.findOne({ access_token }).populate('user_id').select({ user_id: 1, _id: 0 });
     }
 
     async getUserFromRefreshToken() {
