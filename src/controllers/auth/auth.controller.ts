@@ -46,11 +46,11 @@ class UserController {
   async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
 
-      const { user_id } = req.user;
+      const { refresh_token , user_id } = req.user;
 
       const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
 
-      await oauthService.deleteOauthTokenByUserId(user_id);
+      await oauthService.deleteOauthTokenByRefrehToken(refresh_token);
 
       await oauthService.createOauthToken({
         access_token: accessToken,

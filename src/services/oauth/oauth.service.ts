@@ -16,10 +16,10 @@ class OAuthService {
         return OauthTokenModel.deleteOne({ access_token });
     }
 
-    deleteOauthTokenByUserId(user_id: string) {
+    deleteOauthTokenByRefrehToken(refreshToken: string) {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.deleteOne({ user_id });
+        return OauthTokenModel.deleteOne({ refreshToken });
     }
 
     async getUserFromAccessToken(access_token: string) {
