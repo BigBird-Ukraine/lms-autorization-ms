@@ -1,5 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { verify, VerifyErrors } from 'jsonwebtoken';
+import { VerifyErrors } from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
 import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants';
@@ -7,22 +8,21 @@ import { ErrorHandler, errors } from '../../errors';
 import { oauthService } from '../../services';
 import { IRequestExtended } from '../../Interfaces';
 
-export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-
+export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {
-        const authToken = req.get('Authorization') as string;
+        const token = req.get('Authorization') as string;
 
-        if (!authToken) {
-            return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
+        if (!token) {
+            return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
         }
 
-        verify(authToken, config.JWT_SECRET, (err: VerifyErrors) => {
+        jwt.verify(token, config.JWT_REFRESH_SECRET, (err: VerifyErrors) => {
             if (err) {
                 return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, 'Invalid token'));
             }
         });
 
-        const user = await oauthService.getUserFromAccessToken(authToken); // todo think how create with IUser
+        const user = await oauthService.getUserFromRefreshToken(token);
 
         if (!user) {
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
@@ -31,8 +31,8 @@ export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Res
         req.user = user;
 
         next();
-
     } catch (e) {
+
         next(e);
     }
 };
