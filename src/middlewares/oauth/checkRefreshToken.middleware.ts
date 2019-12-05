@@ -18,7 +18,7 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
 
         jwt.verify(token, config.JWT_REFRESH_SECRET, (err: VerifyErrors) => {
             if (err) {
-                return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, 'Invalid token'));
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'Bad_tokens'));
             }
         });
 
