@@ -16,10 +16,10 @@ class OAuthService {
         return OauthTokenModel.deleteOne({ access_token });
     }
 
-    deleteOauthTokenByRefrehToken(refreshToken: string) {
+    deleteOauthTokenByRefreshToken(refresh_token: string) {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.deleteOne({ refreshToken });
+        return OauthTokenModel.deleteOne({ refresh_token });
     }
 
     async getUserFromAccessToken(access_token: string) {
@@ -31,9 +31,8 @@ class OAuthService {
     async getUserFromRefreshToken(refresh_token: string) {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ user_id: 1, _id: 0 });
+        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ _id: 0 });
     }
-
 }
 
 export const oauthService = new OAuthService();
