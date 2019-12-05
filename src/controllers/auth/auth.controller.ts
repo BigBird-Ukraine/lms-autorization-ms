@@ -33,9 +33,9 @@ class UserController {
 
   async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const accessToken = req.get('Authorization') as string;
+      const access_token = req.get('Authorization') as string;
 
-      await oauthService.deleteOauthTokenByAccessToken(accessToken);
+      await oauthService.deleteOauthTokenByAccessToken(access_token);
 
       res.end();
     } catch (e) {
@@ -50,7 +50,7 @@ class UserController {
 
       const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
 
-      await oauthService.deleteOauthTokenByRefrehToken(refresh_token);
+      await oauthService.deleteOauthTokenByRefreshToken(refresh_token);
 
       await oauthService.createOauthToken({
         access_token: accessToken,
