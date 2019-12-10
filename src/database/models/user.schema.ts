@@ -1,7 +1,6 @@
 import { Document, Model, model, Schema, Types } from 'mongoose';
 
-import { config } from '../../configs';
-import { UserRoleEnum, UserStatusEnum } from '../../constants';
+import { DatabaseTablesEnum, UserRoleEnum, UserStatusEnum } from '../../constants';
 import { IUser } from '../../Interfaces';
 
 export type UserType = IUser & Document;
@@ -33,7 +32,7 @@ UserSchema = new Schema({
         required: true,
         default: UserStatusEnum.ACTIVE
     },
-    role: {
+    role_id: {
         type: Number,
         required: true,
         default: UserRoleEnum.STUDENT
@@ -47,9 +46,9 @@ UserSchema = new Schema({
     updated_at: {
         type: Date
     },
-    group_id: {
+    groups_id: {
         type: Types.ObjectId,
-        ref: config.GROUP_COLLECTION_NAME
+        ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
     },
     passed_test_id: [{
         type: Types.ObjectId
@@ -57,4 +56,8 @@ UserSchema = new Schema({
 
 });
 
-export const User: Model<UserType> = model<UserType>(config.USER_COLLECTION_NAME, UserSchema, config.USER_COLLECTION_NAME);
+export const User: Model<UserType> = model<UserType>(
+    DatabaseTablesEnum.USER_COLLECTION_NAME,
+    UserSchema,
+    DatabaseTablesEnum.USER_COLLECTION_NAME
+);

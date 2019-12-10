@@ -8,7 +8,6 @@ import { oauthService } from '../../services';
 import { IRequestExtended } from '../../Interfaces';
 
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-
     try {
         const authToken = req.get('Authorization') as string;
 
