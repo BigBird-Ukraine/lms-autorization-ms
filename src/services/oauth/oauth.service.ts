@@ -10,28 +10,28 @@ class OAuthService {
         return newOauthToken.save();
     }
 
-    deleteOauthTokenByAccessToken(access_token: string) {
+    deleteOauthTokenByAccessToken(access_token: string): Promise<void> {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.deleteOne({ access_token });
+        return OauthTokenModel.deleteOne({ access_token }) as any;
     }
 
-    deleteOauthTokenByRefreshToken(refresh_token: string) {
+    deleteOauthTokenByRefreshToken(refresh_token: string): Promise<void> {
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.deleteOne({ refresh_token });
+        return OauthTokenModel.deleteOne({ refresh_token }) as any;
     }
 
-    async getUserFromAccessToken(access_token: string) {
+    async getUserFromAccessToken(access_token: string): Promise<any> { // TODO model
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
         return OauthTokenModel.findOne({ access_token }).populate('user_id').select({ user_id: 1, _id: 0 });
     }
 
-    async getUserFromRefreshToken(refresh_token: string) {
+    async getUserFromRefreshToken(refresh_token: string): Promise<any> { // TODO model
         const OauthTokenModel = model<OauthTokenType>('Oauth_token', OauthTokenScheme);
 
-        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ _id: 0 });
+        return OauthTokenModel.findOne({ refresh_token }).populate('user_id').select({ _id: 0 }) as any;
     }
 }
 

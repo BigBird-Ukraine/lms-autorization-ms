@@ -13,11 +13,10 @@ class UserController {
     async createUser(req: Request, res: Response, next: NextFunction) {
         try {
             const user  = req.body;
-
             const userValidity = Joi.validate(user, registerDataValidator);
 
             if (userValidity.error) {
-                throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message);
+                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
             }
 
             user.password = await HASH_PASSWORD(user.password);
@@ -32,16 +31,16 @@ class UserController {
 
     async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const { user_id: { _id , name, surname, role, status, photo_path, group } } = req.user;
+            const { user_id: { _id , name, surname, role_id, status, photo_path, groups_id } } = req.user as any; // TODO model
 
             const user: IUserSubjectModel = {
                 _id,
                 name,
                 surname,
-                role_id: role,
+                role_id,
                 status_id: status,
                 photo_path,
-                group
+                groups_id
             };
 
             res.json(user);
