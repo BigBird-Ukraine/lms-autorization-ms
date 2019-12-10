@@ -21,13 +21,13 @@ export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Res
             }
         });
 
-        const user = await oauthService.getUserFromAccessToken(authToken); // todo think how create with IUser
+        const user = await oauthService.getUserFromAccessToken(authToken);
 
-        if (!user) {
+        if (!user || !user.user_id) {
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
         }
 
-        req.user = user;
+        req.user = user.user_id;
 
         next();
 

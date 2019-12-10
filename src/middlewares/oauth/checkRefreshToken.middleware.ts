@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { VerifyErrors } from 'jsonwebtoken';
 import * as jwt from 'jsonwebtoken';
+import { VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants';
@@ -13,7 +13,7 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
         const token = req.get('Authorization') as string;
 
         if (!token) {
-            return next( new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
+            return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
         }
 
         jwt.verify(token, config.JWT_REFRESH_SECRET, (err: VerifyErrors) => {
@@ -24,11 +24,11 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
 
         const user = await oauthService.getUserFromRefreshToken(token);
 
-        if (!user) {
+        if (!user || !user.user_id) {
             return next(new ErrorHandler(ResponseStatusCodesEnum.NOT_FOUND, errors.NOT_FOUND_USER_NOT_PRESENT.message));
         }
 
-        req.user = user;
+        req.user = user.user_id;
 
         next();
     } catch (e) {
