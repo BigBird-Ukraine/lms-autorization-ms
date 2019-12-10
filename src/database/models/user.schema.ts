@@ -46,10 +46,10 @@ UserSchema = new Schema({
     updated_at: {
         type: Date
     },
-    groups_id: {
+    groups_id: [{
         type: Types.ObjectId,
         ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
-    },
+    }],
     passed_test_id: [{
         type: Types.ObjectId
     }]
