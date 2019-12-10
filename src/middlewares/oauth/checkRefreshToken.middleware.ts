@@ -5,8 +5,8 @@ import { VerifyErrors } from 'jsonwebtoken';
 import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
+import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';
-import { IRequestExtended } from '../../Interfaces';
 
 export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {

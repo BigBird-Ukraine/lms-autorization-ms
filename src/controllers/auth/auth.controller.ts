@@ -2,8 +2,8 @@ import { NextFunction, Response } from 'express';
 
 import { UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { oauthService } from '../../services';
-import { IRequestExtended, IUser } from '../../Interfaces';
 
 class UserController {
   async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
