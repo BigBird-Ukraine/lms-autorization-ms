@@ -7,3 +7,4 @@ export * from './module.model';
 export * from './oauth_token.model';
 export * from './user-subject.model';
 export * from './question.model';
+export * from './user-from-token.model';

@@ -6,7 +6,7 @@ import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
 import { userService } from '../../services';
 import { registerDataValidator } from '../../validators';
-import { IRequestExtended, IUserSubjectModel } from '../../Interfaces';
+import { IRequestExtended, IUser, IUserSubjectModel } from '../../Interfaces';
 
 class UserController {
 
@@ -31,7 +31,7 @@ class UserController {
 
     async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
         try {
-            const { user_id: { _id , name, surname, role_id, status, photo_path, groups_id } } = req.user as any; // TODO model
+            const { _id , name, surname, role_id, status, photo_path, groups_id } = req.user as IUser;
 
             const user: IUserSubjectModel = {
                 _id,
