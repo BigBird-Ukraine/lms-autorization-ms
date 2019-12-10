@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { OauthToken, OauthTokenScheme, OauthTokenType } from '../../database';
-import { IOauthTokenModel, IUserFromTokenModel } from '../../Interfaces';
+import { IOauthTokenModel, IUserFromTokenModel } from '../../interfaces';
 
 class OAuthService {
 
