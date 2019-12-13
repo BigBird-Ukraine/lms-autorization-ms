@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
 import { questionController } from '../../controllers';
-import { checkAccessTokenMiddleware, isQuestionPresentMiddleware, isUserQuestionOwnerMiddleware } from '../../middlewares';
+import { checkAccessTokenMiddleware, checkIsTeacher, isQuestionPresentMiddleware, isUserQuestionOwnerMiddleware } from '../../middlewares';
 
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
+router.use(checkIsTeacher);
+
 router.get('/', questionController.getQuestions);
 router.get('/my', questionController.getMyQuestions);
 router.post('/', questionController.createQuestion);
