@@ -1,6 +1,11 @@
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+
+dotenv.config({ path: resolve(__dirname, '../../.env.example') });
+
 export const config = {
-    PORT: process.env.PORT || 3001,
-    HOST: 'http://localhost',
+    PORT: process.env.PORT || 3000,
+    HOST: process.env.HOST || 'http://localhost',
 
     JWT_SECRET: process.env.JWT_SECRET || 'uf7e^Wai8efj32-&&620O10fm-32jfdj',
     ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME || '10m',
@@ -13,14 +18,11 @@ export const config = {
         maxRequests: 10000
     },
 
-    DATABASE_NAME: 'lmsDB',
-    DATABASE_USER: 'root',
-    DATABASE_PASS: 'root',
-    DATABASE_IP: '127.0.0.1',
-    DATABASE_PORT: '27017',
+    DATABASE_NAME: process.env.DATABASE_NAME || 'lmsDB',
+    DATABASE_USER: process.env.DATABASE_USER || 'root',
+    DATABASE_PASS: process.env.DATABASE_PASS || 'root',
+    DATABASE_IP: process.env.DATABASE_IP || '127.0.0.1',
+    DATABASE_PORT: process.env.DATABASE_PORT || '27017',
 
-    /*Mongo Collections*/
-    USER_COLLECTION_NAME: 'User',
-    GROUP_COLLECTION_NAME: 'Group',
-    OAUTH_TOKEN_COLLECTION_NAME: 'Oauth_token'
+    logFileSize: 5 * 1024 * 1024 // 5mb
 };
