@@ -6,7 +6,7 @@ import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
 import { IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { userService } from '../../services';
-import { registerDataValidator } from '../../validators';
+import { registerDataValidator, updateDataValidator } from '../../validators';
 
 class UserController {
 
@@ -47,6 +47,21 @@ class UserController {
         } catch (e) {
             next(e);
         }
+    }
+
+    async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
+      const { user_id } = req.params;
+      const updateInfo = req.body as IUser;
+      console.log(req.body);
+      const updateValidity = Joi.validate(updateInfo, updateDataValidator);
+
+      if (updateValidity.error) {
+          return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
+      }
+
+      await userService.updateUser(user_id, updateInfo);
+      const user = await userService.getUserByID(user_id);
+      res.json({ data: user });
     }
 }
 
