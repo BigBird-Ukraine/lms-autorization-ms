@@ -7,5 +7,5 @@ export interface IRequestExtended extends Request {
     user?: IUser;
     files?: any;
     question?: IQuestion;
-
+    photos?: any[];
 }
