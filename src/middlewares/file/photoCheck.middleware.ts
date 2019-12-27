@@ -15,7 +15,7 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
     }
 
     const {files} = req.files;
-    // tslint:disable-next-line:prefer-for-of
+    // tslint:disable-next-line:prefer-for-of //TODO
     for (let i = 0; i < files.length; i++) {
       const {mimetype, size, name} = files[i] as UploadedFile;
 
