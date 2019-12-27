@@ -1,8 +1,24 @@
+import { config } from '../configs';
+
 export const errors = {
     // 400
     BAD_REQUEST_USER_ALREADY_EXIST: { // Error when user want register. But this user is already exists
         message: 'User already exist',
         code: 4001
+    },
+
+    BAD_REQUEST_MAX_PHOTO_SIZE: {
+      code: 4002,
+      message: `Max photo size is ${config.MAX_PHOTO_SIZE / (1024 * 1024)}mb`
+    },
+
+    BAD_REQUEST_INVALID_FILE_MIMETYPE: {
+      code: 4003
+    },
+
+    BAD_REQUEST_MAX_PHOTO_AMOUNT: {
+      code: 4004,
+      message: `You can't upload more than one userPhotos`
     },
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {

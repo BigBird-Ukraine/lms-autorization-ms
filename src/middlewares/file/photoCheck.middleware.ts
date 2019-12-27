@@ -3,7 +3,7 @@ import { UploadedFile } from 'express-fileupload';
 
 import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants/enums';
-import { ErrorHandler } from '../../errors';
+import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 
 export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next: NextFunction) => {
@@ -14,22 +14,28 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
       next();
     }
 
-    const files = Object.values(req.files);
-
-    for (const file of files) {
-      const {mimetype, size, name} = file as UploadedFile;
+    const {files} = req.files;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < files.length; i++) {
+      const {mimetype, size, name} = files[i] as UploadedFile;
 
       if (config.PHOTO_MIMETYPES.includes(mimetype)) {
 
         if (config.MAX_PHOTO_SIZE < size) {
           return next(new ErrorHandler(
             ResponseStatusCodesEnum.BAD_REQUEST,
-            `Max photo size is ${config.MAX_PHOTO_SIZE / (1024 * 1024)}mb`));
+            errors.BAD_REQUEST_MAX_PHOTO_SIZE.message,
+            errors.BAD_REQUEST_MAX_PHOTO_SIZE.code
+          ));
         }
-        req.photos.push(file);
+        req.photos.push(files[i]);
 
       } else {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, `File ${name} is not valid`));
+        return next(new ErrorHandler(
+          ResponseStatusCodesEnum.BAD_REQUEST,
+          `File ${name} is not valid`,
+          errors.BAD_REQUEST_INVALID_FILE_MIMETYPE.code
+        ));
       }
     }
     next();

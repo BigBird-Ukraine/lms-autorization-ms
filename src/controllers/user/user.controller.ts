@@ -16,7 +16,8 @@ class UserController {
 
   async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {photo, ...user} = req.body;
+      const user = req.body as IUser;
+
       const appRoot = (global as any).appRoot;
       const [userPhoto] = req.photos as UploadedFile[];
       const userValidity = Joi.validate(user, registerDataValidator);

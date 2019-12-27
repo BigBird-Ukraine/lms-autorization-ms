@@ -8,7 +8,7 @@ import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import { resolve as resolvePath } from 'path';
 
-import { config } from './configs';
+import { config, logger } from './configs';
 import { ResponseStatusCodesEnum } from './constants';
 import { apiRouter, notFoundRouter } from './routes';
 
@@ -42,6 +42,7 @@ class App {
     private setupDB(): void {
         const mongoDB = `mongodb://${config.DATABASE_IP}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
         mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+        mongoose.set('useFindAndModify', false);
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'MongoDB Connection error'));
     }
@@ -52,6 +53,13 @@ class App {
     }
 
     private logErrors(err: any, req: Request, res: Response, next: NextFunction): void {
+        logger.error({
+            method: req.method,
+            url: req.path,
+            data: req.body,
+            time: new Date(),
+            massage: err.message
+        });
         next(err);
     }
 
