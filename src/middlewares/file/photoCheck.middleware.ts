@@ -14,10 +14,14 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
       next();
     }
 
-    const {files} = req.files;
-    // tslint:disable-next-line:prefer-for-of //TODO
-    for (let i = 0; i < files.length; i++) {
-      const {mimetype, size, name} = files[i] as UploadedFile;
+    let {files} = req.files;
+
+    if (!Array.isArray(files)) {
+      files = [files];
+    }
+
+    for (const file of files) {
+      const {mimetype, size, name} = file as UploadedFile;
 
       if (config.PHOTO_MIMETYPES.includes(mimetype)) {
 
@@ -28,7 +32,7 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
             errors.BAD_REQUEST_MAX_PHOTO_SIZE.code
           ));
         }
-        req.photos.push(files[i]);
+        req.photos.push(file);
 
       } else {
         return next(new ErrorHandler(
