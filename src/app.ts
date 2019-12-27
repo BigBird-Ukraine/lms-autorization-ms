@@ -30,8 +30,7 @@ class App {
         this.app.use(fileUpload());
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(express.static(resolvePath((global as any).appRoot + '/public')));
-
+        this.app.use(express.static(resolvePath((global as any).appRoot, 'static')));
         this.mountRoutes();
         this.setupDB();
 

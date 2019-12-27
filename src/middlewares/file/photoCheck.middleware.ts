@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
 
 import { config } from '../../configs';
 import { ResponseStatusCodesEnum } from '../../constants/enums';
@@ -16,7 +17,7 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
     const files = Object.values(req.files);
 
     for (const file of files) {
-      const {mimetype, size, name} = file as any;
+      const {mimetype, size, name} = file as UploadedFile;
 
       if (config.PHOTO_MIMETYPES.includes(mimetype)) {
 
