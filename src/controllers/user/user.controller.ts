@@ -1,5 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
+import { UploadedFile } from 'express-fileupload';
+import * as fs from 'fs-extra';
 import * as Joi from 'joi';
+import { resolve as resolvePath } from 'path';
+import * as uuid from 'uuid';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
@@ -10,59 +14,75 @@ import { registerDataValidator, updateDataValidator } from '../../validators';
 
 class UserController {
 
-    async createUser(req: Request, res: Response, next: NextFunction) {
-        try {
-            const user  = req.body;
-            const userValidity = Joi.validate(user, registerDataValidator);
+  async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const user = req.body as IUser;
 
-            if (userValidity.error) {
-                return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
-            }
+      const appRoot = (global as any).appRoot;
+      const [userPhoto] = req.photos as UploadedFile[];
+      const userValidity = Joi.validate(user, registerDataValidator);
 
-            user.password = await HASH_PASSWORD(user.password);
-
-            await userService.createUser(user);
-
-            res.status(ResponseStatusCodesEnum.CREATED).end();
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const { _id , name, surname, role_id, status, photo_path, groups_id } = req.user as IUser;
-
-            const user: IUserSubjectModel = {
-                _id,
-                name,
-                surname,
-                role_id,
-                status_id: status,
-                photo_path,
-                groups_id
-            };
-
-            res.json(user);
-        } catch (e) {
-            next(e);
-        }
-    }
-
-    async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
-      const { user_id } = req.params;
-      const updateInfo = req.body as IUser;
-      console.log(req.body);
-      const updateValidity = Joi.validate(updateInfo, updateDataValidator);
-
-      if (updateValidity.error) {
-          return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
+      if (userValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
       }
 
-      await userService.updateUser(user_id, updateInfo);
-      const user = await userService.getUserByID(user_id);
-      res.json({ data: user });
+      user.password = await HASH_PASSWORD(user.password);
+
+      const registeredUser = await userService.createUser(user);
+
+      if (userPhoto) {
+        const {_id} = registeredUser;
+        const photoDir = `user/${_id}/photo`;
+        const photoExtension = userPhoto.name.split('.').pop();
+        const photoName = `${uuid.v1()}.${photoExtension}`;
+
+        fs.mkdirSync(resolvePath(`${appRoot}/static/${photoDir}`), {recursive: true});
+        await userPhoto.mv(resolvePath(`${appRoot}/static/${photoDir}/${photoName}`));
+        await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
+      }
+
+      res.status(ResponseStatusCodesEnum.CREATED).end();
+    } catch (e) {
+      next(e);
     }
+  }
+
+  async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const {_id, name, surname, role_id, status, photo_path, groups_id} = req.user as IUser;
+
+      const user: IUserSubjectModel = {
+        _id,
+        name,
+        surname,
+        role_id,
+        status_id: status,
+        photo_path,
+        groups_id
+      };
+
+      res.json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {user_id} = req.params;
+    const updateInfo = req.body as IUser;
+
+    const updateValidity = Joi.validate(updateInfo, updateDataValidator);
+
+    if (updateValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
+    }
+
+    await userService.updateUser(user_id, updateInfo);
+
+    const user = await userService.getUserByID(user_id);
+
+    res.json({data: user});
+  }
 }
 
 export const userController = new UserController();

@@ -24,5 +24,8 @@ export const config = {
     DATABASE_IP: process.env.DATABASE_IP || '127.0.0.1',
     DATABASE_PORT: process.env.DATABASE_PORT || '27017',
 
-    logFileSize: 5 * 1024 * 1024 // 5mb
+    logFileSize: 5 * 1024 * 1024, // 5mb
+
+    MAX_PHOTO_SIZE: 5 * 1024 * 1024,
+    PHOTO_MIMETYPES: ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/webp']
 };

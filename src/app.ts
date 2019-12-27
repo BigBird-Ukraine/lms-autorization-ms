@@ -1,13 +1,14 @@
 import * as cors from 'cors';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
+import * as fileUpload from 'express-fileupload';
 import * as RateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
 import { resolve as resolvePath } from 'path';
 
-import { config } from './configs';
+import { config, logger } from './configs';
 import { ResponseStatusCodesEnum } from './constants';
 import { apiRouter, notFoundRouter } from './routes';
 
@@ -26,10 +27,10 @@ class App {
         this.app.use(helmet());
         this.app.use(cors());
         this.app.use(serverRequestLimiter);
+        this.app.use(fileUpload());
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
-        this.app.use(express.static(resolvePath((global as any).appRoot + '/public')));
-
+        this.app.use(express.static(resolvePath((global as any).appRoot, 'static')));
         this.mountRoutes();
         this.setupDB();
 
@@ -41,6 +42,7 @@ class App {
     private setupDB(): void {
         const mongoDB = `mongodb://${config.DATABASE_IP}:${config.DATABASE_PORT}/${config.DATABASE_NAME}`;
         mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+        mongoose.set('useFindAndModify', false);
         const db = mongoose.connection;
         db.on('error', console.error.bind(console, 'MongoDB Connection error'));
     }
@@ -51,6 +53,13 @@ class App {
     }
 
     private logErrors(err: any, req: Request, res: Response, next: NextFunction): void {
+        logger.error({
+            method: req.method,
+            url: req.path,
+            data: req.body,
+            time: new Date(),
+            massage: err.message
+        });
         next(err);
     }
 
