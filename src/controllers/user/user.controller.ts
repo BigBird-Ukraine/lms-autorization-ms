@@ -70,14 +70,37 @@ class UserController {
   async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
     const {user_id} = req.params;
     const updateInfo = req.body as IUser;
+    const appRoot = (global as any).appRoot;
+    const [userPhoto] = req.photos as UploadedFile[];
 
     const updateValidity = Joi.validate(updateInfo, updateDataValidator);
 
     if (updateValidity.error) {
+
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
     }
 
     await userService.updateUser(user_id, updateInfo);
+
+    if (userPhoto) {
+
+      const photoDir = `user/${user_id}/photo`;
+      const photoExtension = userPhoto.name.split('.').pop();
+      const photoName = `${uuid.v1()}.${photoExtension}`;
+
+      const oldPhotos = fs.readdirSync(resolvePath(`${appRoot}/static/${photoDir}`));
+
+      if (oldPhotos) {
+        for (const photo of oldPhotos) {
+          fs.unlinkSync(resolvePath(`${appRoot}/static/${photoDir}/${photo}`));
+        }
+      }
+
+      fs.mkdirSync(resolvePath(`${appRoot}/static/${photoDir}`), {recursive: true});
+
+      await userPhoto.mv(resolvePath(`${appRoot}/static/${photoDir}/${photoName}`));
+      await userService.updateUser(user_id, {photo_path: `${photoDir}/${photoName}`});
+    }
 
     const user = await userService.getUserByID(user_id);
 

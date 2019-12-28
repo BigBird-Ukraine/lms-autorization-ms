@@ -11,7 +11,7 @@ export const photoCheckMiddleware = (req: IRequestExtended, res: Response, next:
     req.photos = [];
 
     if (!req.files) {
-      next();
+      return next();
     }
 
     let {files} = req.files;
