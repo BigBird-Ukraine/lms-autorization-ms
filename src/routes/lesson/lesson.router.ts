@@ -9,5 +9,6 @@ router.use(checkAccessTokenMiddleware);
 router.use(checkIsTeacher);
 
 router.post('/', lessonController.createLesson);
+router.get('/', lessonController.getLesson);
 
 export const lessonRouter = router;

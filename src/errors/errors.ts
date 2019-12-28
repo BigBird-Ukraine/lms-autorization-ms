@@ -20,6 +20,11 @@ export const errors = {
       code: 4004,
       message: `You can't upload more than one userPhotos`
     },
+
+    BAD_REQUEST_WRONG_SORTING_PARAMS: {
+        code: 4005,
+        message: 'You can\'t sort by this parameter'
+    },
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,
@@ -29,6 +34,11 @@ export const errors = {
     FORBIDDEN_USER_BLOCKED: { // When user try to do something with blocked account
         message: 'User is blocked',
         code: 4031
+    },
+
+    FORBIDDEN_NO_PERMISSIONS: {
+        message: 'You have no permissions to this action',
+        code: 4032
     },
 
     // 404

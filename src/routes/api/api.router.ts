@@ -15,6 +15,6 @@ router.use('/users', userRouter);
 router.use('/helpers', helperRouter);
 router.use('/downloads', downloadRouter);
 router.use('/questions', questionRouter);
-router.use('./lessons', lessonRouter);
+router.use('/lessons', lessonRouter);
 
 export const apiRouter = router;

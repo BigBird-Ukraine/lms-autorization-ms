@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum, UserRoleEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
+import { ErrorHandler, errors } from '../../errors';
 import { IQuestion, IRequestExtended, IUser } from '../../interfaces';
 import { questionService } from '../../services';
 import { filterParametresValidator, insertedQuestionValidator } from '../../validators';
@@ -27,8 +27,12 @@ class QuestionController {
       }
 
       if (!questionSortingAttributes.includes(sort)) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
+        return next(new ErrorHandler(
+          ResponseStatusCodesEnum.BAD_REQUEST,
+          errors.BAD_REQUEST_WRONG_SORTING_PARAMS.message,
+          errors.BAD_REQUEST_WRONG_SORTING_PARAMS.code));
       }
+
       const questions = await questionService.getQuestions(+limit, +offset, sort, order, filter);
       const count = questions.length;
       const pageCount = Math.ceil(count / limit); // todo method to find all records
