@@ -23,6 +23,13 @@ class LessonService {
         [sort]: order
       }) as any;
   }
+
+  async getMyLesson(_id: string): Promise<ILesson[]> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .find({user_id: `${_id}`});
+  }
 }
 
 export const lessonService = new LessonService();
