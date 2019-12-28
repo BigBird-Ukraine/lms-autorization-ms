@@ -12,8 +12,8 @@ export const checkIsTeacher = async (req: IRequestExtended, res: Response, next:
       return next(
         new ErrorHandler(
           ResponseStatusCodesEnum.FORBIDDEN,
-          errors.UNAUTHORIZED_WRONG_CREDENTIALS.message,
-          errors.UNAUTHORIZED_WRONG_CREDENTIALS.code
+          errors.FORBIDDEN_NO_PERMISSIONS.message,
+          errors.FORBIDDEN_NO_PERMISSIONS.code
         ));
     }
     next();
