@@ -10,5 +10,6 @@ router.use(checkIsTeacher);
 
 router.post('/', lessonController.createLesson);
 router.get('/', lessonController.getLesson);
+router.get('/my', lessonController.getMyLesson);
 
 export const lessonRouter = router;
