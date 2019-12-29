@@ -68,5 +68,19 @@ class LessonController {
       next(e);
     }
   }
+
+  async updateMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    const { lesson_id } = req.params;
+
+    const updatingData = req.body as Partial<ILesson>;
+
+    await lessonService.editMyLesson(lesson_id, updatingData);
+  }
+
+  async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    const { lesson_id } = req.params;
+
+    await lessonService.deleteMyLesson(lesson_id);
+  }
 }
 export const lessonController = new LessonController();

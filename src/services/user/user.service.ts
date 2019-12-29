@@ -24,7 +24,9 @@ class UserService {
 
   updateUser(user_id: string, patchObject: Partial<IUser>): Promise<any> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
-    return UserModel.findByIdAndUpdate(user_id, patchObject) as any;
+
+    return UserModel
+      .findByIdAndUpdate(user_id, patchObject) as any;
   }
 }
 
