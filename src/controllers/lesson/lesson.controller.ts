@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
-import { lessonFilterParamtresValidator, lessonValidator } from '../../validators';
+import { lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
 
 const lessonSortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
 class LessonController {
@@ -73,6 +73,12 @@ class LessonController {
     const { lesson_id } = req.params;
 
     const updatingData = req.body as Partial<ILesson>;
+
+    const dataValidity = Joi.validate(updatingData, lessonUpdateDataValidator);
+
+    if (dataValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
+    }
 
     await lessonService.editMyLesson(lesson_id, updatingData);
   }
