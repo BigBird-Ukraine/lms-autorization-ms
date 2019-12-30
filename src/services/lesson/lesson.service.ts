@@ -24,6 +24,13 @@ class LessonService {
       }) as any;
   }
 
+  async getMyLesson(_id: string): Promise<ILesson[]> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .find({user_id: `${_id}`});
+  }
+
   getLessonByID(lesson_id: string): Promise<ILesson> {
     const LessonModel = model<LessonType>('Lesson', LessonSchema);
 

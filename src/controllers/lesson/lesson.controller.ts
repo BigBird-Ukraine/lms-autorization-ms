@@ -69,6 +69,22 @@ class LessonController {
     }
   }
 
+  async getMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { _id } = req.user as IUser;
+
+      const lesson = await lessonService.getMyLesson(_id);
+
+      res.json({
+        data: {
+          lesson
+        }
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async updateMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
     const { lesson_id } = req.params;
 
