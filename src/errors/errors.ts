@@ -41,9 +41,29 @@ export const errors = {
         code: 4032
     },
 
+    FORBIDDEN_NOT_YOUR_QUESTION: {
+        message: 'Its not your question',
+        code: 4033
+    },
+
+    FORBIDDEN_NOT_YOUR_LESSON: {
+      message: 'Its not your lesson',
+      code: 4034
+    },
+
     // 404
     NOT_FOUND_USER_NOT_PRESENT: { // When user wants login, but email not found in DB
         message: 'User is not found',
         code: 4041
+    },
+
+    NOT_FOUND_QUESTION_NOT_PRESENT: {
+        message: 'Question not found',
+        code: 4042
+    },
+
+    NOT_FOUND_LESSON_NOT_PRESENT: {
+        message: 'Lesson not found',
+        code: 4043
     }
 };

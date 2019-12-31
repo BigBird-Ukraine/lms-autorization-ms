@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
+import { ErrorHandler, errors } from '../../errors';
 import { IQuestion, IRequestExtended, IUser } from '../../interfaces';
 
 export const isUserQuestionOwnerMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
@@ -10,7 +10,10 @@ export const isUserQuestionOwnerMiddleware = async (req: IRequestExtended, res: 
     const { user_id } = req.question as IQuestion;
 
     if (user_id !== _id) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.FORBIDDEN, 'Its not your question'));
+      return next(new ErrorHandler(
+        ResponseStatusCodesEnum.FORBIDDEN,
+        errors.FORBIDDEN_NOT_YOUR_QUESTION.message,
+        errors.FORBIDDEN_NOT_YOUR_QUESTION.code));
     }
 
     next();

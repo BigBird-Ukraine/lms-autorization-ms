@@ -3,23 +3,23 @@ import { NextFunction, Response } from 'express';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
-import { questionService } from '../../services';
+import { lessonService } from '../../services';
 
-export const isQuestionPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
+export const isLessonPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
   try {
-    const { question_id } = req.params;
-    const question = await questionService.getQuestionById(question_id);
+    const { lesson_id } = req.params;
 
-    if (!question) {
+    const lesson = await lessonService.getLessonByID(lesson_id);
+
+    if (!lesson) {
       return next(new ErrorHandler(
         ResponseStatusCodesEnum.NOT_FOUND,
         errors.NOT_FOUND_QUESTION_NOT_PRESENT.message,
         errors.NOT_FOUND_QUESTION_NOT_PRESENT.code));
     }
 
-    req.question = question;
+    req.lesson = lesson;
 
-    next();
   } catch (e) {
     next(e);
   }

@@ -30,6 +30,27 @@ class LessonService {
     return LessonModel
       .find({user_id: `${_id}`});
   }
+
+  getLessonByID(lesson_id: string): Promise<ILesson> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .findById(lesson_id) as any;
+  }
+
+  editMyLesson(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .findByIdAndUpdate(lesson_id, updatingData) as any;
+  }
+
+  deleteMyLesson(lesson_id: string): Promise<void> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .findByIdAndDelete(lesson_id) as any;
+  }
 }
 
 export const lessonService = new LessonService();
