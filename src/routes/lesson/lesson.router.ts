@@ -11,11 +11,8 @@ router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);
 router.get('/', lessonController.getLesson);
 router.get('/my', lessonController.getMyLesson);
-
-router.use(isLessonPresentMiddleware);
-router.use(isLessonOwnerMiddleware);
-
-router.patch('/:lesson_id', lessonController.updateMyLesson);
-router.delete('/:lesson_id', lessonController.deleteMyLesson);
+router.patch('/:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware, lessonController.updateMyLesson);
+router.patch('/:lesson_id/question', isLessonPresentMiddleware, isLessonOwnerMiddleware,  lessonController.addQuestionToLesson);
+router.delete('/:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware, lessonController.deleteMyLesson);
 
 export const lessonRouter = router;

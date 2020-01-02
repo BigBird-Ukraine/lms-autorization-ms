@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
-import { ILesson, IRequestExtended, IUser } from '../../interfaces';
+import { ILesson, IQuestion, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
 import { lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
 
@@ -85,24 +85,63 @@ class LessonController {
     }
   }
 
-  async updateMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
-    const { lesson_id } = req.params;
+  async updateMyLesson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { lesson_id } = req.params;
+      console.log(lesson_id);
 
-    const updatingData = req.body as Partial<ILesson>;
+      const updatingData = req.body as Partial<ILesson>;
 
-    const dataValidity = Joi.validate(updatingData, lessonUpdateDataValidator);
+      const dataValidity = Joi.validate(updatingData, lessonUpdateDataValidator);
 
-    if (dataValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
+      if (dataValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
+      }
+
+      const updatedLesson = await lessonService.editMyLesson(lesson_id, updatingData);
+
+      res.json({
+        data: {
+          updatedLesson
+        }
+      });
+
+    } catch (e) {
+      next(e);
     }
+  }
 
-    await lessonService.editMyLesson(lesson_id, updatingData);
+  async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { lesson_id } = req.params;
+      console.log(req.params);
+
+      const _id = req.body as Partial<IQuestion>;
+
+      const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, _id);
+
+      res.json({
+        data: {
+          updatedLesson
+        }
+      });
+
+    } catch (e) {
+      next(e);
+    }
   }
 
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
-    const { lesson_id } = req.params;
+    try {
+      const { lesson_id } = req.params;
 
-    await lessonService.deleteMyLesson(lesson_id);
+      await lessonService.deleteMyLesson(lesson_id);
+
+      res.end();
+
+    } catch (e) {
+      next(e);
+    }
   }
 }
 export const lessonController = new LessonController();

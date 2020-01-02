@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { Lesson, LessonSchema, LessonType } from '../../database';
-import { ILesson } from '../../interfaces';
+import { ILesson, IQuestion } from '../../interfaces';
 
 class LessonService {
 
@@ -43,6 +43,13 @@ class LessonService {
 
     return LessonModel
       .findByIdAndUpdate(lesson_id, updatingData) as any;
+  }
+
+  addQuestionsToLesson(lesson_id: string, question_id: Partial<IQuestion>): Promise<ILesson> {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel
+      .findByIdAndUpdate(lesson_id, {$push: {questions_id: question_id}}) as any;
   }
 
   deleteMyLesson(lesson_id: string): Promise<void> {

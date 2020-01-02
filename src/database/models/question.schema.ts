@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema, Types } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
 import { IQuestion } from '../../interfaces';
@@ -7,17 +7,47 @@ export type QuestionType = IQuestion & Document;
 
 export let QuestionSchema: Schema;
 QuestionSchema = new Schema({
-    question: String,
-    description: String,
-    user_id: String,
+    question: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    user_id: {
+        type: Types.ObjectId,
+        ref: DatabaseTablesEnum.USER_COLLECTION_NAME,
+        required: true
+    },
     answers: [{
-        value: String,
-        correct: Boolean
+        value: {
+            type: String,
+            required: true
+        },
+        correct: {
+            type: Boolean,
+            required: true
+        }
     }],
-    level: String,
-    subject: String,
-    group: [String],
-    tags: [String]
+    level: {
+        type: String,
+        required: true
+    },
+    subject: {
+        type: String,
+        required: true
+    },
+    group: [{
+        type: String
+    }],
+    tags: [{
+        type: String
+    }],
+    lesson_id: [{
+        type: Types.ObjectId,
+        ref: DatabaseTablesEnum.LESSON_COLLECTION_NAME
+    }]
 });
 
 export const Question: Model<QuestionType> = model<QuestionType>(
