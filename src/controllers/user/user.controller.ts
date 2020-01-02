@@ -49,10 +49,12 @@ class UserController {
 
   async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {_id, name, surname, role_id, status, photo_path, groups_id} = req.user as IUser;
+      const {_id, email, phone_number, name, surname, role_id, status, photo_path, groups_id} = req.user as IUser;
 
       const user: IUserSubjectModel = {
         _id,
+        email,
+        phone_number,
         name,
         surname,
         role_id,
