@@ -3,9 +3,9 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
-import { ILesson, IQuestion, IRequestExtended, IUser } from '../../interfaces';
+import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
-import { lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
+import { addQuestionToLessonValidator, lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
 
 const lessonSortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
 class LessonController {
@@ -88,7 +88,6 @@ class LessonController {
   async updateMyLesson(req: Request, res: Response, next: NextFunction) {
     try {
       const { lesson_id } = req.params;
-      console.log(lesson_id);
 
       const updatingData = req.body as Partial<ILesson>;
 
@@ -98,7 +97,9 @@ class LessonController {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
       }
 
-      const updatedLesson = await lessonService.editMyLesson(lesson_id, updatingData);
+      await lessonService.editMyLesson(lesson_id, updatingData);
+
+      const updatedLesson = await lessonService.getLessonByID(lesson_id);
 
       res.json({
         data: {
@@ -114,11 +115,20 @@ class LessonController {
   async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
     try {
       const { lesson_id } = req.params;
-      console.log(req.params);
 
-      const _id = req.body as Partial<IQuestion>;
+      const { NewQuestions_id } = req.body;
 
-      const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, _id);
+      const qusetionIdValidity = Joi.validate(NewQuestions_id, addQuestionToLessonValidator);
+
+      if (qusetionIdValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, qusetionIdValidity.error.details[0].message));
+      }
+
+      for (const Question of NewQuestions_id) {
+        await lessonService.addQuestionsToLesson(lesson_id, Question);
+      }
+
+      const updatedLesson = await lessonService.getLessonByID(lesson_id);
 
       res.json({
         data: {

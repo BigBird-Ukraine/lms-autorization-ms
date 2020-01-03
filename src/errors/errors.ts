@@ -25,6 +25,11 @@ export const errors = {
         code: 4005,
         message: 'You can\'t sort by this parameter'
     },
+
+    BAD_REQUEST_QUESTION_ALREADY_EXIST_IN_LESSON: {
+        code: 4006,
+        message: 'This question already exist'
+    },
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,

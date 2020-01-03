@@ -6,13 +6,10 @@ import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 
 export const isLessonOwnerMiddleware  = async (req: IRequestExtended, res: Response, next: NextFunction) => {
   try {
-    const { _id } = req.user as Partial<IUser>;
+    const { _id } = req.user as IUser;
+    const { user_id } = req.lesson as ILesson;
 
-    const { user_id } = req.lesson as Partial<ILesson>;
-    console.log(_id === user_id);
-    console.log( _id );
-    console.log( user_id );
-    if (user_id !== _id) {
+    if (user_id.toString() !== _id.toString()) {
       return next(new ErrorHandler(
         ResponseStatusCodesEnum.FORBIDDEN,
         errors.FORBIDDEN_NOT_YOUR_LESSON.message,
