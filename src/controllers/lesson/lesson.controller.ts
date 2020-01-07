@@ -141,6 +141,23 @@ class LessonController {
     }
   }
 
+  async generateTestByLessonId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {lesson_id} = req.params;
+
+      const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
+
+      res.json({
+        data: {
+          questions_id
+        }
+      });
+
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { lesson_id } = req.params;

@@ -45,6 +45,12 @@ class LessonService {
       .findById(lesson_id).select({questions_id: 1, _id: 0}) as any;
   }
 
+  getQuestionsForTestByLessonId(lesson_id: string) {
+    const LessonModel = model<LessonType>('Lesson', LessonSchema);
+
+    return LessonModel.findById(lesson_id).select({ questions_id: 1, _id: 0 }).populate;
+  }
+
   editMyLesson(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
     const LessonModel = model<LessonType>('Lesson', LessonSchema);
 

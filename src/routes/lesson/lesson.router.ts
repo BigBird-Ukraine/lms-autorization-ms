@@ -12,6 +12,9 @@ import {
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
+
+router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
+
 router.use(checkIsTeacher);
 
 router.post('/', lessonController.createLesson);
