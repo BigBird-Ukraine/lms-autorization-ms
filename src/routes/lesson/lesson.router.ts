@@ -13,21 +13,15 @@ const router = Router();
 
 router.use(checkAccessTokenMiddleware);
 router.get('/', lessonController.getLesson);
-
-
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
 
 router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
-router.patch('/:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware, lessonController.updateMyLesson);
-router.patch(
-  '/:lesson_id/question',
-  isLessonPresentMiddleware,
-  isLessonOwnerMiddleware,
-  isQuestionExistInLessonMiddleware,
-  lessonController.addQuestionToLesson
-);
-router.delete('/:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware, lessonController.deleteMyLesson);
+
+router.use('./:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware);
+router.patch('/:lesson_id', lessonController.updateMyLesson);
+router.patch('/:lesson_id/question', isQuestionExistInLessonMiddleware, lessonController.addQuestionToLesson);
+router.delete('/:lesson_id', lessonController.deleteMyLesson);
 
 export const lessonRouter = router;

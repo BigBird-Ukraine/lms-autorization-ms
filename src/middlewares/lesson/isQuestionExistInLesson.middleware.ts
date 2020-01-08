@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
-import { ErrorHandler, errors } from '../../errors';
+// import { ResponseStatusCodesEnum } from '../../constants';
+// import { ErrorHandler, errors } from '../../errors';
 
 import { IRequestExtended } from '../../interfaces';
 import { lessonService } from '../../services/lesson';
@@ -15,10 +15,12 @@ export const isQuestionExistInLessonMiddleware = async (req: IRequestExtended, r
       for (const newQuestion of NewQuestions_id) {
 
         if (question.toString() === newQuestion.toString()) {
-          return next(new ErrorHandler(
+          /*return next(new ErrorHandler(
             ResponseStatusCodesEnum.BAD_REQUEST,
             `question id: ${newQuestion} already exist in lesson id: ${lesson_id}`,
-            errors.BAD_REQUEST_QUESTION_ALREADY_EXIST_IN_LESSON.code));
+            errors.BAD_REQUEST_QUESTION_ALREADY_EXIST_IN_LESSON.code)); //Commented by Viktor 08.01.20*/
+
+          return next();
         }
       }
     }

@@ -53,7 +53,7 @@ class LessonService {
       .populate('questions_id', {'answers.correct' : 0});
   }
 
-  editMyLesson(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
+  editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
     const LessonModel = model<LessonType>('Lesson', LessonSchema);
 
     return LessonModel
@@ -67,7 +67,7 @@ class LessonService {
       .findByIdAndUpdate(lesson_id, {$addToSet: {questions_id: questions_list}}) as any;
   }
 
-  deleteMyLesson(lesson_id: string): Promise<void> {
+  deleteLessonById(lesson_id: string): Promise<void> {
     const LessonModel = model<LessonType>('Lesson', LessonSchema);
 
     return LessonModel

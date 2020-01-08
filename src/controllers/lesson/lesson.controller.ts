@@ -97,14 +97,12 @@ class LessonController {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
       }
 
-      await lessonService.editMyLesson(lesson_id, updatingData);
+      await lessonService.editLessonById(lesson_id, updatingData);
 
       const updatedLesson = await lessonService.getLessonByID(lesson_id);
 
       res.json({
-        data: {
-          updatedLesson
-        }
+        data: updatedLesson
       });
 
     } catch (e) {
@@ -131,9 +129,7 @@ class LessonController {
       const updatedLesson = await lessonService.getLessonByID(lesson_id);
 
       res.json({
-        data: {
-          updatedLesson
-        }
+        data: updatedLesson
       });
 
     } catch (e) {
@@ -162,7 +158,7 @@ class LessonController {
     try {
       const { lesson_id } = req.params;
 
-      await lessonService.deleteMyLesson(lesson_id);
+      await lessonService.deleteLessonById(lesson_id);
 
       res.end();
 
