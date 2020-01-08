@@ -49,10 +49,12 @@ class UserController {
 
   async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const {_id, name, surname, role_id, status, photo_path, groups_id} = req.user as IUser;
+      const {_id, email, phone_number, name, surname, role_id, status, photo_path, groups_id} = req.user as IUser;
 
       const user: IUserSubjectModel = {
         _id,
+        email,
+        phone_number,
         name,
         surname,
         role_id,
@@ -73,24 +75,16 @@ class UserController {
     const appRoot = (global as any).appRoot;
     const [userPhoto] = req.photos as UploadedFile[];
 
-    const updateValidity = Joi.validate(updateInfo, updateDataValidator);
-
-    if (updateValidity.error) {
-
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
-    }
-
-    await userService.updateUser(user_id, updateInfo);
-
     if (userPhoto) {
 
       const photoDir = `user/${user_id}/photo`;
+
       const photoExtension = userPhoto.name.split('.').pop();
       const photoName = `${uuid.v1()}.${photoExtension}`;
-
       const oldPhotos = fs.readdirSync(resolvePath(`${appRoot}/static/${photoDir}`));
 
       if (oldPhotos) {
+
         for (const photo of oldPhotos) {
           fs.unlinkSync(resolvePath(`${appRoot}/static/${photoDir}/${photo}`));
         }
@@ -99,8 +93,16 @@ class UserController {
       fs.mkdirSync(resolvePath(`${appRoot}/static/${photoDir}`), {recursive: true});
 
       await userPhoto.mv(resolvePath(`${appRoot}/static/${photoDir}/${photoName}`));
-      await userService.updateUser(user_id, {photo_path: `${photoDir}/${photoName}`});
+      updateInfo.photo_path = `${photoDir}/${photoName}`;
     }
+
+    const updateValidity = Joi.validate(updateInfo, updateDataValidator);
+
+    if (updateValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, updateValidity.error.details[0].message));
+    }
+
+    await userService.updateUser(user_id, updateInfo);
 
     const user = await userService.getUserByID(user_id);
 

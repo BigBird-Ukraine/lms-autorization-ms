@@ -12,13 +12,13 @@ import {
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
+router.get('/', lessonController.getLesson);
+
 
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
 
 router.use(checkIsTeacher);
-
 router.post('/', lessonController.createLesson);
-router.get('/', lessonController.getLesson);
 router.get('/my', lessonController.getMyLesson);
 router.patch('/:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware, lessonController.updateMyLesson);
 router.patch(
