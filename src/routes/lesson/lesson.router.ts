@@ -6,10 +6,10 @@ import { checkAccessTokenMiddleware, checkIsTeacher, isLessonOwnerMiddleware, is
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
-router.use(checkIsTeacher);
-
-router.post('/', lessonController.createLesson);
 router.get('/', lessonController.getLesson);
+
+router.use(checkIsTeacher);
+router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
 
 router.use(isLessonPresentMiddleware);
