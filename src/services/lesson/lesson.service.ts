@@ -48,7 +48,9 @@ class LessonService {
   getQuestionsForTestByLessonId(lesson_id: string) {
     const LessonModel = model<LessonType>('Lesson', LessonSchema);
 
-    return LessonModel.findById(lesson_id).select({ questions_id: 1, _id: 0 }).populate;
+    return LessonModel.findById(lesson_id)
+      .select({ questions_id: 1, _id: 0 })
+      .populate('questions_id', {'answers.correct' : 0});
   }
 
   editMyLesson(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
