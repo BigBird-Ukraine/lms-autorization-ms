@@ -15,7 +15,7 @@ export const checkQuestionsListLenght = async (req: IRequestExtended, res: Respo
     const newQuestions_list = [...NewQuestions_id];
     const questions_list = [...questions_id];
 
-    if (questions_list.length + newQuestions_list.length > config.MAX_QUESTION_LIMIT) {
+    if (questions_list.length + newQuestions_list.length > config.MAX_QUESTION_LIMIT + 1) {
         return next(new ErrorHandler(
           ResponseStatusCodesEnum.BAD_REQUEST,
           errors.BAD_REQUEST_LIMIT_QUESTION.message,
