@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
@@ -9,7 +9,7 @@ export const isLessonOwnerMiddleware  = async (req: IRequestExtended, res: Respo
     const { _id } = req.user as IUser;
     const { user_id } = req.lesson as ILesson;
 
-    if (user_id !== _id) {
+    if (user_id.toString() !== _id.toString()) {
       return next(new ErrorHandler(
         ResponseStatusCodesEnum.FORBIDDEN,
         errors.FORBIDDEN_NOT_YOUR_LESSON.message,
@@ -19,6 +19,6 @@ export const isLessonOwnerMiddleware  = async (req: IRequestExtended, res: Respo
 
     next();
   } catch (e) {
-    next(e);
+   return  next(e);
   }
 };
