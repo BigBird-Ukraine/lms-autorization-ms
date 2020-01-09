@@ -1,8 +1,10 @@
 import { NextFunction, Response } from 'express';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+
+import { config } from '../../configs';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
-import { lessonService } from '../../services/lesson';
+import { lessonService } from '../../services';
 
 export const checkQuestionsListLenght = async (req: IRequestExtended, res: Response, next: NextFunction) => {
   try {
@@ -13,7 +15,7 @@ export const checkQuestionsListLenght = async (req: IRequestExtended, res: Respo
     const newQuestions_list = [...NewQuestions_id];
     const questions_list = [...questions_id];
 
-    if (questions_list.length + newQuestions_list.length > 21) {
+    if (questions_list.length + newQuestions_list.length > config.MAX_QUESTION_LIMIT) {
         return next(new ErrorHandler(
           ResponseStatusCodesEnum.BAD_REQUEST,
           errors.BAD_REQUEST_LIMIT_QUESTION.message,

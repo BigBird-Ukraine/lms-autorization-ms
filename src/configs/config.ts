@@ -27,5 +27,7 @@ export const config = {
     logFileSize: 5 * 1024 * 1024, // 5mb
 
     MAX_PHOTO_SIZE: 5 * 1024 * 1024,
-    PHOTO_MIMETYPES: ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/webp']
+    PHOTO_MIMETYPES: ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'],
+
+    MAX_QUESTION_LIMIT: 20
 };
