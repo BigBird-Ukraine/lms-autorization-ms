@@ -1,12 +1,14 @@
 import { Router } from 'express';
 
 import { authController } from '../../controllers';
-import { checkIsPasswordCorrect, checkIsUserRegistered, checkRefreshTokenMiddleware } from '../../middlewares';
+import { checkIsPasswordCorrect, checkIsUserBlocked, checkIsUserRegistered, checkRefreshTokenMiddleware } from '../../middlewares';
 
 const router = Router();
 
-router.post('/', checkIsUserRegistered, checkIsPasswordCorrect, authController.loginUser);
 router.post('/logout', authController.logoutUser);
 router.post('/refresh', checkRefreshTokenMiddleware , authController.refreshToken);
+
+router.use(checkIsUserRegistered, checkIsUserBlocked);
+router.post('/', checkIsPasswordCorrect, authController.loginUser);
 
 export const authRouter = router;
