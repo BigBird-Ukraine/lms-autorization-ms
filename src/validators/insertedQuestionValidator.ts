@@ -31,5 +31,6 @@ export const insertedQuestionValidator = Joi.object().keys({
         Joi.string().max(255).trim(),
         Joi.number()
     ])).required(),
-    tags: Joi.array().items(Joi.string().max(255).trim()).required()
+    tags: Joi.array().items(Joi.string().max(255).trim()).required(),
+    lesson_id: Joi.array().items(Joi.string().max(255).trim())
 });

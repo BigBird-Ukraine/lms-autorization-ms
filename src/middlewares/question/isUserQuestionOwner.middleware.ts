@@ -9,7 +9,7 @@ export const isUserQuestionOwnerMiddleware = async (req: IRequestExtended, res: 
     const { _id } = req.user as IUser;
     const { user_id } = req.question as IQuestion;
 
-    if (user_id !== _id) {
+    if (user_id.toString() !== _id.toString()) {
       return next(new ErrorHandler(
         ResponseStatusCodesEnum.FORBIDDEN,
         errors.FORBIDDEN_NOT_YOUR_QUESTION.message,

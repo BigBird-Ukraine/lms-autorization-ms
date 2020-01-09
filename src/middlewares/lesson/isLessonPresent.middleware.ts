@@ -14,11 +14,13 @@ export const isLessonPresentMiddleware = async (req: IRequestExtended, res: Resp
     if (!lesson) {
       return next(new ErrorHandler(
         ResponseStatusCodesEnum.NOT_FOUND,
-        errors.NOT_FOUND_QUESTION_NOT_PRESENT.message,
-        errors.NOT_FOUND_QUESTION_NOT_PRESENT.code));
+        errors.NOT_FOUND_LESSON_NOT_PRESENT.message,
+        errors.NOT_FOUND_LESSON_NOT_PRESENT.code));
     }
 
     req.lesson = lesson;
+
+    next();
 
   } catch (e) {
     next(e);

@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
-import { lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
+import { addQuestionToLessonValidator, lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
 
 const lessonSortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
 class LessonController {
@@ -85,24 +85,86 @@ class LessonController {
     }
   }
 
-  async updateMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
-    const { lesson_id } = req.params;
+  async updateMyLesson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { lesson_id } = req.params;
 
-    const updatingData = req.body as Partial<ILesson>;
+      const updatingData = req.body as Partial<ILesson>;
 
-    const dataValidity = Joi.validate(updatingData, lessonUpdateDataValidator);
+      const dataValidity = Joi.validate(updatingData, lessonUpdateDataValidator);
 
-    if (dataValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
+      if (dataValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, dataValidity.error.details[0].message));
+      }
+
+      await lessonService.editLessonById(lesson_id, updatingData);
+
+      const updatedLesson = await lessonService.getLessonByID(lesson_id);
+
+      res.json({
+        data: updatedLesson
+      });
+
+    } catch (e) {
+      next(e);
     }
+  }
 
-    await lessonService.editMyLesson(lesson_id, updatingData);
+  async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { lesson_id } = req.params;
+
+      const { NewQuestions_id } = req.body;
+
+      const qusetionIdValidity = Joi.validate(NewQuestions_id, addQuestionToLessonValidator);
+
+      if (qusetionIdValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, qusetionIdValidity.error.details[0].message));
+      }
+
+      for (const Question of NewQuestions_id) {
+        await lessonService.addQuestionsToLesson(lesson_id, Question);
+      }
+
+      const updatedLesson = await lessonService.getLessonByID(lesson_id);
+
+      res.json({
+        data: updatedLesson
+      });
+
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async generateTestByLessonId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const {lesson_id} = req.params;
+
+      const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
+
+      res.json({
+        data: {
+          questions_id
+        }
+      });
+
+    } catch (e) {
+      next(e);
+    }
   }
 
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
-    const { lesson_id } = req.params;
+    try {
+      const { lesson_id } = req.params;
 
-    await lessonService.deleteMyLesson(lesson_id);
+      await lessonService.deleteLessonById(lesson_id);
+
+      res.end();
+
+    } catch (e) {
+      next(e);
+    }
   }
 }
 export const lessonController = new LessonController();

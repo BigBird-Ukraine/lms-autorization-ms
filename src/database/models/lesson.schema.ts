@@ -35,6 +35,10 @@ LessonSchema = new Schema({
     required: true,
     ref: DatabaseTablesEnum.MODULE_COLLECTION_NAME
   }],
+  questions_id: [{
+    type: Types.ObjectId,
+    ref: DatabaseTablesEnum.QUESTION_COLLECTION_NAME
+  }],
   user_id: {
     type: Types.ObjectId,
     required: true,
