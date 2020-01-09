@@ -6,16 +6,13 @@ import { checkAccessTokenMiddleware, checkIsTeacher, isQuestionPresentMiddleware
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
-router.use(checkIsTeacher);
-
 router.get('/', questionController.getQuestions);
+
+router.use(checkIsTeacher);
 router.get('/my', questionController.getMyQuestions);
 router.post('/', questionController.createQuestion);
-router.delete(
-  '/:question_id',
-  isQuestionPresentMiddleware,
-  isUserQuestionOwnerMiddleware,
-  questionController.deleteQuestion
-);
+
+router.use('./:question_id', isQuestionPresentMiddleware, isUserQuestionOwnerMiddleware);
+router.delete('/:question_id', questionController.deleteQuestion);
 
 export const questionRouter = router;
