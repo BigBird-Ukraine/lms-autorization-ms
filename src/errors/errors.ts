@@ -30,6 +30,11 @@ export const errors = {
         code: 4006,
         message: 'This question already exist'
     },
+
+    BAD_REQUEST_LIMIT_QUESTION: {
+      code: 4007,
+      message: 'Lesson can contain only 20 questions'
+    },
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,

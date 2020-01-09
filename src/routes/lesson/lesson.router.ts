@@ -4,6 +4,7 @@ import { lessonController } from '../../controllers';
 import {
   checkAccessTokenMiddleware,
   checkIsTeacher,
+  checkQuestionsListLenght,
   isLessonOwnerMiddleware,
   isLessonPresentMiddleware,
   isQuestionExistInLessonMiddleware
@@ -21,7 +22,7 @@ router.get('/my', lessonController.getMyLesson);
 
 router.use('./:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware);
 router.patch('/:lesson_id', lessonController.updateMyLesson);
-router.patch('/:lesson_id/question', isQuestionExistInLessonMiddleware, lessonController.addQuestionToLesson);
+router.patch('/:lesson_id/question', checkQuestionsListLenght, isQuestionExistInLessonMiddleware, lessonController.addQuestionToLesson);
 router.delete('/:lesson_id', lessonController.deleteMyLesson);
 
 export const lessonRouter = router;
