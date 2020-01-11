@@ -15,6 +15,7 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.get('/', lessonController.getLesson);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
+router.post('/:lesson_id/test', lessonController.createTestResult);
 
 router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);

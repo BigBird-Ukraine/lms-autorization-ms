@@ -39,6 +39,12 @@ class QuestionService {
       .findOne({ _id: `${questionId}` }) as any;
   }
 
+  async getAnswersByQuestionId(questionId: string): Promise<IQuestion> {
+    const QuestionModel = model<QuestionType>('Question', QuestionSchema);
+
+    return QuestionModel.findById(questionId).select({answers: 1, _id: 0}) as any;
+  }
+
   async deleteQuestionById(_id: string) {
     const QuestionModel = model<QuestionType>('Question', QuestionSchema);
 

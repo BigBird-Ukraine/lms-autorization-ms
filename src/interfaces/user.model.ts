@@ -11,5 +11,10 @@ export interface IUser {
     created_at: string;
     updated_at?: string;
     groups_id?: [string];
-    passed_tests_id: [string];
+    passed_tests: [{
+        _id?: string;
+        lesson_id: string;
+        result: number;
+        questions_id: [string];
+    }];
 }

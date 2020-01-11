@@ -3,8 +3,8 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
-import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService } from '../../services';
+import { ILesson, IPassedTestData, IRequestExtended, IUser } from '../../interfaces';
+import { lessonService, questionService } from '../../services';
 import { addQuestionToLessonValidator, lessonFilterParamtresValidator, lessonUpdateDataValidator, lessonValidator } from '../../validators';
 
 const lessonSortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
@@ -149,6 +149,40 @@ class LessonController {
         }
       });
 
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async createTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { question_list } = req.body as IPassedTestData;
+      let testResult = 0;
+
+      for (const {question_id, chosen_answers} of question_list) {
+
+        const { answers } = await questionService.getAnswersByQuestionId(question_id);
+
+        let chosenCorrectQuestionCount = 0;
+        const correctAnswer = answers.filter(value => value.correct);
+
+        chosen_answers.forEach(chosen_answer => {
+          answers.forEach(answer => {
+            if (chosen_answer.toString() === answer._id.toString() && answer.correct) {
+              chosenCorrectQuestionCount += 1;
+            }
+          });
+        });
+
+        if (chosenCorrectQuestionCount / correctAnswer.length === 1) {
+          testResult += 10;
+        } else if (chosenCorrectQuestionCount / correctAnswer.length !== 1 && chosenCorrectQuestionCount / correctAnswer.length > 0) {
+          testResult += +(chosenCorrectQuestionCount / correctAnswer.length).toFixed(1) * 10;
+        }
+      }
+      console.log(testResult);
+
+      res.end();
     } catch (e) {
       next(e);
     }
