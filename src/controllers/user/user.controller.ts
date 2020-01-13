@@ -8,7 +8,7 @@ import * as uuid from 'uuid';
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { HASH_PASSWORD } from '../../helpers';
-import { IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
+import { IRequestExtended, ITestResultModel, IUser, IUserSubjectModel } from '../../interfaces';
 import { userService } from '../../services';
 import { registerDataValidator, updateDataValidator } from '../../validators';
 
@@ -105,6 +105,18 @@ class UserController {
     await userService.updateUser(user_id, updateInfo);
 
     const user = await userService.getUserByID(user_id);
+
+    res.json({data: user});
+  }
+
+  async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
+
+    const { _id } = req.user as IUser;
+    const passed_test = req.passed_test as ITestResultModel;
+
+    await userService.addPassedTest(_id, passed_test);
+
+    const user = await userService.getUserByID(_id);
 
     res.json({data: user});
   }

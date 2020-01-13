@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "app:start": "node -r dotenv/config --inspect=0.0.0.0:9229 ./dist/",
+    "app:start": "node -r dotenv/config --inspect=localhost:9229 ./dist/",
     "start": "rimraf dist && npm run tslint && tsc-watch --outDir ./dist --onSuccess \"npm run app:start\" --onFailure \"'echo Compilation Failed'\"",
     "build": "rimraf dist && tsc",
     "tsc": "rimraf dist && npm run tslint && tsc --watch",

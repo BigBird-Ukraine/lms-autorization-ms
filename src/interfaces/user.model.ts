@@ -1,3 +1,5 @@
+import { ITestResultModel } from './test_result.model';
+
 export interface IUser {
     _id: string;
     name: string;
@@ -11,5 +13,5 @@ export interface IUser {
     created_at: string;
     updated_at?: string;
     groups_id?: [string];
-    passed_tests_id: [string];
+    passed_tests?: [ITestResultModel];
 }
