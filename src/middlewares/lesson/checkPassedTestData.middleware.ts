@@ -28,13 +28,10 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
       });
 
       const percentageRatio = chosenCorrectQuestionCount / correctAnswer.length;
-      if (percentageRatio === 1) {
-        testResult += 10;
-      } else if (percentageRatio !== 1 && percentageRatio > 0) {
-        testResult += +percentageRatio.toFixed(1) * 10;
-      }
+
+      testResult += +percentageRatio.toFixed(1) * 10;
     }
-    console.log(testResult);
+
     req.passed_test = {
       lesson_id,
       result: testResult,
