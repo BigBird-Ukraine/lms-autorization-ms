@@ -2,6 +2,7 @@ import { Request } from 'express-serve-static-core';
 import { ILesson } from './lesson.model';
 
 import { IQuestion } from './question.model';
+import { ITestResultModel } from './test_result.model';
 import { IUser } from './user.model';
 
 export interface IRequestExtended extends Request {
@@ -10,4 +11,5 @@ export interface IRequestExtended extends Request {
     question?: IQuestion;
     lesson?: ILesson;
     photos?: any[]; // TODO
+    passed_test?: ITestResultModel;
 }

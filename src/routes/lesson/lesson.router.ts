@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import { lessonController } from '../../controllers';
+import { lessonController, userController } from '../../controllers';
 import {
   checkAccessTokenMiddleware,
-  checkIsTeacher,
+  checkIsTeacher, checkPassedTestData,
   checkQuestionsListLenght,
   isLessonOwnerMiddleware,
   isLessonPresentMiddleware,
@@ -15,7 +15,7 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.get('/', lessonController.getLesson);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
-router.post('/:lesson_id/test', lessonController.createTestResult);
+router.post('/:lesson_id/test', checkPassedTestData, userController.addTestResult);
 
 router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);
