@@ -17,11 +17,11 @@ Visit_logSchema = new Schema({
     date: {
       type: Date
     },
-    present_student_id: [{
+    present_students_id: [{
       type: Types.ObjectId,
       ref: DatabaseTablesEnum.USER_COLLECTION_NAME
     }],
-    absent_student_id: [{
+    absent_students_id: [{
       type: Types.ObjectId,
       ref: DatabaseTablesEnum.USER_COLLECTION_NAME
     }]
