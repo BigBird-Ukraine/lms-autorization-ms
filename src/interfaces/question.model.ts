@@ -4,6 +4,7 @@ export interface IQuestion {
     user_id: string;
     description?: string;
     answers: [{
+        _id: string
         value: string;
         correct: boolean;
     }];
