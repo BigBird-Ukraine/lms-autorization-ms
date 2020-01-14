@@ -4,5 +4,6 @@ export enum DatabaseTablesEnum {
     OAUTH_TOKEN_COLLECTION_NAME = 'Oauth_token',
     QUESTION_COLLECTION_NAME = 'Question',
     MODULE_COLLECTION_NAME = 'Module',
-    LESSON_COLLECTION_NAME = 'Lesson'
+    LESSON_COLLECTION_NAME = 'Lesson',
+    VISIT_LOG_COLLECTION_NAME = 'Visit_log'
 }
