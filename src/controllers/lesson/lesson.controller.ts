@@ -29,6 +29,16 @@ class LessonController {
     }
   }
 
+  async getLessonById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const lesson = req.lesson as ILesson;
+
+      res.json ({data: lesson});
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async getLesson(req: Request, res: Response, next: NextFunction) {
     try {
       const {

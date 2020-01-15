@@ -16,6 +16,7 @@ router.use(checkAccessTokenMiddleware);
 router.get('/', lessonController.getLesson);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
 router.post('/:lesson_id/test', checkPassedTestData, userController.addTestResult);
+router.get('/:lesson_id', isLessonPresentMiddleware, lessonController.getLessonById);
 
 router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);
