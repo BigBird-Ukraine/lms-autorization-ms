@@ -22,6 +22,7 @@ router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
 
 router.use('./:lesson_id', isLessonPresentMiddleware, isLessonOwnerMiddleware);
+router.get('/:lesson_id', lessonController.getLessonById);
 router.patch('/:lesson_id', lessonController.updateMyLesson);
 router.patch('/:lesson_id/question', checkQuestionsListLenght, isQuestionExistInLessonMiddleware, lessonController.addQuestionToLesson);
 router.delete('/:lesson_id', lessonController.deleteMyLesson);
