@@ -153,11 +153,7 @@ class LessonController {
 
       const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
 
-      res.json({
-        data: {
-          questions_id
-        }
-      });
+      res.json({data: questions_id});
 
     } catch (e) {
       next(e);
