@@ -1,0 +1,55 @@
+import { NextFunction, Response } from 'express';
+import * as Joi from 'joi';
+
+import { ResponseStatusCodesEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { IGroup, IRequestExtended } from '../../interfaces';
+import { groupService } from '../../services';
+import { groupFilterValidator } from '../../validators';
+
+class GroupController {
+
+  async getAllGroups(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const {
+        pageSize,
+        pageIndex,
+        offset = pageSize * pageIndex,
+        order = '_id',
+        ...filterParams
+      } = req.query;
+      const filterValidity = Joi.validate(filterParams, groupFilterValidator);
+
+      if (filterValidity.error) {
+        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+      }
+
+      for (const filterParamsKey in filterParams) {
+        if (filterParamsKey) {
+          filterParams[filterParamsKey] = {$regex: '^' + filterParams[filterParamsKey], $options: 'i'};
+        }
+      }
+      const groups = await groupService.getAllGroups(filterParams, +pageSize, offset, order);
+      const count = await groupService.getSizeOfAll(filterParams) as number;
+      res.json({
+        data: {
+          groups,
+          count
+        }
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const group = req.group as IGroup;
+      res.json({data: group});
+    } catch (e) {
+      next(e);
+    }
+  }
+}
+
+export const groupController = new GroupController();

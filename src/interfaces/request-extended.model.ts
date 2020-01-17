@@ -1,4 +1,5 @@
 import { Request } from 'express-serve-static-core';
+import { IGroup } from './group.model';
 import { ILesson } from './lesson.model';
 
 import { IQuestion } from './question.model';
@@ -12,4 +13,5 @@ export interface IRequestExtended extends Request {
     lesson?: ILesson;
     photos?: any[]; // TODO
     passed_test?: ITestResultModel;
+    group?: IGroup;
 }

@@ -6,3 +6,5 @@ export * from './not-found';
 export * from './user';
 export * from './question';
 export * from './lesson';
+export * from './course';
+export * from './module';
