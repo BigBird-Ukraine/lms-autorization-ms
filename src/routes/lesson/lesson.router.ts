@@ -18,8 +18,8 @@ router.get('/', lessonController.getLesson);
 router.use('./:lesson_id', isLessonPresentMiddleware);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
 router.post('/:lesson_id/test', checkPassedTestData, userController.addTestResult);
-router.get('/:lesson_id', lessonController.getLessonById)
-;
+router.get('/:lesson_id', lessonController.getLessonById);
+
 router.use(checkIsTeacher);
 router.post('/', lessonController.createLesson);
 router.get('/my', lessonController.getMyLesson);
