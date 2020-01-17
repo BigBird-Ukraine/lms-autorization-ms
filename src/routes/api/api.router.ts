@@ -5,6 +5,7 @@ import { courseRouter } from '../course';
 import { downloadRouter } from '../download';
 import { helperRouter } from '../helper';
 import { lessonRouter } from '../lesson';
+import { moduleRouter } from '../module';
 import { questionRouter } from '../question';
 import { userRouter } from '../user';
 
@@ -18,6 +19,6 @@ router.use('/downloads', downloadRouter);
 router.use('/questions', questionRouter);
 router.use('/lessons', lessonRouter);
 router.use('/courses', courseRouter);
-router.use('/module', )
+router.use('/module' , moduleRouter);
 
 export const apiRouter = router;
