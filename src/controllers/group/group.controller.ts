@@ -5,7 +5,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler } from '../../errors';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { groupService } from '../../services';
-import { groupFilterValidator } from '../../validators';
+import { groupAttendanceValidator, groupFilterValidator } from '../../validators';
 
 class GroupController {
 
@@ -46,6 +46,38 @@ class GroupController {
     try {
       const group = req.group as IGroup;
       res.json({data: group});
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getStudentsList(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { group_id } = req.params;
+
+      const students_list = await groupService.getStudentsList(group_id);
+
+      res.json({data: students_list});
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async addNewVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const { group_id } = req.params;
+
+      const visit_log = req.body;
+
+      const visit_logValidity = Joi.validate(visit_log, groupAttendanceValidator);
+
+      if (visit_logValidity.error) {
+       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, visit_logValidity.error.details[0].message));
+      }
+
+      await groupService.addVisit_log(group_id, visit_log);
+
+      res.end();
     } catch (e) {
       next(e);
     }

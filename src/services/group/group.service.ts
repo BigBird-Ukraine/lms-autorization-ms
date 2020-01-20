@@ -26,6 +26,20 @@ class GroupService {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel.findById(group_id) as any;
   }
+
+  async addVisit_log(group_id: string, visit_log: Partial<IGroup>): Promise<void> {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.findByIdAndUpdate(group_id, {$push: {attendance: visit_log}}) as any;
+  }
+
+  async getStudentsList(group_id: string): Promise<Partial<IGroup>> {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.findById(group_id)
+      .select({users_list: 1, _id: 0})
+      .populate('users_list') as any;
+  }
 }
 
 export const groupService = new GroupService();
