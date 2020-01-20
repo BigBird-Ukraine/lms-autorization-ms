@@ -29,6 +29,16 @@ class LessonController {
     }
   }
 
+  async getLessonById(req: IRequestExtended, res: Response, next: NextFunction) {
+    try {
+      const lesson = req.lesson as ILesson;
+
+      res.json ({data: lesson});
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async getLesson(req: Request, res: Response, next: NextFunction) {
     try {
       const {
@@ -143,11 +153,7 @@ class LessonController {
 
       const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
 
-      res.json({
-        data: {
-          questions_id
-        }
-      });
+      res.json({data: questions_id});
 
     } catch (e) {
       next(e);
