@@ -75,7 +75,7 @@ class GroupController {
        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, visit_logValidity.error.details[0].message));
       }
 
-      await groupService.addVisit_log(group_id, visit_log);
+      await groupService.addVisit_log(group_id, visit_log); // TODO if date the same update.
 
       res.end();
     } catch (e) {

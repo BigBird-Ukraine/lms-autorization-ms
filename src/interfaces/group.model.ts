@@ -1,5 +1,6 @@
 import { ICourse } from './course.model';
 import { IUserSubjectModel } from './user-subject.model';
+import { IUser } from './user.model';
 
 export interface IGroup {
     _id: string;
@@ -8,7 +9,7 @@ export interface IGroup {
     city: string;
     started_at: string;
     finished_at: string;
-    users_list: string[];
+    users_list: IUser[];
     attendance: [{
         date: string;
         present_students_id: IUserSubjectModel[];

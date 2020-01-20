@@ -36,7 +36,7 @@ GroupSchema = new Schema({
     }],
     attendance: [{
         date: {
-            type: Date
+            type: String
         },
         present_students_id: [{
             type: Types.ObjectId,
