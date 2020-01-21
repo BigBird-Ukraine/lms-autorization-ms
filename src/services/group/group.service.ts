@@ -8,7 +8,7 @@ class GroupService {
   getAllGroups(filterParams: Partial<IGroup>, limit: number, skip: number, order: string): Promise<any> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel
-      .find({ filterParams })
+      .find(filterParams)
       .populate('course_id')
       .populate('users_list')
       .limit(limit)
@@ -19,7 +19,7 @@ class GroupService {
   getSizeOfAll(filterParams: Partial<IGroup>): Promise<any> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel
-      .countDocuments({ filterParams }) as any;
+      .countDocuments(filterParams) as any;
   }
 
   async getById(group_id: string): Promise<any> {
