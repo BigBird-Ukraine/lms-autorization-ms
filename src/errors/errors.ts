@@ -75,5 +75,20 @@ export const errors = {
     NOT_FOUND_LESSON_NOT_PRESENT: {
         message: 'Lesson not found',
         code: 4043
+    },
+
+    NOT_FOUND_COURSE_NOT_PRESENT: {
+        message: 'Course is not found',
+        code: 4044
+    },
+
+    NOT_FOUND_MODULE_PRESENT: { // When user wants get module witch not found in DB
+        message: 'Module is not found',
+        code: 4045
+    },
+
+    NOT_FOUND_GROUP_NOT_PRESENT: {
+        message: 'Group is not found',
+        code: 4046
     }
 };

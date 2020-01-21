@@ -5,3 +5,6 @@ export * from './emailValidator';
 export * from './lessonValidator';
 export * from './updateDataValidator';
 export * from './lesson';
+export * from './course';
+export * from './module';
+export * from './group';
