@@ -19,7 +19,7 @@ export const isLessonPresentMiddleware = async (req: IRequestExtended, res: Resp
     }
 
     req.lesson = lesson;
-    console.log(lesson);
+
     next();
 
   } catch (e) {

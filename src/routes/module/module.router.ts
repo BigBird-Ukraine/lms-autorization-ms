@@ -9,6 +9,6 @@ router.use(checkAccessTokenMiddleware);
 router.get('/', moduleController.getModules);
 
 router.use('/:module_id', isModulePresent);
-router.get('/:module_id', isModulePresent);
+router.get('/:module_id');
 
 export const moduleRouter = router;
