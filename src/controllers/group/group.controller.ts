@@ -82,6 +82,18 @@ class GroupController {
       next(e);
     }
   }
+
+  async getVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+   try {
+     const { group_id } = req.params;
+
+     const visit_log = await groupService.getVisitLog(group_id);
+
+     res.json({data: visit_log});
+   } catch (e) {
+     next(e);
+   }
+  }
 }
 
 export const groupController = new GroupController();

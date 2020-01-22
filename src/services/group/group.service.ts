@@ -22,7 +22,7 @@ class GroupService {
       .countDocuments(filterParams) as any;
   }
 
-  async getById(group_id: string): Promise<any> {
+  async getById(group_id: string): Promise<IGroup> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
     return GroupModel.findById(group_id) as any;
   }
@@ -39,6 +39,15 @@ class GroupService {
     return GroupModel.findById(group_id)
       .populate('users_list', {password : 0})
       .select({users_list: 1, _id: 0}) as any;
+  }
+
+  async getVisitLog(group_id: string, date?: Partial<IGroup>): Promise<Partial<IGroup>> {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.findById(group_id)
+      .populate('attendance.present_students_id', {password: 0})
+      .populate('attendance.absent_students_id', {password: 0})
+      .select({attendance: 1, _id: 0}) as any;
   }
 }
 
