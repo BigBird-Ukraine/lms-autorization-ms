@@ -8,6 +8,7 @@ class QuestionService {
 
   createQuestion(questionValue: IQuestion): Promise<any> {
     const newQuestion = new Question(questionValue);
+
     return newQuestion.save();
   }
 
@@ -17,7 +18,7 @@ class QuestionService {
 
     return QuestionModel
       .find(filter)
-      .select({ 'answers.correct': 0 })
+      .select({'answers.correct': 0})
       .limit(limit)
       .skip(offset)
       .sort({
@@ -29,27 +30,27 @@ class QuestionService {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel
-      .find({ user_id: `${_id}` }); // todo limit offset bug(dont queriing with this parameters)
+      .find({user_id: `${_id}`}); // todo limit offset bug(dont queriing with this parameters)
 
   }
 
-  async getQuestionById(questionId: string):  Promise<IQuestion> {
+  getQuestionById(questionId: string): Promise<IQuestion> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel
-      .findOne({ _id: `${questionId}` }) as any;
+      .findOne({_id: `${questionId}`}) as any;
   }
 
-  async getAnswersByQuestionId(questionId: string): Promise<IQuestion> {
+  getAnswersByQuestionId(questionId: string): Promise<IQuestion> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel.findById(questionId).select({answers: 1, _id: 0}) as any;
   }
 
-  async deleteQuestionById(_id: string) {
+  deleteQuestionById(_id: string) {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
-    return QuestionModel.deleteOne({ _id });
+    return QuestionModel.deleteOne({_id});
   }
 }
 

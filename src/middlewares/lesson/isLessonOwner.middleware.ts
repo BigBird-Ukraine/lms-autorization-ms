@@ -4,21 +4,18 @@ import { ErrorHandler, errors } from '../../errors';
 
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 
-export const isLessonOwnerMiddleware  = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-  try {
-    const { _id } = req.user as IUser;
-    const { user_id } = req.lesson as ILesson;
+export const isLessonOwnerMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 
-    if (user_id.toString() !== _id.toString()) {
-      return next(new ErrorHandler(
-        ResponseStatusCodesEnum.FORBIDDEN,
-        errors.FORBIDDEN_NOT_YOUR_LESSON.message,
-        errors.FORBIDDEN_NOT_YOUR_LESSON.code
-      ));
-    }
+  const {_id} = req.user as IUser;
+  const {user_id} = req.lesson as ILesson;
 
-    next();
-  } catch (e) {
-   return  next(e);
+  if (user_id.toString() !== _id.toString()) {
+    return next(new ErrorHandler(
+      ResponseStatusCodesEnum.FORBIDDEN,
+      errors.FORBIDDEN_NOT_YOUR_LESSON.message,
+      errors.FORBIDDEN_NOT_YOUR_LESSON.code
+    ));
   }
+
+  next();
 };

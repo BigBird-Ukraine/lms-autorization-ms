@@ -6,21 +6,18 @@ import { IRequestExtended } from '../../interfaces';
 import { questionService } from '../../services';
 
 export const isQuestionPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-  try {
-    const { question_id } = req.params;
-    const question = await questionService.getQuestionById(question_id);
 
-    if (!question) {
-      return next(new ErrorHandler(
-        ResponseStatusCodesEnum.NOT_FOUND,
-        errors.NOT_FOUND_QUESTION_NOT_PRESENT.message,
-        errors.NOT_FOUND_QUESTION_NOT_PRESENT.code));
-    }
+  const {question_id} = req.params;
+  const question = await questionService.getQuestionById(question_id);
 
-    req.question = question;
-
-    next();
-  } catch (e) {
-    next(e);
+  if (!question) {
+    return next(new ErrorHandler(
+      ResponseStatusCodesEnum.NOT_FOUND,
+      errors.NOT_FOUND_QUESTION_NOT_PRESENT.message,
+      errors.NOT_FOUND_QUESTION_NOT_PRESENT.code));
   }
+
+  req.question = question;
+
+  next();
 };
