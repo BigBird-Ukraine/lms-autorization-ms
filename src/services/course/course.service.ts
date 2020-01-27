@@ -8,6 +8,7 @@ class CourseService {
 
   getCourses(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<ICourse[]> {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
     return CourseModel
       .find(filter)
       .limit(limit)
@@ -21,9 +22,9 @@ class CourseService {
     const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
 
     return CourseModel
-      .findOne({ _id: course_id })
+      .findOne({_id: course_id})
       .populate('modules_list')
-      .select({ _id: 0 }) as any;
+      .select({_id: 0}) as any;
   }
 }
 

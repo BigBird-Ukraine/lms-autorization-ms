@@ -12,54 +12,47 @@ const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', '
 class ModuleController {
 
   async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
 
-      const {
-        limit = 20,
-        offset = 0,
-        sort = '_id',
-        order,
-        ...filter
-      } = req.query;
+    const {
+      limit = 20,
+      offset = 0,
+      sort = '_id',
+      order,
+      ...filter
+    } = req.query;
 
-      const filterValidity = Joi.validate(filter, moduleFilterValitator);
+    const filterValidity = Joi.validate(filter, moduleFilterValitator);
 
-      if (filterValidity.error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
-      }
-
-      if (!moduleSortingAttributes.includes(sort)) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
-      }
-
-      const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
-      const count = modules.length;
-      const pageCount = Math.ceil(count / limit);
-
-      res.json({
-        data: {
-          modules,
-          count,
-          pageCount
-        }
-      });
-    } catch (e) {
-      next(e);
+    if (filterValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
     }
+
+    if (!moduleSortingAttributes.includes(sort)) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
+    }
+
+    const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
+    const count = modules.length;
+    const pageCount = Math.ceil(count / limit);
+
+    res.json({
+      data: {
+        modules,
+        count,
+        pageCount
+      }
+    });
   }
 
   async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const { module_id } = req.params;
 
-      const module = await moduleService.getModuleByID(module_id);
+    const {module_id} = req.params;
 
-      res.json({
-        data: module
-      });
-    } catch (e) {
-      next(e);
-    }
+    const module = await moduleService.getModuleByID(module_id);
+
+    res.json({
+      data: module
+    });
   }
 }
 

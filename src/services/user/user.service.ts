@@ -7,6 +7,7 @@ import { ITestResultModel, IUser } from '../../interfaces';
 class UserService {
   createUser(userValue: IUser): Promise<any> {
     const newUser = new User(userValue);
+
     return newUser.save();
   }
 
@@ -19,7 +20,7 @@ class UserService {
   getUserByID(user_id: string): Promise<IUser> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
-    return UserModel.findById(user_id).select({password: 0}) as any;
+    return UserModel.findById(user_id).select({ password: 0 }) as any;
   }
 
   updateUser(user_id: string, patchObject: Partial<IUser>): Promise<any> {
@@ -32,7 +33,7 @@ class UserService {
   addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
-    return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
+    return UserModel.findByIdAndUpdate(user_id, { $push: { passed_tests: passed_test } }) as any;
   }
 }
 

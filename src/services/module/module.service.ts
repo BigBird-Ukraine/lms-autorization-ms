@@ -21,9 +21,9 @@ class ModuleService {
     const ModuleModel = model<ModuleType>(DatabaseTablesEnum.MODULE_COLLECTION_NAME);
 
     return ModuleModel
-      .findOne({ _id: module_id })
+      .findOne({_id: module_id})
       .populate('lesson_list')
-      .select({ _id: 0 }) as any;
+      .select({_id: 0}) as any;
   }
 }
 

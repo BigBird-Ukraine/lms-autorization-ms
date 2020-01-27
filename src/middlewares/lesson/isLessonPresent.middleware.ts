@@ -6,23 +6,19 @@ import { IRequestExtended } from '../../interfaces';
 import { lessonService } from '../../services';
 
 export const isLessonPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-  try {
-    const { lesson_id } = req.params;
 
-    const lesson = await lessonService.getLessonByID(lesson_id);
+  const {lesson_id} = req.params;
 
-    if (!lesson) {
-      return next(new ErrorHandler(
-        ResponseStatusCodesEnum.NOT_FOUND,
-        errors.NOT_FOUND_LESSON_NOT_PRESENT.message,
-        errors.NOT_FOUND_LESSON_NOT_PRESENT.code));
-    }
+  const lesson = await lessonService.getLessonByID(lesson_id);
 
-    req.lesson = lesson;
-
-    next();
-
-  } catch (e) {
-    next(e);
+  if (!lesson) {
+    return next(new ErrorHandler(
+      ResponseStatusCodesEnum.NOT_FOUND,
+      errors.NOT_FOUND_LESSON_NOT_PRESENT.message,
+      errors.NOT_FOUND_LESSON_NOT_PRESENT.code));
   }
+
+  req.lesson = lesson;
+
+  next();
 };

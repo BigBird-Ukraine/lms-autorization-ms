@@ -4,46 +4,32 @@ import { helperService } from '../../services';
 
 class HelperController {
 
-    async getTags(req: Request, res: Response, next: NextFunction) {
-        try {
-            const tagsArray = await helperService.getHelperTags();
+  async getTags(req: Request, res: Response, next: NextFunction) {
 
-            res.json(tagsArray);
-        } catch (e) {
-            next(e);
-        }
-    }
+    const tagsArray = await helperService.getHelperTags();
 
-    async getLevels(req: Request, res: Response, next: NextFunction) {
-        try {
-            const levelsArray = await helperService.getHelperLevel();
+    res.json(tagsArray);
+  }
 
-            res.json(levelsArray);
-        } catch (e) {
-            next(e);
-        }
+  async getLevels(req: Request, res: Response, next: NextFunction) {
 
-    }
+    const levelsArray = await helperService.getHelperLevel();
 
-    async getSubjects(req: Request, res: Response, next: NextFunction) {
-        try {
-            const subjectsArray = await helperService.getHelperSubject();
+    res.json(levelsArray);
+  }
 
-            res.json(subjectsArray);
-         } catch (e) {
-             next(e);
-         }
-    }
+  async getSubjects(req: Request, res: Response, next: NextFunction) {
+    const subjectsArray = await helperService.getHelperSubject();
 
-    async getGroups(req: Request, res: Response, next: NextFunction) {
-        try {
-            const groupsArray = await helperService.getHelperGroup();
+    res.json(subjectsArray);
+  }
 
-            res.json(groupsArray);
-        } catch (e) {
-            next(e);
-        }
-    }
+  async getGroups(req: Request, res: Response, next: NextFunction) {
+
+    const groupsArray = await helperService.getHelperGroup();
+
+    res.json(groupsArray);
+  }
 }
 
 export const helperController = new HelperController();

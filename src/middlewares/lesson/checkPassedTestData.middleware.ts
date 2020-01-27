@@ -3,44 +3,40 @@ import { IPassedTestData, IRequestExtended } from '../../interfaces';
 import { questionService } from '../../services/question';
 
 export const checkPassedTestData = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-  try {
-    const { lesson_id } = req.params;
-    const { question_list } = req.body as IPassedTestData;
-    const questions_id = [];
 
-    let testResult = 0;
+  const {lesson_id} = req.params;
+  const {question_list} = req.body as IPassedTestData;
+  const questions_id = [];
 
-    for (const {question_id, chosen_answers} of question_list) {
+  let testResult = 0;
 
-      const { answers } = await questionService.getAnswersByQuestionId(question_id);
-      const correctAnswer = answers.filter(value => value.correct);
+  for (const {question_id, chosen_answers} of question_list) {
 
-      let chosenCorrectQuestionCount = 0;
+    const {answers} = await questionService.getAnswersByQuestionId(question_id);
+    const correctAnswer = answers.filter(value => value.correct);
 
-      questions_id.push(question_id);
+    let chosenCorrectQuestionCount = 0;
 
-      chosen_answers.forEach(chosen_answer => {
-        answers.forEach(answer => {
-          if (chosen_answer.toString() === answer._id.toString() && answer.correct) {
-            chosenCorrectQuestionCount += 1;
-          }
-        });
+    questions_id.push(question_id);
+
+    chosen_answers.forEach(chosen_answer => {
+      answers.forEach(answer => {
+        if (chosen_answer.toString() === answer._id.toString() && answer.correct) {
+          chosenCorrectQuestionCount += 1;
+        }
       });
+    });
 
-      const percentageRatio = chosenCorrectQuestionCount / correctAnswer.length;
+    const percentageRatio = chosenCorrectQuestionCount / correctAnswer.length;
 
-      testResult += +percentageRatio.toFixed(1) * 10;
-    }
-
-    req.passed_test = {
-      lesson_id,
-      result: testResult,
-      questions_id
-    };
-
-    next();
-
-  } catch (e) {
-    next(e);
+    testResult += +percentageRatio.toFixed(1) * 10;
   }
+
+  req.passed_test = {
+    lesson_id,
+    result: testResult,
+    questions_id
+  };
+
+  next();
 };

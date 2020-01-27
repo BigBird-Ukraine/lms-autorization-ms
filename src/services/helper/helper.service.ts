@@ -2,21 +2,21 @@ import { Question } from '../../database';
 
 class HelperService {
 
-    getHelperTags() {
-        return Question.distinct('tags');
-    }
+  getHelperTags() {
+    return Question.distinct('tags');
+  }
 
-    getHelperLevel() {
-        return Question.distinct('level');
-    }
+  getHelperLevel() {
+    return Question.distinct('level');
+  }
 
-    getHelperSubject() {
-        return Question.distinct('subject');
-    }
+  getHelperSubject() {
+    return Question.distinct('subject');
+  }
 
-    getHelperGroup() {
-      return Question.distinct('group');
-    }
+  getHelperGroup() {
+    return Question.distinct('group');
+  }
 }
 
 export const helperService = new HelperService();

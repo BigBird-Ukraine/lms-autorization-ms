@@ -15,58 +15,52 @@ import { registerDataValidator, updateDataValidator } from '../../validators';
 class UserController {
 
   async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const user = req.body as IUser;
 
-      const appRoot = (global as any).appRoot;
-      const [userPhoto] = req.photos as UploadedFile[];
-      const userValidity = Joi.validate(user, registerDataValidator);
+    const user = req.body as IUser;
 
-      if (userValidity.error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
-      }
+    const appRoot = (global as any).appRoot;
+    const [userPhoto] = req.photos as UploadedFile[];
+    const userValidity = Joi.validate(user, registerDataValidator);
 
-      user.password = await HASH_PASSWORD(user.password);
-
-      const registeredUser = await userService.createUser(user);
-
-      if (userPhoto) {
-        const {_id} = registeredUser;
-        const photoDir = `user/${_id}/photo`;
-        const photoExtension = userPhoto.name.split('.').pop();
-        const photoName = `${uuid.v1()}.${photoExtension}`;
-
-        fs.mkdirSync(resolvePath(`${appRoot}/static/${photoDir}`), {recursive: true});
-        await userPhoto.mv(resolvePath(`${appRoot}/static/${photoDir}/${photoName}`));
-        await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
-      }
-
-      res.status(ResponseStatusCodesEnum.CREATED).end();
-    } catch (e) {
-      next(e);
+    if (userValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, userValidity.error.details[0].message));
     }
+
+    user.password = await HASH_PASSWORD(user.password);
+
+    const registeredUser = await userService.createUser(user);
+
+    if (userPhoto) {
+      const {_id} = registeredUser;
+      const photoDir = `user/${_id}/photo`;
+      const photoExtension = userPhoto.name.split('.').pop();
+      const photoName = `${uuid.v1()}.${photoExtension}`;
+
+      fs.mkdirSync(resolvePath(`${appRoot}/static/${photoDir}`), {recursive: true});
+      await userPhoto.mv(resolvePath(`${appRoot}/static/${photoDir}/${photoName}`));
+      await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
+    }
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 
-  async getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const {_id, email, phone_number, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
+  getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
 
-      const user: IUserSubjectModel = {
-        _id,
-        email,
-        phone_number,
-        name,
-        surname,
-        role_id,
-        status_id,
-        photo_path,
-        groups_id
-      };
+    const {_id, email, phone_number, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
 
-      res.json(user);
-    } catch (e) {
-      next(e);
-    }
+    const user: IUserSubjectModel = {
+      _id,
+      email,
+      phone_number,
+      name,
+      surname,
+      role_id,
+      status_id,
+      photo_path,
+      groups_id
+    };
+
+    res.json(user);
   }
 
   async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
@@ -111,7 +105,7 @@ class UserController {
 
   async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
 
-    const { _id } = req.user as IUser;
+    const {_id} = req.user as IUser;
     const passed_test = req.passed_test as ITestResultModel;
 
     await userService.addPassedTest(_id, passed_test);

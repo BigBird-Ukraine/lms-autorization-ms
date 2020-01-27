@@ -29,7 +29,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .find({user_id: `${_id}`});
+      .find({ user_id: `${_id}` });
   }
 
   getLessonByID(lesson_id: string): Promise<ILesson> {
@@ -43,7 +43,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .findById(lesson_id).select({questions_id: 1, _id: 0}) as any;
+      .findById(lesson_id).select({ questions_id: 1, _id: 0 }) as any;
   }
 
   getQuestionsForTestByLessonId(lesson_id: string) {
@@ -51,7 +51,7 @@ class LessonService {
 
     return LessonModel.findById(lesson_id)
       .select({ questions_id: 1, _id: 0 })
-      .populate('questions_id', {'answers.correct' : 0});
+      .populate('questions_id', { 'answers.correct' : 0 });
   }
 
   editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
@@ -65,7 +65,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .findByIdAndUpdate(lesson_id, {$addToSet: {questions_id: questions_list}}) as any;
+      .findByIdAndUpdate(lesson_id, { $addToSet: { questions_id: questions_list } }) as any;
   }
 
   deleteLessonById(lesson_id: string): Promise<void> {

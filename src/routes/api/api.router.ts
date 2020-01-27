@@ -20,7 +20,7 @@ router.use('/downloads', downloadRouter);
 router.use('/questions', questionRouter);
 router.use('/lessons', lessonRouter);
 router.use('/courses', courseRouter);
-router.use('/modules' , moduleRouter);
+router.use('/modules', moduleRouter);
 router.use('/groups', groupRouter);
 
 export const apiRouter = router;
