@@ -27,7 +27,9 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
       });
     });
 
-    const percentageRatio = chosenCorrectQuestionCount / correctAnswer.length;
+    const incorrectAnswer = chosen_answers.length - chosenCorrectQuestionCount;
+
+    const percentageRatio = chosenCorrectQuestionCount / (correctAnswer.length + incorrectAnswer);
 
     testResult += +percentageRatio.toFixed(1) * 10;
   }
