@@ -3,6 +3,11 @@ import { StatusesEnum } from '../constants';
 
 export const errors = {
     // 400
+    BAD_REQUEST_WRONG_PARAMS: {
+        message: StatusesEnum.BAD_REQUEST_WRONG_PARAMS,
+        code: 4000
+    },
+
     BAD_REQUEST_USER_ALREADY_EXIST: { // Error when user want register. But this user is already exists
         message: StatusesEnum.USER_ALREADY_EXIST,
         code: 4001

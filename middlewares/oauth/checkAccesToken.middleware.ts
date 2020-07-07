@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { verify, VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum, StatusesEnum, HardWordsEnum } from '../../constants';
+import { HardWordsEnum, ResponseStatusCodesEnum, StatusesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';

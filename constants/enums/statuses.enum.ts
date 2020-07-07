@@ -1,5 +1,6 @@
 export enum StatusesEnum {
     // 400
+    BAD_REQUEST_WRONG_PARAMS = 'Bad request, wrong params',
     USER_ALREADY_EXIST = 'User already exist',
     CANT_UPLOAD_MORE_THAN_ONE_USER_PHOTO = `You can't upload more than one userPhotos`,
     CANT_SORT_BY_THIS_PARAM = 'You can\'t sort by this parameter',
@@ -10,6 +11,7 @@ export enum StatusesEnum {
     WRONG_ACTION_TYPE = 'Wrong action type',
     NO_TOKEN = 'No token',
     INVALID_TOKEN = 'Invalid token',
+
     // 403
     USER_IS_BLOCKED = 'User is blocked',
     NO_PERMISSIONS_TO_ACTION = 'You have no permissions to this action',

@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum , StatusesEnum} from '../../constants';
+import { ResponseStatusCodesEnum , StatusesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';

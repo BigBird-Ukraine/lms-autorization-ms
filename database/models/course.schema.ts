@@ -29,7 +29,7 @@ CourseSchema = new Schema({
 
 export const Course: Model<CourseType> = model<CourseType>
 (
-  DatabaseTablesEnum.COURSE_COLLECTION_NAME,
-  CourseSchema,
-  DatabaseTablesEnum.COURSE_COLLECTION_NAME
+    DatabaseTablesEnum.COURSE_COLLECTION_NAME,
+    CourseSchema,
+    DatabaseTablesEnum.COURSE_COLLECTION_NAME
 );
