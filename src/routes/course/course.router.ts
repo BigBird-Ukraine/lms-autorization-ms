@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
 import { courseController } from '../../controllers';
-import { checkAccessTokenMiddleware, isCoursePresent } from '../../middlewares';
+import { checkAccessTokenMiddleware, isCourseFilterValid, isCoursePresent } from '../../middlewares';
 
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
-router.get('/', courseController.getCourses);
+router.get('/', isCourseFilterValid, courseController.getCourses);
 
 router.use('/:course_id', isCoursePresent);
 router.get('/:course_id', courseController.getCourseById);
