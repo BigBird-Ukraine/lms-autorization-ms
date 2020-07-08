@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 
 import {ResponseStatusCodesEnum} from '../../constants';
-import {checkAdminRole, questionSortingAttributes, calculationPageCount, regexFilterParams} from '../../helpers';
+import {questionSortingAttributes, calculationPageCount, regexFilterParams} from '../../helpers';
 import {IRequestExtended, IUser} from '../../interfaces';
 import {questionService} from '../../services';
 
@@ -37,9 +37,7 @@ class QuestionController {
 
     async createQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
         const questionValue = req.body;
-        const {_id, role_id} = req.user as IUser;
-
-        checkAdminRole(role_id, next);
+        const {_id} = req.user as IUser;
 
         await questionService.createQuestion({...questionValue, user_id: _id});
 
@@ -48,7 +46,7 @@ class QuestionController {
 
     async getMyQuestions(req: IRequestExtended, res: Response, next: NextFunction) {
         const {_id} = req.user as IUser;
-        const {limit = 20, offset = 20} = req.query;
+        const {limit = 20, offset = 0} = req.query;
 
         const questions = await questionService.getMyQuestion(_id, +limit, +offset);
 

@@ -52,10 +52,10 @@ class UserController {
         if (userPhoto) {
             updateInfo = await updatedUserPhotoMv(user_id, userPhoto, updateInfo, appRoot);
         }
-        await userService.updateUser(user_id, updateInfo);
-        const user = await userService.getUserByID(user_id);
 
-        res.json({data: user});
+        const updatedUser = await userService.updateUser(user_id, updateInfo);
+
+        res.json({data: updatedUser});
     }
 
     async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {

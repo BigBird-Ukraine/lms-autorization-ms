@@ -65,8 +65,7 @@ class LessonController {
         const {lesson_id} = req.params;
         const updatingData = req.body as Partial<ILesson>;
 
-        await lessonService.editLessonById(lesson_id, updatingData);
-        const updatedLesson = await lessonService.getLessonByID(lesson_id);
+        const updatedLesson = await lessonService.editLessonById(lesson_id, updatingData);
 
         res.json({
             data: updatedLesson

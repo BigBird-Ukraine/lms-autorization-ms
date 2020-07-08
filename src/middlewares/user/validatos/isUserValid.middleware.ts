@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import * as Joi from 'joi';
+
 import { ResponseStatusCodesEnum } from '../../../constants/enums';
 import { ErrorHandler } from '../../../errors';
 import { IUser } from '../../../interfaces';
