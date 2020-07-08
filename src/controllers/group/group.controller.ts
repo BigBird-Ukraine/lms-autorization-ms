@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+
 import { regexFilterParams } from '../../helpers';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { groupService } from '../../services';
@@ -28,13 +29,12 @@ class GroupController {
     }
 
     getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const group = req.group as IGroup;
+
         res.json({data: group});
     }
 
     async getStudentsList(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {group_id} = req.params;
 
         const students_list = await groupService.getStudentsList(group_id);
@@ -53,8 +53,8 @@ class GroupController {
     }
 
     async getVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {group_id} = req.params;
+
         const visit_log = await groupService.getVisitLog(group_id);
 
         res.json({data: visit_log});

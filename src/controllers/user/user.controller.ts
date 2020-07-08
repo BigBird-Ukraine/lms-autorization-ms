@@ -8,7 +8,6 @@ import {userService} from '../../services';
 class UserController {
 
     async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const user = req.body as IUser;
         const appRoot = (global as any).appRoot;
         const [userPhoto] = req.photos as UploadedFile[];
@@ -25,7 +24,6 @@ class UserController {
     }
 
     getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {_id, email, phone_number, name, surname, role_id, status_id, photo_path, groups_id} = req.user as IUser;
 
         const user: IUserSubjectModel = {
@@ -44,30 +42,26 @@ class UserController {
     }
 
     async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
+        const appRoot = (global as any).appRoot;
+
         const {user_id} = req.params;
         let updateInfo = req.body as IUser;
-
-        const appRoot = (global as any).appRoot;
         const [userPhoto] = req.photos as UploadedFile[];
 
         if (userPhoto) {
             updateInfo = await updatedUserPhotoMv(user_id, userPhoto, updateInfo, appRoot);
         }
-
         await userService.updateUser(user_id, updateInfo);
-
         const user = await userService.getUserByID(user_id);
 
         res.json({data: user});
     }
 
     async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {_id} = req.user as IUser;
         const passed_test = req.passed_test as ITestResultModel;
 
         await userService.addPassedTest(_id, passed_test);
-
         const user = await userService.getUserByID(_id);
 
         res.json({data: user});

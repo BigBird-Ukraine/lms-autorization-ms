@@ -1,8 +1,8 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { Lesson, LessonSchema, LessonType } from '../../database';
-import { ILesson } from '../../interfaces';
+import {CourseSchema, CourseType, Lesson, LessonSchema, LessonType} from '../../database';
+import {ICourse, ILesson} from '../../interfaces';
 
 class LessonService {
 
@@ -73,6 +73,13 @@ class LessonService {
 
     return LessonModel
       .findByIdAndDelete(lesson_id) as any;
+  }
+
+  getSizeOfAll(filterParams: Partial<ILesson>): Promise<any> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+        .countDocuments(filterParams) as any;
   }
 }
 

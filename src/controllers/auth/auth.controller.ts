@@ -8,8 +8,8 @@ import { oauthService } from '../../services';
 class UserController {
 
     async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {_id} = req.user as IUser;
+
         const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
         await oauthService.createOauthToken({
@@ -27,7 +27,6 @@ class UserController {
     }
 
     async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const access_token = req.get(HardWordsEnum.AUTHORIZATION) as string;
 
         await oauthService.deleteOauthTokenByAccessToken(access_token);
@@ -36,12 +35,11 @@ class UserController {
     }
 
     async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-
         const {_id} = req.user as IUser;
+
         const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
         await oauthService.deleteOauthTokenByRefreshToken(refreshToken);
-
         await oauthService.createOauthToken({
             access_token: accessToken,
             refresh_token: refreshToken,
