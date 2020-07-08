@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-import { QuestionLevelEnum } from '../constants';
+import { QuestionLevelEnum } from '../../constants';
 
 const questionLevelsLength = Object.keys(QuestionLevelEnum).length;
 

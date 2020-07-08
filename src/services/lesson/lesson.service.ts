@@ -1,79 +1,86 @@
-import { model } from 'mongoose';
+import {model} from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants';
-import { Lesson, LessonSchema, LessonType } from '../../database';
-import { ILesson } from '../../interfaces';
+import {DatabaseTablesEnum} from '../../constants';
+import {CourseSchema, CourseType, Lesson, LessonSchema, LessonType} from '../../database';
+import {ICourse, ILesson} from '../../interfaces';
 
 class LessonService {
 
-  createLesson(lessonValue: ILesson): Promise<void> {
-    const newLesson = new Lesson(lessonValue);
+    createLesson(lessonValue: ILesson): Promise<void> {
+        const newLesson = new Lesson(lessonValue);
 
-    return newLesson.save() as any;
-  }
+        return newLesson.save() as any;
+    }
 
-  getLessons(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<ILesson[]> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
-    order = order === 'ASC' ? 'ASC' : 'DESC';
+    getLessons(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<ILesson[]> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+        order = order === 'ASC' ? 'ASC' : 'DESC';
 
-    return LessonModel
-      .find(filter)
-      .limit(limit)
-      .skip(offset)
-      .sort({
-        [sort]: order
-      }) as any;
-  }
+        return LessonModel
+            .find(filter)
+            .limit(limit)
+            .skip(offset)
+            .sort({
+                [sort]: order
+            }) as any;
+    }
 
-  async getMyLesson(_id: string): Promise<ILesson[]> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    async getMyLesson(_id: string): Promise<ILesson[]> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .find({ user_id: `${_id}` });
-  }
+        return LessonModel
+            .find({user_id: `${_id}`});
+    }
 
-  getLessonByID(lesson_id: string): Promise<ILesson> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    getLessonByID(lesson_id: string): Promise<ILesson> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findById(lesson_id) as any;
-  }
+        return LessonModel
+            .findById(lesson_id) as any;
+    }
 
-  getLessonsQuestionsById(lesson_id: string): Promise<any> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    getLessonsQuestionsById(lesson_id: string): Promise<any> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findById(lesson_id).select({ questions_id: 1, _id: 0 }) as any;
-  }
+        return LessonModel
+            .findById(lesson_id).select({questions_id: 1, _id: 0}) as any;
+    }
 
-  getQuestionsForTestByLessonId(lesson_id: string) {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    getQuestionsForTestByLessonId(lesson_id: string) {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel.findById(lesson_id)
-      .select({ questions_id: 1, _id: 0 })
-      .populate('questions_id', { 'answers.correct' : 0 });
-  }
+        return LessonModel.findById(lesson_id)
+            .select({questions_id: 1, _id: 0})
+            .populate('questions_id', {'answers.correct': 0});
+    }
 
-  editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findByIdAndUpdate(lesson_id, updatingData) as any;
-  }
+        return LessonModel
+            .findByIdAndUpdate(lesson_id, updatingData, {new: true}) as any;
+    }
 
-  addQuestionsToLesson(lesson_id: string, questions_list: string): Promise<ILesson> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    addQuestionsToLesson(lesson_id: string, questions_list: string): Promise<ILesson> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findByIdAndUpdate(lesson_id, { $addToSet: { questions_id: questions_list } }) as any;
-  }
+        return LessonModel
+            .findByIdAndUpdate(lesson_id, {$addToSet: {questions_id: questions_list}}) as any;
+    }
 
-  deleteLessonById(lesson_id: string): Promise<void> {
-    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+    deleteLessonById(lesson_id: string): Promise<void> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    return LessonModel
-      .findByIdAndDelete(lesson_id) as any;
-  }
+        return LessonModel
+            .findByIdAndDelete(lesson_id) as any;
+    }
+
+    getSizeOfAll(filterParams: Partial<ILesson>): Promise<any> {
+        const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+        return LessonModel
+            .countDocuments(filterParams) as any;
+    }
 }
 
 export const lessonService = new LessonService();

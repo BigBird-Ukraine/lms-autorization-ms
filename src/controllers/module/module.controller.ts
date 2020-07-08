@@ -1,59 +1,46 @@
-import { NextFunction, Response } from 'express';
-import * as Joi from 'joi';
+import {NextFunction, Response} from 'express'
 
-import { ResponseStatusCodesEnum } from '../../constants';
-import { ErrorHandler } from '../../errors';
-import { IModule, IRequestExtended } from '../../interfaces';
-import { moduleService } from '../../services';
-import { moduleFilterValitator } from '../../validators';
-
-const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
+import {calculationPageCount, moduleSortingAttributes, regexFilterParams} from '../../helpers';
+import {IRequestExtended} from '../../interfaces';
+import {moduleService} from '../../services';
 
 class ModuleController {
 
-  async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
+    async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
+        try {
+            const {
+                limit = 20,
+                offset = 0,
+                sort = '_id',
+                order,
+                ...filter
+            } = req.query;
 
-    const {
-      limit = 20,
-      offset = 0,
-      sort = '_id',
-      order,
-      ...filter
-    } = req.query;
+            moduleSortingAttributes(sort);
+            const updatedFilterParams = regexFilterParams(filter);
 
-    const filterValidity = Joi.validate(filter, moduleFilterValitator);
+            const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
+            const count = await moduleService.getSizeOfAll(updatedFilterParams) as number;
 
-    if (filterValidity.error) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
+            res.json({
+                data: {
+                    modules,
+                    count: count,
+                    pageCount: calculationPageCount(count, limit)
+                }
+            });
+        } catch (e) {
+            next(e)
+        }
     }
 
-    if (!moduleSortingAttributes.includes(sort)) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
+    async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+        const module = req.module;
+
+        res.json({
+            data: module
+        });
     }
-
-    const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
-    const count = modules.length;
-    const pageCount = Math.ceil(count / limit);
-
-    res.json({
-      data: {
-        modules,
-        count,
-        pageCount
-      }
-    });
-  }
-
-  async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
-
-    const {module_id} = req.params;
-
-    const module = await moduleService.getModuleByID(module_id);
-
-    res.json({
-      data: module
-    });
-  }
 }
 
 export const moduleController = new ModuleController();

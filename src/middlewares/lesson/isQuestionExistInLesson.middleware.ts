@@ -1,6 +1,4 @@
 import { NextFunction, Response } from 'express';
-// import { ResponseStatusCodesEnum } from '../../constants';
-// import { ErrorHandler, errors } from '../../errors';
 
 import { IRequestExtended } from '../../interfaces';
 import { lessonService } from '../../services/lesson';

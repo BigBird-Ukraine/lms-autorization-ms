@@ -9,6 +9,13 @@ export const isLessonPresentMiddleware = async (req: IRequestExtended, res: Resp
 
   const {lesson_id} = req.params;
 
+  if(!lesson_id) {
+    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST,
+        errors.BAD_REQUEST_WRONG_PARAMS.message,
+        errors.BAD_REQUEST_WRONG_PARAMS.code
+    ))
+  }
+
   const lesson = await lessonService.getLessonByID(lesson_id);
 
   if (!lesson) {

@@ -24,13 +24,12 @@ CourseSchema = new Schema({
     modules_list: [{
         type: Types.ObjectId,
         ref: DatabaseTablesEnum.MODULE_COLLECTION_NAME
-
     }]
 });
 
 export const Course: Model<CourseType> = model<CourseType>
 (
-  DatabaseTablesEnum.COURSE_COLLECTION_NAME,
-  CourseSchema,
-  DatabaseTablesEnum.COURSE_COLLECTION_NAME
+    DatabaseTablesEnum.COURSE_COLLECTION_NAME,
+    CourseSchema,
+    DatabaseTablesEnum.COURSE_COLLECTION_NAME
 );
