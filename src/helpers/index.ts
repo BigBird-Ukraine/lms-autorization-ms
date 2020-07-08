@@ -5,3 +5,5 @@ export * from './group';
 export * from './lesson';
 export * from './module';
 export * from './question';
+export * from './user';
+

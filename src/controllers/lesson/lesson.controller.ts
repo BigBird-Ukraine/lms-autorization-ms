@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount } from '../../helpers/course';
-import { lessonSortingAttributes } from '../../helpers/lesson';
+import {calculationPageCount , lessonSortingAttributes} from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
 
@@ -26,7 +25,12 @@ class LessonController {
             ...filter
         } = req.query;
 
-        lessonSortingAttributes(sort, next);
+
+        try {
+            lessonSortingAttributes(sort);
+        } catch (e) {
+            next(e)
+        }
 
         const lesson = await lessonService.getLessons(+limit, +offset, sort, order, filter);
 
@@ -49,7 +53,6 @@ class LessonController {
     async getMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
 
         const {_id} = req.user as IUser;
-
         const lesson = await lessonService.getMyLesson(_id);
 
         res.json({
@@ -62,11 +65,9 @@ class LessonController {
     async updateMyLesson(req: Request, res: Response, next: NextFunction) {
 
         const {lesson_id} = req.params;
-
         const updatingData = req.body as Partial<ILesson>;
 
         await lessonService.editLessonById(lesson_id, updatingData);
-
         const updatedLesson = await lessonService.getLessonByID(lesson_id);
 
         res.json({
@@ -93,7 +94,6 @@ class LessonController {
     async generateTestByLessonId(req: Request, res: Response, next: NextFunction) {
 
         const {lesson_id} = req.params;
-
         const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
 
         res.json({data: questions_id});
@@ -102,11 +102,9 @@ class LessonController {
     async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
 
         const {lesson_id} = req.params;
-
         await lessonService.deleteLessonById(lesson_id);
 
         res.end();
-
     }
 }
 

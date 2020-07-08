@@ -1,11 +1,9 @@
-import { NextFunction, Response } from 'express';
-import { UploadedFile } from 'express-fileupload';
-import { ResponseStatusCodesEnum } from '../../constants';
-import { HASH_PASSWORD } from '../../helpers';
-import { updatedUserPhotoMv } from '../../helpers/user/updatedUserPhotoMv.helper';
-import { userPhotoMv } from '../../helpers/user/userPhotoMv.helper';
-import { IRequestExtended, ITestResultModel, IUser, IUserSubjectModel } from '../../interfaces';
-import { userService } from '../../services';
+import {NextFunction, Response} from 'express';
+import {UploadedFile} from 'express-fileupload';
+import {ResponseStatusCodesEnum} from '../../constants';
+import {HASH_PASSWORD, updatedUserPhotoMv, userPhotoMv} from '../../helpers';
+import {IRequestExtended, ITestResultModel, IUser, IUserSubjectModel} from '../../interfaces';
+import {userService} from '../../services';
 
 class UserController {
 

@@ -1,15 +1,11 @@
-import { NextFunction } from 'express';
-import { ResponseStatusCodesEnum } from '../../constants/enums';
-import { ErrorHandler, errors } from '../../errors';
-import { ILesson } from '../../interfaces';
+import {ResponseStatusCodesEnum, StatusesEnum} from '../../constants/enums';
+import {ErrorHandler} from '../../errors';
+import {ILesson} from '../../interfaces';
 
-export const lessonSortingAttributes = (sort: keyof ILesson, next: NextFunction) => {
+export const lessonSortingAttributes = (sort: keyof ILesson) => {
     const sortingAttributes: Array<keyof ILesson> = ['number', 'label', 'tags', '_id'];
 
     if (!sortingAttributes.includes(sort)) {
-        return next(new ErrorHandler(
-            ResponseStatusCodesEnum.BAD_REQUEST,
-            errors.BAD_REQUEST_WRONG_SORTING_PARAMS.message,
-            errors.BAD_REQUEST_WRONG_SORTING_PARAMS.code));
+        throw new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.CANT_SORT_BY_THIS_PARAM);
     }
 };

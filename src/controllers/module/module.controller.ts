@@ -1,8 +1,7 @@
-import { NextFunction, Response } from 'express';
-import { calculationPageCount } from '../../helpers/course';
-import { moduleSortingAttributes } from '../../helpers/module';
-import { IRequestExtended } from '../../interfaces';
-import { moduleService } from '../../services';
+import {NextFunction, Response} from 'express';
+import {calculationPageCount, moduleSortingAttributes} from '../../helpers';
+import {IRequestExtended} from '../../interfaces';
+import {moduleService} from '../../services';
 
 class ModuleController {
 
@@ -16,7 +15,11 @@ class ModuleController {
             ...filter
         } = req.query;
 
-        moduleSortingAttributes(sort, next);
+        try {
+            moduleSortingAttributes(sort);
+        } catch (e) {
+            next(e)
+        }
 
         const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
 

@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { regexFilterParams } from '../../helpers/group';
+import { regexFilterParams } from '../../helpers';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { groupService } from '../../services';
 
@@ -18,6 +18,7 @@ class GroupController {
 
         const groups = await groupService.getAllGroups(updatedFilterParams, +pageSize, offset, order);
         const count = await groupService.getSizeOfAll(updatedFilterParams) as number;
+
         res.json({
             data: {
                 groups,

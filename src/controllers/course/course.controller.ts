@@ -1,20 +1,25 @@
-import { NextFunction, Response } from 'express';
-import { calculationPageCount, courseSortingAttributes } from '../../helpers';
-import { IRequestExtended } from '../../interfaces';
-import { courseService } from '../../services';
+import {NextFunction, Response} from 'express';
+import {calculationPageCount, courseSortingAttributes} from '../../helpers';
+import {IRequestExtended} from '../../interfaces';
+import {courseService} from '../../services';
 
 class CourseController {
 
     async getCourses(req: IRequestExtended, res: Response, next: NextFunction) {
 
-        const {limit = 20,
+        const {
+            limit = 20,
             offset = 0,
             sort = '_id',
             order,
             ...filter
         } = req.query;
 
-        courseSortingAttributes(sort, next);
+        try {
+            courseSortingAttributes(sort);
+        } catch (e) {
+            next(e)
+        }
 
         const courses = await courseService.getCourses(+limit, +offset, sort, order, filter);
 

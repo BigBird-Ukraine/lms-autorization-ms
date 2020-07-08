@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount } from '../../helpers/course';
-import { checkAdminRole, questionSortingAttributes } from '../../helpers/question';
+import { checkAdminRole, questionSortingAttributes, calculationPageCount} from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 import { questionService } from '../../services';
 
@@ -17,7 +16,12 @@ class QuestionController {
             ...filter
         } = req.query;
 
-        questionSortingAttributes(sort, next);
+        try {
+            questionSortingAttributes(sort);
+        } catch (e) {
+            next(e)
+        }
+
         const questions = await questionService.getQuestions(+limit, +offset, sort, order, filter);
 
         res.json({
