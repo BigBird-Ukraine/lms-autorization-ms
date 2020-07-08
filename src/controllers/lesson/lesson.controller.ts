@@ -1,4 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
+
 import {ResponseStatusCodesEnum} from '../../constants';
 import {calculationPageCount, lessonSortingAttributes, regexFilterParams} from '../../helpers';
 import {ILesson, IRequestExtended, IUser} from '../../interfaces';
