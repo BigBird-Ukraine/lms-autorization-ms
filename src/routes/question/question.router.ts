@@ -8,7 +8,7 @@ import {
     isQuestionPresentMiddleware, isQuestionValid, isUserAdminMiddleware,
     isUserQuestionOwnerMiddleware
 } from '../../middlewares';
-import {isQuestionIdValid} from '../../middlewares/question/validators/isQuestionIdValid.middleware';
+import {isQuestionIdValid} from '../../middlewares/question/validators';
 
 const router = Router();
 
