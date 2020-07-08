@@ -39,7 +39,8 @@ class UserController {
 
         const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
-        await oauthService.deleteOauthTokenByRefreshToken(refreshToken);
+        const {refresh_token} = await oauthService.getRefreshTokenByUserId(+_id);
+        await oauthService.deleteOauthTokenByRefreshToken(refresh_token);
         await oauthService.createOauthToken({
             access_token: accessToken,
             refresh_token: refreshToken,
