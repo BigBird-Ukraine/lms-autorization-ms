@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum , StatusesEnum } from '../../constants';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';
@@ -13,12 +13,12 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
   const token = req.get('Authorization') as string;
 
   if (!token) {
-    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.NO_TOKEN));
+    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
   }
 
   jwt.verify(token, config.JWT_REFRESH_SECRET, (err: VerifyErrors) => {
     if (err) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.INVALID_TOKEN));
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'Bad_tokens'));
     }
   });
 

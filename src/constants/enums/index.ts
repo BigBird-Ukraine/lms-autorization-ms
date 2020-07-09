@@ -5,5 +5,3 @@ export * from './user-role.enum';
 export * from './regExp.enum';
 export * from './user-action.enum';
 export * from './question-level.enum';
-export * from './hard-words.enum';
-export * from './statuses.enum';

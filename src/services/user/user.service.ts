@@ -27,13 +27,13 @@ class UserService {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
     return UserModel
-        .findByIdAndUpdate(user_id, patchObject, {new: true}) as any;
+      .findByIdAndUpdate(user_id, patchObject) as any;
   }
 
   addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
-    return UserModel.findByIdAndUpdate(user_id, { $push: { passed_tests: passed_test } }).select({ password: 0 }) as any;
+    return UserModel.findByIdAndUpdate(user_id, { $push: { passed_tests: passed_test } }) as any;
   }
 }
 

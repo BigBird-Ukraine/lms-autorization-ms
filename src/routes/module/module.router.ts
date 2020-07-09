@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
 import { moduleController } from '../../controllers';
-import { checkAccessTokenMiddleware, isModuleFilterValid, isModulePresent } from '../../middlewares';
+import { checkAccessTokenMiddleware, isModulePresent } from '../../middlewares';
 
 const router = Router();
 
 router.use(checkAccessTokenMiddleware);
-router.get('/', isModuleFilterValid, moduleController.getModules);
+router.get('/', moduleController.getModules);
 
 router.use('/:module_id', isModulePresent);
 router.get('/:module_id', moduleController.getModuleById);

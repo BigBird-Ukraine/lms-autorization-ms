@@ -1,7 +1,5 @@
-import { StatusesEnum } from '../constants/enums';
-
 export class ErrorHandler extends Error {
-    name = StatusesEnum.CONTROLLER_ERROR;
+    name = 'Controller Error';
     status: number;
     message: string;
     code?: number;

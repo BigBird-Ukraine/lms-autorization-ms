@@ -1,8 +1,8 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import {CourseSchema, CourseType, GroupSchema, GroupType} from '../../database';
-import {ICourse, IModule} from '../../interfaces';
+import { CourseSchema, CourseType } from '../../database';
+import { ICourse, IModule } from '../../interfaces';
 
 class CourseService {
 
@@ -25,13 +25,6 @@ class CourseService {
       .findOne({_id: course_id})
       .populate('modules_list')
       .select({_id: 0}) as any;
-  }
-
-  getSizeOfAll(filterParams: Partial<ICourse>): Promise<any> {
-    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
-
-    return CourseModel
-        .countDocuments(filterParams) as any;
   }
 }
 

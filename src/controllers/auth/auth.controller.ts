@@ -1,59 +1,60 @@
 import { NextFunction, Response } from 'express';
 
-import { HardWordsEnum, UserActionEnum } from '../../constants';
+import { UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 import { oauthService } from '../../services';
 
 class UserController {
 
-    async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
-        const {_id} = req.user as IUser;
+  async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
 
-        const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
+    const {_id} = req.user as IUser;
+    const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
-        await oauthService.createOauthToken({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            user_id: _id
-        });
+    await oauthService.createOauthToken({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user_id: _id
+    });
 
-        res.json({
-            data: {
-                accessToken,
-                refreshToken
-            }
-        });
-    }
+    res.json({
+      data: {
+        accessToken,
+        refreshToken
+      }
+    });
+  }
 
-    async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
-        const access_token = req.get(HardWordsEnum.AUTHORIZATION) as string;
+  async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
 
-        await oauthService.deleteOauthTokenByAccessToken(access_token);
+    const access_token = req.get('Authorization') as string;
 
-        res.end();
-    }
+    await oauthService.deleteOauthTokenByAccessToken(access_token);
 
-    async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
-        const {_id} = req.user as IUser;
+    res.end();
+  }
 
-        const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
+  async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
 
-        const {refresh_token} = await oauthService.getRefreshTokenByUserId(+_id);
-        await oauthService.deleteOauthTokenByRefreshToken(refresh_token);
-        await oauthService.createOauthToken({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            user_id: _id
-        });
+    const {_id} = req.user as IUser;
+    const {accessToken, refreshToken} = tokenizer(UserActionEnum.AUTH);
 
-        res.json({
-            data: {
-                accessToken,
-                refreshToken
-            }
-        });
-    }
+    await oauthService.deleteOauthTokenByRefreshToken(refreshToken);
+
+    await oauthService.createOauthToken({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      user_id: _id
+    });
+
+    res.json({
+      data: {
+        accessToken,
+        refreshToken
+      }
+    });
+  }
 }
 
 export const authController = new UserController();
