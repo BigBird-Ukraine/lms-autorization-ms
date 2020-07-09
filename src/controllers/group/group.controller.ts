@@ -39,15 +39,13 @@ class GroupController {
   }
 
   getGroupById(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const group = req.group as IGroup;
+
     res.json({data: group});
   }
 
   async getStudentsList(req: IRequestExtended, res: Response, next: NextFunction) {
-
     const {group_id} = req.params;
-
     const students_list = await groupService.getStudentsList(group_id);
 
     res.json({data: students_list});
