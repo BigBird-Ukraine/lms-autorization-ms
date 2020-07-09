@@ -1,8 +1,8 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import {ModuleSchema, ModuleType, Question, QuestionSchema, QuestionType} from '../../database';
-import {IModule, IQuestion} from '../../interfaces';
+import { Question, QuestionSchema, QuestionType } from '../../database';
+import { IQuestion } from '../../interfaces';
 
 class QuestionService {
 
@@ -51,13 +51,6 @@ class QuestionService {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel.deleteOne({_id});
-  }
-
-  getSizeOfAll(filterParams: Partial<IQuestion>): Promise<any> {
-    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
-
-    return QuestionModel
-        .countDocuments(filterParams) as any;
   }
 }
 

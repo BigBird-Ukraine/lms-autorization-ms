@@ -1,46 +1,59 @@
-import {NextFunction, Response} from 'express'
+import { NextFunction, Response } from 'express';
+import * as Joi from 'joi';
 
-import {calculationPageCount, moduleSortingAttributes, regexFilterParams} from '../../helpers';
-import {IRequestExtended} from '../../interfaces';
-import {moduleService} from '../../services';
+import { ResponseStatusCodesEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { IModule, IRequestExtended } from '../../interfaces';
+import { moduleService } from '../../services';
+import { moduleFilterValitator } from '../../validators';
+
+const moduleSortingAttributes: Array<keyof IModule> = ['_id', 'label', 'tags', 'courses_id', 'lessons'];
 
 class ModuleController {
 
-    async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {
-                limit = 20,
-                offset = 0,
-                sort = '_id',
-                order,
-                ...filter
-            } = req.query;
+  async getModules(req: IRequestExtended, res: Response, next: NextFunction) {
 
-            moduleSortingAttributes(sort);
-            const updatedFilterParams = regexFilterParams(filter);
+    const {
+      limit = 20,
+      offset = 0,
+      sort = '_id',
+      order,
+      ...filter
+    } = req.query;
 
-            const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
-            const count = await moduleService.getSizeOfAll(updatedFilterParams) as number;
+    const filterValidity = Joi.validate(filter, moduleFilterValitator);
 
-            res.json({
-                data: {
-                    modules,
-                    count: count,
-                    pageCount: calculationPageCount(count, limit)
-                }
-            });
-        } catch (e) {
-            next(e)
-        }
+    if (filterValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
     }
 
-    async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
-        const module = req.module;
-
-        res.json({
-            data: module
-        });
+    if (!moduleSortingAttributes.includes(sort)) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
     }
+
+    const modules = await moduleService.getModulesByParams(+limit, +offset, sort, order, filter);
+    const count = modules.length;
+    const pageCount = Math.ceil(count / limit);
+
+    res.json({
+      data: {
+        modules,
+        count,
+        pageCount
+      }
+    });
+  }
+
+  async getModuleById(req: IRequestExtended, res: Response, next: NextFunction) {
+
+    const {module_id} = req.params;
+
+    const module = await moduleService.getModuleByID(module_id);
+
+    res.json({
+      data: module
+    });
+  }
 }
 
 export const moduleController = new ModuleController();

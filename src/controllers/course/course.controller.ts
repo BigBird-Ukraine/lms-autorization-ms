@@ -1,46 +1,59 @@
-import {NextFunction, Response} from 'express';
+import { NextFunction, Response } from 'express';
+import * as Joi from 'joi';
 
-import {calculationPageCount, courseSortingAttributes, regexFilterParams} from '../../helpers';
-import {IRequestExtended} from '../../interfaces';
-import {courseService} from '../../services';
+import { ResponseStatusCodesEnum } from '../../constants';
+import { ErrorHandler } from '../../errors';
+import { ICourse, IRequestExtended } from '../../interfaces';
+import { courseService } from '../../services';
+import { CoursefilterParametresValidator } from '../../validators';
+
+const courseSortingAttributes: Array<keyof ICourse> = ['_id', 'label', 'level', 'modules_list'];
 
 class CourseController {
 
-    async getCourses(req: IRequestExtended, res: Response, next: NextFunction) {
-        try {
-            const {
-                limit = 20,
-                offset = 0,
-                sort = '_id',
-                order,
-                ...filter
-            } = req.query;
+  async getCourses(req: IRequestExtended, res: Response, next: NextFunction) {
 
-            courseSortingAttributes(sort);
-            const updatedFilterParams = regexFilterParams(filter);
+    const {
+      limit = 20,
+      offset = 0,
+      sort = '_id',
+      order,
+      ...filter
+    } = req.query;
 
-            const courses = await courseService.getCourses(+limit, +offset, sort, order, filter);
-            const count = await courseService.getSizeOfAll(updatedFilterParams) as number;
+    const filterValidity = Joi.validate(filter, CoursefilterParametresValidator);
 
-            res.json({
-                data: {
-                    courses,
-                    count,
-                    pageCount: calculationPageCount(count, limit)
-                }
-            });
-        } catch (e) {
-            next(e)
-        }
+    if (filterValidity.error) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
     }
 
-    async getCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
-        const course = req.course;
-
-        res.json({
-            data: course
-        });
+    if (!courseSortingAttributes.includes(sort)) {
+      return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'You can\'t sort by this parameter'));
     }
+
+    const courses = await courseService.getCourses(+limit, +offset, sort, order, filter);
+    const count = courses.length;
+    const pageCount = Math.ceil(count / limit);
+
+    res.json({
+      data: {
+        courses,
+        count,
+        pageCount
+      }
+    });
+  }
+
+  async getCourseById(req: IRequestExtended, res: Response, next: NextFunction) {
+
+    const {course_id} = req.params;
+
+    const course = await courseService.getCourseByID(course_id);
+
+    res.json({
+      data: course
+    });
+  }
 }
 
 export const courseController = new CourseController();

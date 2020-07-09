@@ -2,22 +2,22 @@ import { NextFunction, Response } from 'express';
 import { verify, VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { HardWordsEnum, ResponseStatusCodesEnum, StatusesEnum } from '../../constants';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';
 
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
 
-  const authToken = req.get(HardWordsEnum.AUTHORIZATION) as string;
+  const authToken = req.get('Authorization') as string;
 
   if (!authToken) {
-    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.NO_TOKEN));
+    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
   }
 
   verify(authToken, config.JWT_SECRET, (err: VerifyErrors) => {
     if (err) {
-      return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, StatusesEnum.INVALID_TOKEN));
+      return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, 'Invalid token'));
     }
   });
 

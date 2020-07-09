@@ -6,15 +6,8 @@ import { IRequestExtended } from '../../interfaces';
 import { questionService } from '../../services';
 
 export const isQuestionPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
+
   const {question_id} = req.params;
-
-  if(!question_id) {
-    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST,
-        errors.BAD_REQUEST_WRONG_PARAMS.message,
-        errors.BAD_REQUEST_WRONG_PARAMS.code
-    ))
-  }
-
   const question = await questionService.getQuestionById(question_id);
 
   if (!question) {

@@ -19,7 +19,6 @@ class HelperController {
   }
 
   async getSubjects(req: Request, res: Response, next: NextFunction) {
-
     const subjectsArray = await helperService.getHelperSubject();
 
     res.json(subjectsArray);

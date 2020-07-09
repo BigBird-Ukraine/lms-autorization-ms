@@ -35,12 +35,6 @@ class OAuthService {
 
     return OauthTokenModel.findOne({refresh_token}).populate('user_id').select({_id: 0}) as any;
   }
-
-  getRefreshTokenByUserId(user_id: number) {
-    const OauthTokenModel = model<OauthTokenType>(DatabaseTablesEnum.OAUTH_TOKEN_COLLECTION_NAME, OauthTokenScheme);
-
-    return OauthTokenModel.findOne({user_id}) as any;
-  }
 }
 
 export const oauthService = new OAuthService();

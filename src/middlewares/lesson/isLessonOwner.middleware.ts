@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
-
 import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
+
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 
 export const isLessonOwnerMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
