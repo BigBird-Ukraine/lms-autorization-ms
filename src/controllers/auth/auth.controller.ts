@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 
-import { UserActionEnum } from '../../constants';
+import { HardWordsEnum, UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 import { oauthService } from '../../services';
@@ -30,7 +30,7 @@ class UserController {
 
   async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const access_token = req.get('Authorization') as string;
+      const access_token = req.get(HardWordsEnum.AUTHORIZATION) as string;
 
       await oauthService.deleteOauthTokenByAccessToken(access_token);
 

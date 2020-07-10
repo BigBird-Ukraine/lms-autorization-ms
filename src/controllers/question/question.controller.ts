@@ -1,15 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
-import * as Joi from 'joi';
 
-import { ResponseStatusCodesEnum, UserRoleEnum } from '../../constants';
-import { ErrorHandler, errors } from '../../errors';
-import { IQuestion, IRequestExtended, IUser } from '../../interfaces';
+import { ResponseStatusCodesEnum } from '../../constants';
+import { calculationPageCount, questionSortingAttributes, regexFilterParams } from '../../helpers';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { questionService } from '../../services';
-import { filterParametresValidator, insertedQuestionValidator } from '../../validators';
-
-const questionSortingAttributes: Array<keyof IQuestion> = ['group', 'level', 'subject', 'tags', '_id'];
 
 class QuestionController {
+
   async getQuestions(req: Request, res: Response, next: NextFunction) {
     try {
       const {
@@ -20,28 +17,17 @@ class QuestionController {
         ...filter
       } = req.query;
 
-      const filterValidity = Joi.validate(filter, filterParametresValidator);
-
-      if (filterValidity.error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, filterValidity.error.details[0].message));
-      }
-
-      if (!questionSortingAttributes.includes(sort)) {
-        return next(new ErrorHandler(
-          ResponseStatusCodesEnum.BAD_REQUEST,
-          errors.BAD_REQUEST_WRONG_SORTING_PARAMS.message,
-          errors.BAD_REQUEST_WRONG_SORTING_PARAMS.code));
-      }
+      questionSortingAttributes(sort);
+      const updatedFilterParams = regexFilterParams(filter);
 
       const questions = await questionService.getQuestions(+limit, +offset, sort, order, filter);
-      const count = questions.length;
-      const pageCount = Math.ceil(count / limit); // todo method to find all records
+      const count = await questionService.getSizeOfAll(updatedFilterParams) as number;
 
       res.json({
         data: {
           questions,
           count,
-          pageCount
+          pageCount: calculationPageCount(count, limit)
         }
       });
     } catch (e) {
@@ -50,63 +36,35 @@ class QuestionController {
   }
 
   async createQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const questionValue = req.body;
-      const { _id, role_id } = req.user as IUser;
+    const questionValue = req.body;
+    const {_id} = req.user as IUser;
 
-      if (role_id === UserRoleEnum.STUDENT) {
-        return next(
-          new ErrorHandler(
-            ResponseStatusCodesEnum.FORBIDDEN,
-            'You have no permissions to add question'
-          )
-        );
-      }
+    await questionService.createQuestion({...questionValue, user_id: _id});
 
-      const questionValidity = Joi.validate(questionValue, insertedQuestionValidator);
-
-      if (questionValidity.error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, questionValidity.error.details[0].message));
-      }
-
-      await questionService.createQuestion({ ...questionValue, user_id: _id });
-
-      res.status(ResponseStatusCodesEnum.CREATED).end();
-    } catch (e) {
-      next(e);
-    }
+    res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 
   async getMyQuestions(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const { _id } = req.user as IUser;
-      const { limit = 20, offset = 20 } = req.query;
-      const questions = await questionService.getMyQuestion(_id, +limit, +offset);
-      const count = questions.length;
-      const pageCount = Math.ceil(count / limit);
+    const {_id} = req.user as IUser;
+    const {limit = 20, offset = 0} = req.query;
 
-      res.json({
-        data: {
-          questions,
-          count,
-          pageCount
-        }
-      });
-    } catch (e) {
-      next(e);
-    }
+    const questions = await questionService.getMyQuestion(_id, +limit, +offset);
+
+    res.json({
+      data: {
+        questions,
+        count: questions.length,
+        pageCount: calculationPageCount(questions.length, limit)
+      }
+    });
   }
 
   async deleteQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
-    try {
-      const { question_id } = req.params;
+    const {question_id} = req.params;
 
-      await questionService.deleteQuestionById(question_id);
+    await questionService.deleteQuestionById(question_id);
 
-      res.end();
-    } catch (e) {
-      next(e);
-    }
+    res.end();
   }
 }
 
