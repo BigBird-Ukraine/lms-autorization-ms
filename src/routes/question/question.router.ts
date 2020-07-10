@@ -2,13 +2,10 @@ import { Router } from 'express';
 
 import { questionController } from '../../controllers';
 import {
-  checkAccessTokenMiddleware,
-  checkIsTeacher,
-  isQuestionFilterValid,
-  isQuestionPresentMiddleware, isQuestionValid, isUserAdminMiddleware,
-  isUserQuestionOwnerMiddleware
+  checkAccessTokenMiddleware, checkIsTeacher, isQuestionFilterValid,
+  isQuestionIdValid, isQuestionPresentMiddleware, isQuestionValid,
+  isUserAdminMiddleware, isUserQuestionOwnerMiddleware
 } from '../../middlewares';
-import { isQuestionIdValid } from '../../middlewares/question/validators';
 
 const router = Router();
 
