@@ -18,11 +18,7 @@ export const config = {
         maxRequests: 10000
     },
 
-    DATABASE_NAME: process.env.DATABASE_NAME || 'lmsDB',
-    DATABASE_USER: process.env.DATABASE_USER || 'root',
-    DATABASE_PASS: process.env.DATABASE_PASS || 'root',
-    DATABASE_IP: process.env.DATABASE_IP || '127.0.0.1',
-    DATABASE_PORT: process.env.DATABASE_PORT || '27017',
+    MONGO_URL: 'mongodb+srv://lmaadmin:lmsadmin2020@cluster0.sfb2x.mongodb.net/lmsDB?retryWrites=true&w=majority',
 
     logFileSize: 5 * 1024 * 1024, // 5mb
 
