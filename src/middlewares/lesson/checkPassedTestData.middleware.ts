@@ -7,7 +7,6 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
     const { lesson_id } = req.params;
     const { question_list } = req.body as IPassedTestData;
     const questions_id = [];
-
     let testResult = 0;
 
     for (const {question_id, chosen_answers} of question_list) {
