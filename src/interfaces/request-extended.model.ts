@@ -18,4 +18,5 @@ export interface IRequestExtended extends Request {
     group?: IGroup;
     course?: ICourse;
     module?: IModule;
+    refresh_token?: any;
 }

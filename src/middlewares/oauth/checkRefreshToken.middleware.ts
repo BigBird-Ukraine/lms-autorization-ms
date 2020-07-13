@@ -29,7 +29,7 @@ export const checkRefreshTokenMiddleware = async (req: IRequestExtended, res: Re
         }
 
         req.user = user.user_id;
-
+        req.refresh_token = token;
         next();
     } catch (e) {
 

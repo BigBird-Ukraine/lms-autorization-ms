@@ -5,7 +5,7 @@ import { tokenizer } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 import { oauthService } from '../../services';
 
-class UserController {
+class AuthController {
   async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { _id } = req.user as IUser;
@@ -43,10 +43,11 @@ class UserController {
   async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { _id } = req.user as IUser;
+      const refresh_token = req.refresh_token;
+
       const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
 
-      await oauthService.deleteOauthTokenByRefreshToken(refreshToken);
-
+      await oauthService.deleteOauthTokenByRefreshToken(refresh_token);
       await oauthService.createOauthToken({
         access_token: accessToken,
         refresh_token: refreshToken,
@@ -65,4 +66,4 @@ class UserController {
   }
 }
 
-export const authController = new UserController();
+export const authController = new AuthController();
