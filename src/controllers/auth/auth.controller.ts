@@ -1,11 +1,11 @@
 import { NextFunction, Response } from 'express';
 
-import { UserActionEnum } from '../../constants';
+import { HardWordsEnum, UserActionEnum } from '../../constants';
 import { tokenizer } from '../../helpers';
 import { IRequestExtended, IUser } from '../../interfaces';
 import { oauthService } from '../../services';
 
-class UserController {
+class AuthController {
   async loginUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { _id } = req.user as IUser;
@@ -30,7 +30,7 @@ class UserController {
 
   async logoutUser(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
-      const access_token = req.get('Authorization') as string;
+      const access_token = req.get(HardWordsEnum.AUTHORIZATION) as string;
 
       await oauthService.deleteOauthTokenByAccessToken(access_token);
 
@@ -43,10 +43,11 @@ class UserController {
   async refreshToken(req: IRequestExtended, res: Response, next: NextFunction) {
     try {
       const { _id } = req.user as IUser;
+      const refresh_token = req.refresh_token;
+
       const { accessToken, refreshToken } = tokenizer(UserActionEnum.AUTH);
 
-      await oauthService.deleteOauthTokenByRefreshToken(refreshToken);
-
+      await oauthService.deleteOauthTokenByRefreshToken(refresh_token);
       await oauthService.createOauthToken({
         access_token: accessToken,
         refresh_token: refreshToken,
@@ -65,4 +66,4 @@ class UserController {
   }
 }
 
-export const authController = new UserController();
+export const authController = new AuthController();

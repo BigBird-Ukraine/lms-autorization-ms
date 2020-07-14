@@ -74,6 +74,13 @@ class LessonService {
     return LessonModel
       .findByIdAndDelete(lesson_id) as any;
   }
+
+  getSizeOfAll(filterParams: Partial<ILesson>): Promise<any> {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel
+      .countDocuments(filterParams) as any;
+  }
 }
 
 export const lessonService = new LessonService();

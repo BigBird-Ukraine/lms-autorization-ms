@@ -25,6 +25,13 @@ class CourseService {
       .populate('modules_list')
       .select({ _id: 0 }) as any;
   }
+
+  getSizeOfAll(filterParams: Partial<ICourse>): Promise<any> {
+    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
+    return CourseModel
+      .countDocuments(filterParams) as any;
+  }
 }
 
 export const courseService = new CourseService();

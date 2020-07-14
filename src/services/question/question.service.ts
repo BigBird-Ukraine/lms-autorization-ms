@@ -51,6 +51,13 @@ class QuestionService {
 
     return QuestionModel.deleteOne({ _id });
   }
+
+  getSizeOfAll(filterParams: Partial<IQuestion>): Promise<any> {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel
+      .countDocuments(filterParams) as any;
+  }
 }
 
 export const questionService = new QuestionService();
