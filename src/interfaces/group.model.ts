@@ -30,3 +30,9 @@ export interface IGroupSubject {
     created_at: string;
     updated_at: string;
 }
+
+export interface IAttendance {
+    date: string;
+    present_students_id: IUserSubjectModel[];
+    absent_students_id: IUserSubjectModel[];
+}
