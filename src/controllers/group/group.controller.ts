@@ -47,7 +47,7 @@ class GroupController {
     const {group_id} = req.params;
     const visit_log = req.body;
 
-    await groupService.addVisit_log(group_id, visit_log); // TODO if date the same update.
+    await groupService.addVisit_log(group_id, visit_log);
 
     res.end();
   }
