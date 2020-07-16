@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, lessonSortingAttributes, regexFilterParams } from '../../helpers';
+import { calculationPageCount, lessonSortingAttributes } from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService } from '../../services';
 
@@ -27,10 +27,9 @@ class LessonController {
       } = req.query;
 
       lessonSortingAttributes(sort);
-      const updatedFilterParams = regexFilterParams(filter);
 
       const lesson = await lessonService.getLessons(+limit, +offset, sort, order, filter);
-      const count = await lessonService.getSizeOfAll(updatedFilterParams) as number;
+      const count = await lessonService.getSizeOfAll(filter) as number;
 
       res.json({
         data: {
