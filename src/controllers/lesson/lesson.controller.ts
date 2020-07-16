@@ -76,11 +76,7 @@ class LessonController {
     const {lesson_id} = req.params;
     const {NewQuestions_id} = req.body;
 
-    for (const Question of NewQuestions_id) {
-      await lessonService.addQuestionsToLesson(lesson_id, Question);
-    }
-
-    const updatedLesson = await lessonService.getLessonByID(lesson_id);
+    const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, NewQuestions_id);
 
     res.json({
       data: updatedLesson
