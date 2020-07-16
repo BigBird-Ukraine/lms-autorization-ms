@@ -65,7 +65,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel
-      .findByIdAndUpdate(lesson_id, {$addToSet: {questions_id: questions_list}}) as any;
+      .findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list}},  {new: true}) as any;
   }
 
   deleteLessonById(lesson_id: string): Promise<void> {
