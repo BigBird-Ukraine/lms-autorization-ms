@@ -1,3 +1,5 @@
+import { ITestResultModel } from './test_result.model';
+
 export interface IUserSubjectModel {
     _id: string;
     phone_number: string;
@@ -8,4 +10,5 @@ export interface IUserSubjectModel {
     status_id: number;
     photo_path?: string;
     groups_id?: [string];
+    passed_tests?: [ITestResultModel];
 }

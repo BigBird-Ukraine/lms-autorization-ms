@@ -1,4 +1,5 @@
 import { model } from 'mongoose';
+import * as mongoose from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
 import { User, UserSchema, UserType } from '../../database';
@@ -33,6 +34,35 @@ class UserService {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
     return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
+  }
+
+  getPassedTests(id: string) {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $lookup: {
+          from: 'Lesson',
+          localField: 'passed_tests.lesson_id',
+          foreignField: '_id',
+          as: 'lessons'
+        }
+      },
+      {
+        $lookup: {
+          from: 'Question',
+          localField: 'passed_tests.questions_id',
+          foreignField: '_id',
+          as: 'questions'
+        }
+      },
+      {$project: {lessons: 1, questions: 1, passed_tests: 1}}
+    ]);
   }
 }
 
