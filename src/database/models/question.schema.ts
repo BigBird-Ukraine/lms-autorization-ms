@@ -15,11 +15,6 @@ QuestionSchema = new Schema({
         type: String,
         required: true
     },
-    user_id: {
-        type: Types.ObjectId,
-        ref: DatabaseTablesEnum.USER_COLLECTION_NAME,
-        required: true
-    },
     answers: [{
         value: {
             type: String,
@@ -47,7 +42,12 @@ QuestionSchema = new Schema({
     lesson_id: [{
         type: Types.ObjectId,
         ref: DatabaseTablesEnum.LESSON_COLLECTION_NAME
-    }]
+    }],
+    user_id: {
+        type: Types.ObjectId,
+        required: true,
+        ref: DatabaseTablesEnum.USER_COLLECTION_NAME
+    }
 });
 
 export const Question: Model<QuestionType> = model<QuestionType>(

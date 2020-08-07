@@ -67,6 +67,14 @@ class UserController {
 
     res.json({data: user});
   }
+
+  async getMyPassedTests(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+
+    const data = await userService.getPassedTests(_id);
+
+    res.json(data);
+  }
 }
 
 export const userController = new UserController();
