@@ -9,6 +9,7 @@ export interface IUser {
     password: string;
     status_id: number;
     role_id: number;
+    city: string;
     photo_path?: string;
     created_at: string;
     updated_at?: string;
