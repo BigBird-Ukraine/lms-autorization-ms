@@ -11,6 +11,13 @@ class QuestionService {
     return newQuestion.save();
   }
 
+  updateQuestion(question: Partial<IQuestion>): Promise<any> {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel
+      .findByIdAndUpdate(question._id, question) as any;
+  }
+
   getQuestions(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<IQuestion[]> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
     order = order === 'ASC' ? 'ASC' : 'DESC';
