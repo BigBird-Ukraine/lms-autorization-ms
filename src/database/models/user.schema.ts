@@ -37,7 +37,7 @@ UserSchema = new Schema({
         required: true,
         default: UserRoleEnum.STUDENT
     },
-    city: {
+    population_point: {
         type: String,
         required: true
     },
