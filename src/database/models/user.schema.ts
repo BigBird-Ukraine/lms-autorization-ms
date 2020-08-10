@@ -37,6 +37,10 @@ UserSchema = new Schema({
         required: true,
         default: UserRoleEnum.STUDENT
     },
+    city: {
+        type: String,
+        required: true
+    },
     photo_path: String,
     created_at: {
         type: Date,

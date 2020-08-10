@@ -6,6 +6,7 @@ export interface IUserSubjectModel {
     email: string;
     name: string;
     surname: string;
+    city: string;
     role_id: number;
     status_id: number;
     photo_path?: string;

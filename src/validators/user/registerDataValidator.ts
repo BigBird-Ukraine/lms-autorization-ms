@@ -7,6 +7,7 @@ export const registerDataValidator = Joi.object().keys({
   password: Joi.string().max(255).regex(RegExpEnum.password).min(8).trim().required(),
   name: Joi.string().max(255).min(2).trim().required(),
   surname: Joi.string().max(255).min(2).trim().required(),
+  city: Joi.string().max(255).min(2).trim().required(),
   photo_path: Joi.string().max(255).trim(),
   phone_number: Joi.string().min(8).max(16).trim()
 });
