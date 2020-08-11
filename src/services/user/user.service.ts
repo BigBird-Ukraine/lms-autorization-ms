@@ -64,6 +64,27 @@ class UserService {
       {$project: {lessons: 1, questions: 1, passed_tests: 1}}
     ]);
   }
+
+  getMyGroups(id: string) {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $lookup: {
+          from: 'Group',
+          localField: 'groups_id',
+          foreignField: '_id',
+          as: 'groups'
+        }
+      },
+      {$project: {groups: {city: 1, created_at: 1, finished_at: 1, label: 1, _id: 1, attendance: 1}, _id: 0}}
+    ]);
+  }
 }
 
 export const userService = new UserService();

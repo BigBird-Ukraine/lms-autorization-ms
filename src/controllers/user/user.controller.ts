@@ -76,6 +76,14 @@ class UserController {
 
     res.json(data);
   }
+
+  async getMyGroups(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+
+    const data = await userService.getMyGroups(_id);
+
+    res.json(data);
+  }
 }
 
 export const userController = new UserController();
