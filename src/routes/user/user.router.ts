@@ -20,7 +20,7 @@ router.get('/info', userController.getUserInfoByToken);
 
 router.get('/my_passed_tests', userController.getMyPassedTests);
 
-router.use('/:user_id', isUserIdValid, isUpdatedUserDataValid, checkAccessTokenMiddleware, photoCheckMiddleware, checkNumberOfUserPhoto);
+router.use('/:user_id', checkAccessTokenMiddleware, isUserIdValid, isUpdatedUserDataValid, photoCheckMiddleware, checkNumberOfUserPhoto);
 router.patch('/:user_id', userController.updateUserByID);
 
 export const userRouter = router;
