@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 
 import { calculationPageCount, courseSortingAttributes, regexFilterParams } from '../../helpers';
-import { IRequestExtended } from '../../interfaces';
+import { IRequestExtended, IUser } from '../../interfaces';
 import { courseService } from '../../services';
 
 class CourseController {
@@ -40,6 +40,14 @@ class CourseController {
     res.json({
       data: course
     });
+  }
+
+  async getMyCourses(req: IRequestExtended, res: Response, next: NextFunction) {
+    const user = req.user as IUser;
+
+    const courses = await courseService.getMyCourses(user._id);
+
+    res.json(courses);
   }
 }
 

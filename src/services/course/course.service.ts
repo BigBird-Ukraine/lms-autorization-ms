@@ -1,7 +1,8 @@
 import { model } from 'mongoose';
 
+import * as mongoose from 'mongoose';
 import { DatabaseTablesEnum } from '../../constants';
-import { CourseSchema, CourseType } from '../../database';
+import { CourseSchema, CourseType, UserSchema, UserType } from '../../database';
 import { ICourse, IModule } from '../../interfaces';
 
 class CourseService {
@@ -31,6 +32,38 @@ class CourseService {
 
     return CourseModel
       .countDocuments(filterParams) as any;
+  }
+
+  getMyCourses(id: string) {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $lookup: {
+          from: 'Group',
+          localField: 'groups_id',
+          foreignField: '_id',
+          as: 'groups'
+        }
+      },
+      {$project: {groups: {course_id: 1}}},
+      {
+        $unwind: '$groups'
+      },
+      {
+        $lookup: {
+          from: 'Course',
+          localField: 'groups.course_id',
+          foreignField: '_id',
+          as: 'courses'
+        }
+      }
+    ]);
   }
 }
 
