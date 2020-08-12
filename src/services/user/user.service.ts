@@ -33,6 +33,7 @@ class UserService {
   addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
+    // @ts-ignore
     return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
   }
 
