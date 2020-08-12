@@ -1,5 +1,4 @@
 import { model } from 'mongoose';
-import * as mongoose from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
 import { User, UserSchema, UserType } from '../../database';
@@ -33,36 +32,23 @@ class UserService {
   addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
+    // @ts-ignore
     return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
   }
 
   getPassedTests(id: string) {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
-    return UserModel.aggregate([
-      {
-        $match: {
-          _id: mongoose.Types.ObjectId(id)
-        }
-      },
-      {
-        $lookup: {
-          from: 'Lesson',
-          localField: 'passed_tests.lesson_id',
-          foreignField: '_id',
-          as: 'lessons'
-        }
-      },
-      {
-        $lookup: {
-          from: 'Question',
-          localField: 'passed_tests.questions_id',
-          foreignField: '_id',
-          as: 'questions'
-        }
-      },
-      {$project: {lessons: 1, questions: 1, passed_tests: 1}}
-    ]);
+    return UserModel.findById(id)
+      .populate({
+        path: 'passed_tests.lesson_id',
+        select: {label: 1, description: 1, _id: 0}
+      })
+      .populate({
+        path: 'passed_tests.questions_id',
+        select: {questions: 1, description: 1, level: 1, subject: 1, _id: 0}
+      })
+      .select({passed_tests: 1, _id: 0});
   }
 }
 
