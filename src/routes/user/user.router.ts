@@ -19,6 +19,7 @@ router.use(checkAccessTokenMiddleware);
 router.get('/info', userController.getUserInfoByToken);
 
 router.get('/my_passed_tests', userController.getMyPassedTests);
+router.get('/my-groups', userController.getMyGroups);
 
 router.use('/:user_id', checkAccessTokenMiddleware, isUserIdValid, isUpdatedUserDataValid, photoCheckMiddleware, checkNumberOfUserPhoto);
 router.patch('/:user_id', userController.updateUserByID);
