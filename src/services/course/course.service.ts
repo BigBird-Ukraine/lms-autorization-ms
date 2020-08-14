@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { CourseSchema, CourseType } from '../../database';
+import { CourseSchema, CourseType, UserSchema, UserType } from '../../database';
 import { ICourse, IModule } from '../../interfaces';
 
 class CourseService {
@@ -31,6 +31,29 @@ class CourseService {
 
     return CourseModel
       .countDocuments(filterParams) as any;
+  }
+
+  getMyCourses(id: string) {
+    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+
+    return UserModel.findById(id)
+      .populate({
+        path: 'groups_id',
+        select: {course_id: 1, _id: 0},
+        populate: {
+          path: 'course_id',
+          select: {label: 1, description: 1, _id: 0},
+          populate: {
+            path: 'modules_list',
+            select: {description: 1, label: 1, lessons_list: 1, _id: 0},
+            populate: {
+              path: 'lessons_list',
+              select: {description: 1, label: 1, _id: 0}
+            }
+          }
+        }
+      })
+      .select({groups_id: 1, _id: 0});
   }
 }
 
