@@ -7,3 +7,4 @@ export * from './lesson';
 export * from './module';
 export * from './question';
 export * from './user';
+export * from './checkPassedTestData.helper';

@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { questionController } from '../../controllers';
 
 import {
-  checkAccessTokenMiddleware, checkIsTeacher, isQuestionFilterValid,
+  checkAccessTokenMiddleware, checkIsTeacher, checkPassedTestData, isLessonPassedTestDataValid, isQuestionFilterValid,
   isQuestionPresentMiddleware, isQuestionValid, isUpdatedQuestionValid,
   isUserAdminOrTeacherMiddleware, isUserQuestionOwnerMiddleware
 } from '../../middlewares';
@@ -12,6 +12,7 @@ const router = Router();
 
 router.use(checkAccessTokenMiddleware);
 router.get('/', isQuestionFilterValid, questionController.getQuestions);
+router.post('/test', isLessonPassedTestDataValid, checkPassedTestData, questionController.addFilteredTestResult);
 
 router.use(checkIsTeacher);
 router.get('/my', questionController.getMyQuestions);
