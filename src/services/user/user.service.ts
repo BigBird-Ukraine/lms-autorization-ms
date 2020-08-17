@@ -1,3 +1,4 @@
+import * as mongoose from 'mongoose';
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
