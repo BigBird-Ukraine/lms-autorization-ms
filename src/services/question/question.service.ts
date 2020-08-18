@@ -65,6 +65,38 @@ class QuestionService {
     return QuestionModel
       .countDocuments(filterParams) as any;
   }
+
+  addLessonInQuestion(questions_id: string[], lesson_id: string) {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel.bulkWrite(questions_id.map(question_id => {
+      return {
+        updateOne: {
+          filter: {_id: question_id},
+          update: {
+            $addToSet: {lesson_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
+
+  deleteLessonInQuestion(questions_id: any[], lesson_id: string) {
+    const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
+
+    return QuestionModel.bulkWrite(questions_id.map(question_id => {
+      return {
+        updateOne: {
+          filter: {_id: question_id},
+          update: {
+            $pull: {lesson_id}
+          },
+          upsert: true
+        }
+      };
+    }));
+  }
 }
 
 export const questionService = new QuestionService();

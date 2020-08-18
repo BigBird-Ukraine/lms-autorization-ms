@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { calculationPageCount, lessonSortingAttributes } from '../../helpers';
+import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService } from '../../services';
+import { lessonService, questionService } from '../../services';
 
 class LessonController {
 
@@ -74,6 +75,14 @@ class LessonController {
   async addQuestionToLesson(req: Request, res: Response, next: NextFunction) {
     const {lesson_id} = req.params;
     const {NewQuestions_id} = req.body;
+
+    const {questions_id} = await lessonService.getLessonByID(lesson_id);
+
+    if (questions_id) {
+      const { deleted, updated } = checkDeletedObjects(questions_id, NewQuestions_id);
+      if (updated.length) { await questionService.addLessonInQuestion(updated, lesson_id); }
+      if (deleted.length) { await questionService.deleteLessonInQuestion(deleted, lesson_id); }
+    }
 
     const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, NewQuestions_id);
 
