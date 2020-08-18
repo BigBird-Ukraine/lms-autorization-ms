@@ -9,14 +9,6 @@ class HelperService {
     getHelperLevel() {
         return Question.distinct('level');
     }
-
-    getHelperSubject() {
-        return Question.distinct('subject');
-    }
-
-    getHelperGroup() {
-      return Question.distinct('group');
-    }
 }
 
 export const helperService = new HelperService();
