@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { calculationPageCount, questionSortingAttributes, regexFilterParams } from '../../helpers';
-import { IRequestExtended, IUser } from '../../interfaces';
-import { questionService } from '../../services';
+import { IRequestExtended, ITestResultModel, IUser } from '../../interfaces';
+import { questionService, userService } from '../../services';
 
 class QuestionController {
 
@@ -71,6 +71,16 @@ class QuestionController {
     await questionService.deleteQuestionById(question_id);
 
     res.end();
+  }
+
+  async addFilteredTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+    const passed_test = req.passed_test as ITestResultModel;
+
+    await userService.addPassedTest(_id, passed_test);
+    const user = await userService.getUserByID(_id);
+
+    res.json({data: user});
   }
 }
 
