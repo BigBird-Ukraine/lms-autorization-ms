@@ -55,6 +55,12 @@ class CourseService {
       })
       .select({groups_id: 1, _id: 0});
   }
+
+  getAllCourseLabel() {
+    const CourseModel = model<CourseType>(DatabaseTablesEnum.COURSE_COLLECTION_NAME, CourseSchema);
+
+    return CourseModel.find().select({label: 1, _id: 0});
+  }
 }
 
 export const courseService = new CourseService();

@@ -55,6 +55,12 @@ class GroupService {
       .populate('attendance.absent_students_id', {password: 0})
       .select({attendance: 1, _id: 0}) as any;
   }
+
+  getAllGroupsLabel() {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.find().select({label: 1, _id: 0});
+  }
 }
 
 export const groupService = new GroupService();

@@ -56,7 +56,7 @@ class QuestionService {
   async deleteQuestionById(questions_id: string) {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
-    return QuestionModel.deleteOne({questions_id}, (err) => {
+    return QuestionModel.findByIdAndDelete(questions_id, (err) => {
       Lesson.update(
         { questions_id },
         { $pull: { questions_id } },
