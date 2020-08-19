@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { User, UserSchema, UserType } from '../../database';
-import { ITestResultModel, IUser } from '../../interfaces';
+import { PassedTest, PassedTestSchema, PassedTestType, User, UserSchema, UserType } from '../../database';
+import { IPassedTest, IUser } from '../../interfaces';
 
 class UserService {
   createUser(userValue: IUser): Promise<any> {
@@ -30,26 +30,18 @@ class UserService {
       .findByIdAndUpdate(user_id, patchObject) as any;
   }
 
-  addPassedTest(user_id: string, passed_test: ITestResultModel): Promise<void> {
-    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+  addPassedTest(passed_test: IPassedTest): Promise<any> {
+    const newPassedTest = new PassedTest(passed_test);
 
-    // @ts-ignore
-    return UserModel.findByIdAndUpdate(user_id, {$push: {passed_tests: passed_test}}) as any;
+    return newPassedTest.save();
   }
 
   getPassedTests(id: string) {
-    const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
+    const PassedTestModel = model<PassedTestType>(DatabaseTablesEnum.PASSED_TEST_COLLECTION_NAME, PassedTestSchema);
 
-    return UserModel.findById(id)
-      .populate({
-        path: 'passed_tests.lesson_id',
-        select: {label: 1, description: 1, _id: 0}
-      })
-      .populate({
-        path: 'passed_tests.questions_id',
-        select: {questions: 1, description: 1, level: 1, subject: 1, _id: 0}
-      })
-      .select({passed_tests: 1, _id: 0});
+    return PassedTestModel.find({
+      user_id: id
+    });
   }
 
   getMyGroups(id: string) {

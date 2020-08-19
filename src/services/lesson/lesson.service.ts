@@ -94,6 +94,12 @@ class LessonService {
     return LessonModel
       .countDocuments(filterParams) as any;
   }
+
+  getLabelAndDescriptionOfLesson(id: string) {
+    const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
+
+    return LessonModel.findById(id).select({label: 1, description: 1, _id: 0}) as any;
+  }
 }
 
 export const lessonService = new LessonService();
