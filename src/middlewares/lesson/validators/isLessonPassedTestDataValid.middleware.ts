@@ -6,7 +6,7 @@ import { ErrorHandler } from '../../../errors';
 import { lessonPassedTestDataValidator } from '../../../validators';
 
 export const isLessonPassedTestDataValid = async (req: Request, res: Response, next: NextFunction) => {
-    const {error} = Joi.validate(req.body, lessonPassedTestDataValidator);
+    const {error} = Joi.validate(req.body.test, lessonPassedTestDataValidator);
 
     if (error) {
         return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, error.details[0].message));

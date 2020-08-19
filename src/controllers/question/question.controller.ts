@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { calculationPageCount, questionSortingAttributes, regexFilterParams } from '../../helpers';
-import { IRequestExtended, ITestResultModel, IUser } from '../../interfaces';
+import { IPassedTest, IRequestExtended, ITestResultModel, IUser } from '../../interfaces';
 import { questionService, userService } from '../../services';
 
 class QuestionController {
@@ -75,12 +75,17 @@ class QuestionController {
 
   async addFilteredTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
     const {_id} = req.user as IUser;
-    const passed_test = req.passed_test as ITestResultModel;
+    const pt = req.passed_test as ITestResultModel;
 
-    await userService.addPassedTest(_id, passed_test);
-    const user = await userService.getUserByID(_id);
+    const passed_test: IPassedTest = {
+      questions: req.body.questions,
+      result: pt.result,
+      user_id: _id
+    };
 
-    res.json({data: user});
+    await userService.addPassedTest(passed_test);
+
+    res.json(pt.result);
   }
 }
 
