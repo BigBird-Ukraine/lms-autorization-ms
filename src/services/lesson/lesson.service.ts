@@ -49,22 +49,9 @@ class LessonService {
   getQuestionsForTestByLessonId(lesson_id: string) {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
-    // return LessonModel.findById(lesson_id)
-    //   .select({ questions_id: 1, _id: 0 })
-    //   .populate('questions_id', {'answers.correct' : 0});
-    return LessonModel.aggregate([
-      {$project: {questions_id: 1}},
-      {$unwind: '$questions_id'},
-      {
-        $lookup: {
-          from: 'Question',
-          localField: 'questions_id',
-          foreignField: '_id',
-          as: 'question'
-        }
-      },
-      {$project: {question: {answers: 1}, _id: 0}}
-    ]);
+    return LessonModel.findById(lesson_id)
+      .select({questions_id: 1, _id: 0})
+      .populate('questions_id');
   }
 
   editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
