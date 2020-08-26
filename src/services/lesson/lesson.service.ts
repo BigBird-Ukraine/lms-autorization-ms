@@ -50,8 +50,8 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel.findById(lesson_id)
-      .select({ questions_id: 1, _id: 0 })
-      .populate('questions_id', {'answers.correct' : 0});
+      .select({questions_id: 1, _id: 0})
+      .populate('questions_id');
   }
 
   editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {
@@ -65,7 +65,7 @@ class LessonService {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     // @ts-ignore
-    return LessonModel.findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list}},  {new: true}) as any;
+    return LessonModel.findByIdAndUpdate(lesson_id, {$set: {questions_id: questions_list}}, {new: true}) as any;
   }
 
   deleteLessonById(lesson_id: string): Promise<void> {
@@ -74,15 +74,15 @@ class LessonService {
     return LessonModel
       .findByIdAndRemove(lesson_id, (err, post) => {
         Module.update(
-          { lessons_list : lesson_id},
-          { $pull: { lessons_list: lesson_id } },
-          { multi: true })
+          {lessons_list: lesson_id},
+          {$pull: {lessons_list: lesson_id}},
+          {multi: true})
           .exec();
 
         Question.update(
-          { lesson_id},
-          { $pull: { lesson_id } },
-          { multi: true })
+          {lesson_id},
+          {$pull: {lesson_id}},
+          {multi: true})
           .exec();
 
       }) as any;

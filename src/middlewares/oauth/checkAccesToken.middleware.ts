@@ -10,7 +10,6 @@ import { oauthService } from '../../services';
 export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {
         const authToken = req.get('Authorization') as string;
-
         if (!authToken) {
             return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
         }

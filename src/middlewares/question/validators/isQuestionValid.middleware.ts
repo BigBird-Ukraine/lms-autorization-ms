@@ -7,7 +7,6 @@ import { insertedQuestionValidator } from '../../../validators';
 
 export const isQuestionValid = async (req: Request, res: Response, next: NextFunction) => {
     const questionValue = req.body;
-
     const {error} = Joi.validate(questionValue, insertedQuestionValidator);
 
     if (error) {

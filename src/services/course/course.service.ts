@@ -48,7 +48,7 @@ class CourseService {
             select: {description: 1, label: 1, lessons_list: 1, _id: 0},
             populate: {
               path: 'lessons_list',
-              select: {description: 1, label: 1, _id: 0}
+              select: {description: 1, label: 1}
             }
           }
         }
