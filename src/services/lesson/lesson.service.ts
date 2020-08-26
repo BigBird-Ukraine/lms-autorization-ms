@@ -46,12 +46,12 @@ class LessonService {
       .findById(lesson_id).select({questions_id: 1, _id: 0}) as any;
   }
 
-  getQuestionsForTestByLessonId(lesson_id: string) {
+  getQuestionsForTestByLessonId(lesson_id: string, statusAnswers: number) {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel.findById(lesson_id)
-      .select({questions_id: 1, _id: 0})
-      .populate('questions_id');
+      .select({ questions_id: 1, _id: 0 })
+      .populate('questions_id', {'answers.correct' : statusAnswers}) as any;
   }
 
   editLessonById(lesson_id: string, updatingData: Partial<ILesson>): Promise<ILesson> {

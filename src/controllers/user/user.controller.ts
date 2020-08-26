@@ -70,13 +70,13 @@ class UserController {
     };
 
     if (pt.lesson_id) {
-      const { label, description } = await lessonService.getLabelAndDescriptionOfLesson(pt.lesson_id);
+      const {label, description} = await lessonService.getLabelAndDescriptionOfLesson(pt.lesson_id);
       passed_test.lesson_label = label;
       passed_test.lesson_description = description;
     }
     await userService.addPassedTest(passed_test);
 
-    res.json( pt.result);
+    res.json(pt.result);
   }
 
   async getMyPassedTests(req: IRequestExtended, res: Response, next: NextFunction) {
