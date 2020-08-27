@@ -18,6 +18,7 @@ export enum StatusesEnum {
     NOT_YOUR_QUESTION = 'Its not your question',
     NOT_YOUR_LESSON = 'Its not your lesson',
     CONTROLLER_ERROR = 'Controller Error',
+    NOT_YOUR_COMMENT = 'Its not your comment',
 
     // 404
     USER_NOT_FOUND = 'User is not found',

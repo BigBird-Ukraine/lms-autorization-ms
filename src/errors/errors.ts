@@ -67,6 +67,10 @@ export const errors = {
         message: StatusesEnum.NOT_YOUR_LESSON,
         code: 4034
     },
+    FORBIDDEN_NOT_YOUR_COMMENT: {
+        message: StatusesEnum.NOT_YOUR_COMMENT,
+        code: 4034
+    },
 
     // 404
     NOT_FOUND_USER_NOT_PRESENT: { // When user wants login, but email not found in DB
@@ -80,6 +84,11 @@ export const errors = {
     },
 
     NOT_FOUND_LESSON_NOT_PRESENT: {
+        message: StatusesEnum.LESSON_NOT_FOUND,
+        code: 4043
+    },
+
+    NOT_FOUND_COMMENT_NOT_PRESENT: {
         message: StatusesEnum.LESSON_NOT_FOUND,
         code: 4043
     },

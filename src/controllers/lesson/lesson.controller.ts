@@ -4,7 +4,7 @@ import { ResponseStatusCodesEnum } from '../../constants';
 import { calculationPageCount, lessonSortingAttributes } from '../../helpers';
 import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
-import { lessonService, questionService } from '../../services';
+import { commentService, lessonService, questionService } from '../../services';
 
 class LessonController {
 
@@ -79,9 +79,13 @@ class LessonController {
     const {questions_id} = await lessonService.getLessonByID(lesson_id);
 
     if (questions_id) {
-      const { deleted, updated } = checkDeletedObjects(questions_id, NewQuestions_id);
-      if (updated.length) { await questionService.addLessonInQuestion(updated, lesson_id); }
-      if (deleted.length) { await questionService.deleteLessonInQuestion(deleted, lesson_id); }
+      const {deleted, updated} = checkDeletedObjects(questions_id, NewQuestions_id);
+      if (updated.length) {
+        await questionService.addLessonInQuestion(updated, lesson_id);
+      }
+      if (deleted.length) {
+        await questionService.deleteLessonInQuestion(deleted, lesson_id);
+      }
     }
 
     const updatedLesson = await lessonService.addQuestionsToLesson(lesson_id, NewQuestions_id);
@@ -105,6 +109,53 @@ class LessonController {
     await lessonService.deleteLessonById(lesson_id);
 
     res.end();
+  }
+
+  async saveComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {lesson_id} = req.params;
+    const {_id} = req.user as any;
+    const {text} = req.body;
+
+    await commentService.saveComment({lesson_id, text, user_id: _id});
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
+  async getCommentaries(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.lesson as any;
+    const {
+      pageSize,
+      pageIndex,
+      offset = pageSize * pageIndex,
+      ...filterParams
+    } = req.query;
+
+    const comments = await commentService.getCommentaries(_id, +pageSize, offset);
+    const count = comments.length && await commentService.getSizeOfAll(filterParams) || 0;
+
+    res.json({
+      data: {
+        comments,
+        count
+      }
+    });
+  }
+
+  async deleteComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {comment_id} = req.query;
+
+    await commentService.delete(comment_id);
+
+    res.end();
+  }
+
+  async editComment(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {comment_id} = req.query;
+    const {text} = req.body;
+
+    await commentService.editComment(comment_id, text);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
   }
 }
 
