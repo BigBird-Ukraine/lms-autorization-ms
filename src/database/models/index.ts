@@ -5,4 +5,5 @@ export * from './lesson.schema';
 export * from './course.schema';
 export * from './group.schema';
 export * from './module.schema';
-export * from './passed_test.schema';
+export * from './passed_lesson.schema';
+export * from './passed_question.schema';

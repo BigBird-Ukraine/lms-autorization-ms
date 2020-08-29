@@ -1,8 +1,16 @@
 import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
-import { Lesson, Question, QuestionSchema, QuestionType } from '../../database';
+import {
+  Lesson,
+  PassedQuestionSchema,
+  PassedQuestionType,
+  Question,
+  QuestionSchema,
+  QuestionType
+} from '../../database';
 import { IQuestion } from '../../interfaces';
+import { IPassedQuestion } from '../../interfaces/passed_question.model';
 
 class QuestionService {
 
@@ -24,7 +32,7 @@ class QuestionService {
 
     return QuestionModel
       .find(filter)
-      .select({ 'answers.correct': 0 })
+      .select({'answers.correct': 0})
       .limit(limit)
       .skip(offset)
       .sort({
@@ -36,15 +44,21 @@ class QuestionService {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel
-      .find({ user_id: `${_id}` }); // todo limit offset bug(dont queriing with this parameters)
+      .find({user_id: `${_id}`}); // todo limit offset bug(dont queriing with this parameters)
 
   }
 
-  async getQuestionById(questionId: string):  Promise<IQuestion> {
+  async getQuestionById(questionId: string): Promise<IQuestion> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
 
     return QuestionModel
-      .findOne({ _id: `${questionId}` }) as any;
+      .findOne({_id: `${questionId}`}) as any;
+  }
+
+  async getPassedQuestionByParams(question: Partial<IPassedQuestion>): Promise<IPassedQuestion> {
+    const PassedQuestionModel = model<PassedQuestionType>(DatabaseTablesEnum.PASSED_QUESTION_COLLECTION_NAME, PassedQuestionSchema);
+
+    return PassedQuestionModel.findOne(question) as any;
   }
 
   async getAnswersByQuestionId(questionId: string): Promise<IQuestion> {
@@ -58,9 +72,9 @@ class QuestionService {
 
     return QuestionModel.findByIdAndDelete(questions_id, (err) => {
       Lesson.update(
-        { questions_id },
-        { $pull: { questions_id } },
-        { multi: true })
+        {questions_id},
+        {$pull: {questions_id}},
+        {multi: true})
         .exec();
     });
   }
@@ -102,6 +116,12 @@ class QuestionService {
         }
       };
     }));
+  }
+
+  savePassedQuestions(questions: IPassedQuestion[]) {
+    const PassedQuestionModel = model<PassedQuestionType>(DatabaseTablesEnum.PASSED_QUESTION_COLLECTION_NAME, PassedQuestionSchema);
+
+    return PassedQuestionModel.insertMany(questions);
   }
 }
 

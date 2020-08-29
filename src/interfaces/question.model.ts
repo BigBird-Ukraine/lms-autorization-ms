@@ -12,5 +12,5 @@ export interface IQuestion {
     subject: string;
     group: [string];
     tags: [string];
-    lessons_id?: [string];
+    lessons_id?: string[];
 }

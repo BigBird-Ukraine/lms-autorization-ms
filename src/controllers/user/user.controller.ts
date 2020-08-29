@@ -3,8 +3,8 @@ import { UploadedFile } from 'express-fileupload';
 
 import { ResponseStatusCodesEnum } from '../../constants';
 import { HASH_PASSWORD, updatedUserPhotoMv, userPhotoMv } from '../../helpers';
-import { IPassedTest, IRequestExtended, ITestResultModel, IUser, IUserSubjectModel } from '../../interfaces';
-import { lessonService, userService } from '../../services';
+import { IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
+import { userService } from '../../services';
 
 class UserController {
 
@@ -61,22 +61,11 @@ class UserController {
 
   async addTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
     const {_id} = req.user as IUser;
-    const pt = req.passed_test as ITestResultModel;
+    const pt = req.passed_test as IPassedTest;
 
-    const passed_test: IPassedTest = {
-      questions: req.body.questions,
-      result: pt.result,
-      user_id: _id
-    };
+    await userService.addPassedTest(_id, {passed_lesson_id: req.passed_lesson_id, result: pt.result});
 
-    if (pt.lesson_id) {
-      const { label, description } = await lessonService.getLabelAndDescriptionOfLesson(pt.lesson_id);
-      passed_test.lesson_label = label;
-      passed_test.lesson_description = description;
-    }
-    await userService.addPassedTest(passed_test);
-
-    res.json( pt.result);
+    res.json(pt.result);
   }
 
   async getMyPassedTests(req: IRequestExtended, res: Response, next: NextFunction) {

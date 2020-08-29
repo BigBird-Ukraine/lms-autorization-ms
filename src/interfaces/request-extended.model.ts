@@ -5,7 +5,7 @@ import { ILesson } from './lesson.model';
 import { IModule } from './module.model';
 
 import { IQuestion } from './question.model';
-import { ITestResultModel } from './test_result.model';
+import { IPassedTest } from './test_result.model';
 import { IUser } from './user.model';
 
 export interface IRequestExtended extends Request {
@@ -14,9 +14,10 @@ export interface IRequestExtended extends Request {
     question?: IQuestion;
     lesson?: ILesson;
     photos?: any[]; // TODO
-    passed_test?: ITestResultModel;
+    passed_test?: IPassedTest;
     group?: IGroup;
     course?: ICourse;
     module?: IModule;
     refresh_token?: any;
+    passed_lesson_id?: string;
 }

@@ -41,6 +41,27 @@ UserSchema = new Schema({
         type: String,
         required: true
     },
+    passed_tests: [{
+      passed_lesson_id: {
+        type: Types.ObjectId,
+        required: false,
+        ref: DatabaseTablesEnum.PASSED_LESSON_COLLECTION_NAME
+      },
+      passed_questions_id: [{
+        type: Types.ObjectId,
+        required: false,
+        ref: DatabaseTablesEnum.PASSED_QUESTION_COLLECTION_NAME
+      }],
+      result: {
+        type: Number,
+        required: true
+      },
+      passed_at: {
+        type: Date,
+        default: Date.now(),
+        required: true
+      }
+  }],
     photo_path: String,
     created_at: {
         type: Date,
