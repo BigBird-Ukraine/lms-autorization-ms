@@ -1,7 +1,7 @@
 import { model } from 'mongoose';
 
-import { DatabaseTablesEnum } from '../../constants';
-import { Lesson, LessonSchema, LessonType, Module, Question } from '../../database';
+import { DatabaseTablesEnum } from '../../constants/enums';
+import { Lesson, LessonSchema, LessonType, Module, Question } from '../../database/models';
 import { ILesson } from '../../interfaces';
 
 class LessonService {
@@ -95,7 +95,7 @@ class LessonService {
       .countDocuments(filterParams) as any;
   }
 
-  getLabelAndDescriptionOfLesson(id: string) {
+  getLabelAndDescriptionOfLesson(id: string): Promise<any> {
     const LessonModel = model<LessonType>(DatabaseTablesEnum.LESSON_COLLECTION_NAME, LessonSchema);
 
     return LessonModel.findById(id).select({label: 1, description: 1, _id: 0}) as any;
