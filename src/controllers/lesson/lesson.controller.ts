@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, lessonSortingAttributes } from '../../helpers';
+import { calculationPageCount, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
 import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService, questionService } from '../../services';
@@ -94,9 +94,10 @@ class LessonController {
   async generateTestByLessonId(req: Request, res: Response, next: NextFunction) {
     const {lesson_id} = req.params;
 
-    const questions_id = await lessonService.getQuestionsForTestByLessonId(lesson_id);
+    const {questions_id} = await lessonService.getQuestionsForTestByLessonId(lesson_id, 0);
+    const maxMark = await questionCorrectAnswersCount(lesson_id);
 
-    res.json({data: questions_id});
+    res.json({data: {questions: [...questions_id], maxMark: maxMark * 10}});
   }
 
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
