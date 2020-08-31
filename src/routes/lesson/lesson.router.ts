@@ -9,6 +9,7 @@ import {
   isLessonPresentMiddleware, isLessonQuestionValid, isLessonUpdatingDataValid, isLessonValid,
   isQuestionExistInLessonMiddleware
 } from '../../middlewares';
+import { passedTestManager } from '../../middlewares/lesson/passedTestManager.middleware';
 import { isLessonCommentariesDataValid } from '../../middlewares/lesson/validators/isLessonCommentariesDataValid.middleware';
 
 const router = Router();
@@ -26,7 +27,7 @@ router.put('/comment', isLessonCommentariesDataValid, lessonController.editComme
 router.use('/:lesson_id', isLessonPresentMiddleware);
 router.get('/:lesson_id', lessonController.getLessonById);
 router.get('/:lesson_id/test', lessonController.generateTestByLessonId);
-router.post('/:lesson_id/test', isLessonPassedTestDataValid, checkPassedTestData, userController.addTestResult);
+router.post('/:lesson_id/test', isLessonPassedTestDataValid, checkPassedTestData, passedTestManager, userController.addTestResult);
 
 router.post('/:lesson_id/comment', isLessonCommentariesDataValid, lessonController.saveComment);
 router.get('/:lesson_id/comment', lessonController.getCommentaries);

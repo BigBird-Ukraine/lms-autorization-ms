@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, questionSortingAttributes, regexFilterParams } from '../../helpers';
-import { IPassedTest, IRequestExtended, ITestResultModel, IUser } from '../../interfaces';
-import { questionService, userService } from '../../services';
+import { calculationPageCount, checkPresentPassedQuestions, questionSortingAttributes, regexFilterParams } from '../../helpers';
+import { IPassedTest, IRequestExtended, IUser } from '../../interfaces';
+import { lessonService, questionService, userService } from '../../services';
 
 class QuestionController {
 
@@ -46,6 +46,7 @@ class QuestionController {
 
   async updateQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
     await questionService.updateQuestion(req.body);
+    await lessonService.resetLastValidLessons(req.body.lesson_id);
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
@@ -68,6 +69,8 @@ class QuestionController {
   async deleteQuestion(req: IRequestExtended, res: Response, next: NextFunction) {
     const {question_id} = req.params;
 
+    const {lesson_id} = await questionService.getQuestionById(question_id) as any;
+    await lessonService.resetLastValidLessons(lesson_id);
     await questionService.deleteQuestionById(question_id);
 
     res.end();
@@ -75,15 +78,11 @@ class QuestionController {
 
   async addFilteredTestResult(req: IRequestExtended, res: Response, next: NextFunction) {
     const {_id} = req.user as IUser;
-    const pt = req.passed_test as ITestResultModel;
+    const pt = req.passed_test as IPassedTest;
 
-    const passed_test: IPassedTest = {
-      questions: req.body.questions,
-      result: pt.result,
-      user_id: _id
-    };
+    const passed_questions_id = await checkPresentPassedQuestions(req.body.questions) as any;
 
-    await userService.addPassedTest(passed_test);
+    await userService.addPassedTest(_id, {passed_questions_id, result: pt.result});
 
     res.json(pt.result);
   }
