@@ -7,6 +7,7 @@ export enum DatabaseTablesEnum {
   LESSON_COLLECTION_NAME = 'Lesson',
   VISIT_LOG_COLLECTION_NAME = 'Visit_log',
   COURSE_COLLECTION_NAME = 'Course',
+  COMMENT_COLLECTION_NAME = 'Comment',
   PASSED_LESSON_COLLECTION_NAME = 'Passed_lesson',
   PASSED_QUESTION_COLLECTION_NAME = 'Passed_question'
 }

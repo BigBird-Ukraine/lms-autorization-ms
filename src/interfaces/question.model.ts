@@ -14,3 +14,14 @@ export interface IQuestion {
     tags: [string];
     lessons_id?: string[];
 }
+
+export interface IAnswers {
+  questions_id: [{
+    _id: string,
+    answers: IAnswer[];
+  }];
+}
+
+export interface IAnswer {
+  correct: boolean;
+}

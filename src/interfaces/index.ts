@@ -10,3 +10,4 @@ export * from './passed_lesson.model';
 export * from './test_result.model';
 export * from './group.model';
 export * from './course.model';
+export * from './comment.model';
