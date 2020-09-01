@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 
-import { regexFilterParams } from '../../helpers';
+import { editVisitLog, regexFilterParams } from '../../helpers';
 import { IGroup, IRequestExtended } from '../../interfaces';
 import { groupService } from '../../services';
 
@@ -58,6 +58,26 @@ class GroupController {
     const visit_log = await groupService.getVisitLog(group_id);
 
     res.json({data: visit_log});
+  }
+
+  async deleteVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    const group = req.group as IGroup;
+    const {visitId} = req.query;
+
+    await groupService.deleteVisitLog(group._id, visitId);
+
+    res.end();
+  }
+
+  async editVisitLog(req: IRequestExtended, res: Response, next: NextFunction) {
+    const group = req.group as IGroup;
+    const {visitId, studentId} = req.query;
+
+    const attendances = editVisitLog(group, visitId, studentId);
+
+    await groupService.editVisitLog(group._id, attendances);
+
+    res.json(attendances);
   }
 }
 

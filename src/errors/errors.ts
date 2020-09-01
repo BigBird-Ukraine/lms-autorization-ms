@@ -106,5 +106,9 @@ export const errors = {
     NOT_FOUND_GROUP_NOT_PRESENT: {
         message: StatusesEnum.GROUP_NOT_FOUND,
         code: 4046
+    },
+    NOT_FOUND_VISIT_LOG_NOT_PRESENT:  {
+        message: StatusesEnum.VISIT_LOG_NOT_FOUND,
+        code: 4047
     }
 };

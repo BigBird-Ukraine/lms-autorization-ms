@@ -33,7 +33,7 @@ class GroupService {
     const group = await GroupModel.findById(group_id);
     if (group) {
       const index = group.attendance.findIndex(el => el.date === visit_log.date);
-      index === -1 ? group.attendance.push(visit_log) :  group.attendance[index] = visit_log;
+      index === -1 ? group.attendance.push(visit_log) : group.attendance[index] = visit_log;
     }
 
     return group && GroupModel.findByIdAndUpdate(group_id, {$set: {attendance: group.attendance}}) as any;
@@ -56,10 +56,31 @@ class GroupService {
       .select({attendance: 1, _id: 0}) as any;
   }
 
-  getAllGroupsLabel() {
+  getAllGroupsLabel(): Promise<Partial<IGroup[]>> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
 
-    return GroupModel.find().select({label: 1, _id: 0});
+    return GroupModel.find().select({label: 1, _id: 0}) as any;
+  }
+
+  async deleteVisitLog(group_id: string, attendance_id: string) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    await GroupModel.update(
+      {_id: group_id},
+      {
+        $pull: {
+          attendance: {
+            _id: attendance_id
+          }
+        }
+      }
+    );
+  }
+
+  async editVisitLog(group_id: string, attendance: IAttendance[]) {
+    const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
+
+    return GroupModel.findByIdAndUpdate(group_id, {attendance});
   }
 }
 

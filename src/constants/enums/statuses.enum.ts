@@ -27,6 +27,6 @@ export enum StatusesEnum {
     COURSE_NOT_FOUND = 'Course is not found',
     MODULE_NOT_FOUND = 'Module is not found',
     GROUP_NOT_FOUND = 'Group is not found',
-    API_ROUTE_NOT_FOUND = 'API route not found'
-
+    API_ROUTE_NOT_FOUND = 'API route not found',
+    VISIT_LOG_NOT_FOUND = 'Visit log nog found'
 }
