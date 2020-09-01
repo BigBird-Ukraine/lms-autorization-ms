@@ -2,7 +2,7 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants';
 import { User, UserSchema, UserType } from '../../database';
-import { ITestResultModel, IUser } from '../../interfaces';
+import { IFullUserTest, ITestResultModel, IUser } from '../../interfaces';
 
 class UserService {
   createUser(userValue: IUser): Promise<any> {
@@ -23,7 +23,7 @@ class UserService {
       .findByIdAndUpdate(user_id, patchObject) as any;
   }
 
-  getPassedTests(id: string) {
+  getPassedTests(id: string): Promise<IFullUserTest> {
     const UserModel = model<UserType>(DatabaseTablesEnum.USER_COLLECTION_NAME, UserSchema);
 
     return UserModel.findById(id)
@@ -40,7 +40,7 @@ class UserService {
         path: 'passed_tests.passed_questions_id',
         select: {description: 1, level: 1, subject: 1, question: 1, _id: 0}
       })
-      .select({passed_tests: 1, _id: 0});
+      .select({passed_tests: 1, _id: 0}) as any;
   }
 
   getMyGroups(id: string) {
