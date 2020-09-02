@@ -4,9 +4,9 @@ import { lessonController, userController } from '../../controllers';
 import {
   checkAccessTokenMiddleware,
   checkIsTeacher, checkPassedTestData,
-  checkQuestionsListLenght, isCommentOwnerMiddleware, isCommentPresent, isLessonFilterValid,
+  checkQuestionsListLenght, googleVideoUploader, isCommentOwnerMiddleware, isCommentPresent, isLessonFilterValid,
   isLessonOwnerMiddleware, isLessonPassedTestDataValid,
-  isLessonPresentMiddleware, isLessonQuestionValid, isLessonUpdatingDataValid, isLessonValid,
+  isLessonPresentMiddleware, isLessonQuestionValid, isLessonUpdatingDataValid,
   isQuestionExistInLessonMiddleware
 } from '../../middlewares';
 import { passedTestManager } from '../../middlewares/lesson/passedTestManager.middleware';
@@ -17,7 +17,7 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.get('/', isLessonFilterValid, lessonController.getLessons);
 
-router.post('/', isLessonValid, checkIsTeacher, lessonController.createLesson);
+router.post('/', checkIsTeacher, googleVideoUploader, lessonController.createLesson);
 router.get('/my', checkIsTeacher, lessonController.getMyLesson);
 
 router.use('/comment', isCommentPresent, isCommentOwnerMiddleware);
