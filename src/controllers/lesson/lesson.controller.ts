@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
+import { calculationPageCount, googleDeleter, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
 import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
+import { googleUploader } from '../../helpers/google-uploader.helper';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { commentService, lessonService, questionService } from '../../services';
 
@@ -12,7 +13,15 @@ class LessonController {
     const lessonValue = req.body;
     const {_id} = req.user as IUser;
 
-    await lessonService.createLesson({...lessonValue, user_id: _id});
+    const lesson = await lessonService.createLesson({...lessonValue, user_id: _id}) as any;
+
+    if (req.files) {
+      const {files} = req.files;
+      const video_path = await googleUploader(files, 'google_video_keys.json',
+        'bigbirdvideos', 'big-bird-videos', lesson._id.toString());
+
+      await lessonService.editLessonById(lesson._id, {video_path}, false);
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
@@ -108,6 +117,8 @@ class LessonController {
     const {lesson_id} = req.params;
 
     await lessonService.deleteLessonById(lesson_id);
+    await googleDeleter('google_video_keys.json',
+      'bigbirdvideos', 'big-bird-videos', lesson_id.toString());
 
     res.end();
   }
@@ -155,6 +166,25 @@ class LessonController {
     const {text} = req.body;
 
     await commentService.editComment(comment_id, text);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
+  async changeVideo(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id, video_path} = req.lesson as ILesson;
+    const {files} = req.files;
+
+    if (_id) {
+      await googleDeleter('google_video_keys.json',
+        'bigbirdvideos', 'big-bird-videos', _id.toString());
+
+      const uploaded_video_path = await googleUploader(files, 'google_video_keys.json',
+        'bigbirdvideos', 'big-bird-videos', _id.toString());
+
+      if (!video_path) {
+        await lessonService.editLessonById(_id, {video_path: uploaded_video_path}, false);
+      }
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }

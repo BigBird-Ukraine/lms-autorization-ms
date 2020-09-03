@@ -6,4 +6,3 @@ export * from './checkPassedTestData.middleware';
 export * from './validators';
 export * from './isCommentPresent.middleware';
 export * from './isCommentOwner.middleware';
-export * from './google-video-uploader.helper';
