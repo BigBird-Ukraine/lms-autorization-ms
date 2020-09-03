@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ResponseStatusCodesEnum } from '../../constants';
+import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
 import { calculationPageCount, googleDeleter, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
 import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
 import { googleUploader } from '../../helpers/google-uploader.helper';
@@ -17,8 +17,8 @@ class LessonController {
 
     if (req.files) {
       const {files} = req.files;
-      const video_path = await googleUploader(files, 'google_video_keys.json',
-        'bigbirdvideos', 'big-bird-videos', lesson._id.toString());
+      const video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, lesson._id.toString());
 
       await lessonService.editLessonById(lesson._id, {video_path}, false);
     }
@@ -117,8 +117,8 @@ class LessonController {
     const {lesson_id} = req.params;
 
     await lessonService.deleteLessonById(lesson_id);
-    await googleDeleter('google_video_keys.json',
-      'bigbirdvideos', 'big-bird-videos', lesson_id.toString());
+    await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, lesson_id.toString());
 
     res.end();
   }
@@ -175,11 +175,11 @@ class LessonController {
     const {files} = req.files;
 
     if (_id) {
-      await googleDeleter('google_video_keys.json',
-        'bigbirdvideos', 'big-bird-videos', _id.toString());
+      await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, _id.toString());
 
-      const uploaded_video_path = await googleUploader(files, 'google_video_keys.json',
-        'bigbirdvideos', 'big-bird-videos', _id.toString());
+      const uploaded_video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, _id.toString());
 
       if (!video_path) {
         await lessonService.editLessonById(_id, {video_path: uploaded_video_path}, false);
