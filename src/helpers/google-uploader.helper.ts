@@ -1,12 +1,11 @@
-
 import { Storage } from '@google-cloud/storage';
 import { UploadedFile } from 'express-fileupload';
 import * as path from 'path';
 import { format } from 'util';
+import { v4 as uuidv4 } from 'uuid';
 
 export const googleUploader = async (files: UploadedFile, fileName: string,
-                                     projectId: string, bucketName: string,
-                                     id: string) => {
+                                     projectId: string, bucketName: string) => {
   const serviceKey = path.join(process.cwd(), fileName);
 
   const gc = new Storage({
@@ -15,6 +14,8 @@ export const googleUploader = async (files: UploadedFile, fileName: string,
   });
 
   const bucket = gc.bucket(bucketName);
+
+  const id = uuidv4();
 
   const blob = bucket.file(id.replace(/ /g, '_'));
   const blobStream = blob.createWriteStream({
