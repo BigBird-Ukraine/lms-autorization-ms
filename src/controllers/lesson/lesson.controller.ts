@@ -115,10 +115,11 @@ class LessonController {
 
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
     const {lesson_id} = req.params;
+    const {video_path} = req.lesson as ILesson;
 
     await lessonService.deleteLessonById(lesson_id);
     await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, lesson_id.toString());
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, video_path);
 
     res.end();
   }
