@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
+import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
+import { calculationPageCount, googleDeleter, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
 import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
+import { googleUploader } from '../../helpers/google-uploader.helper';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { commentService, lessonService, questionService } from '../../services';
 
@@ -12,7 +13,15 @@ class LessonController {
     const lessonValue = req.body;
     const {_id} = req.user as IUser;
 
-    await lessonService.createLesson({...lessonValue, user_id: _id});
+    const lesson = await lessonService.createLesson({...lessonValue, user_id: _id}) as any;
+
+    if (req.files) {
+      const {files} = req.files;
+      const video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME);
+
+      await lessonService.editLessonById(lesson._id, {video_path}, false);
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }
@@ -106,8 +115,11 @@ class LessonController {
 
   async deleteMyLesson(req: IRequestExtended, res: Response, next: NextFunction) {
     const {lesson_id} = req.params;
+    const {video_path} = req.lesson as ILesson;
 
     await lessonService.deleteLessonById(lesson_id);
+    await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, video_path);
 
     res.end();
   }
@@ -155,6 +167,24 @@ class LessonController {
     const {text} = req.body;
 
     await commentService.editComment(comment_id, text);
+
+    res.status(ResponseStatusCodesEnum.CREATED).end();
+  }
+
+  async changeVideo(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id, video_path} = req.lesson as ILesson;
+    const {files} = req.files;
+
+    if (_id) {
+      await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, video_path);
+
+      const uploaded_video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME);
+
+      await lessonService.editLessonById(_id, {video_path: uploaded_video_path}, false);
+
+    }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
   }

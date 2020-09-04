@@ -17,7 +17,7 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.get('/', isLessonFilterValid, lessonController.getLessons);
 
-router.post('/', isLessonValid, checkIsTeacher, lessonController.createLesson);
+router.post('/', checkIsTeacher, isLessonValid, lessonController.createLesson);
 router.get('/my', checkIsTeacher, lessonController.getMyLesson);
 
 router.use('/comment', isCommentPresent, isCommentOwnerMiddleware);
@@ -32,10 +32,11 @@ router.post('/:lesson_id/test', isLessonPassedTestDataValid, checkPassedTestData
 router.post('/:lesson_id/comment', isLessonCommentariesDataValid, lessonController.saveComment);
 router.get('/:lesson_id/comment', lessonController.getCommentaries);
 
-router.use('/:lesson_id', isLessonOwnerMiddleware);
+router.use('/:lesson_id', isLessonOwnerMiddleware, checkIsTeacher);
 router.patch('/:lesson_id', isLessonUpdatingDataValid, lessonController.updateMyLesson);
 router.patch('/:lesson_id/question', isLessonQuestionValid, checkQuestionsListLenght, isQuestionExistInLessonMiddleware,
   lessonController.addQuestionToLesson);
+router.patch('/:lesson_id/video', lessonController.changeVideo);
 router.delete('/:lesson_id', lessonController.deleteMyLesson);
 
 export const lessonRouter = router;

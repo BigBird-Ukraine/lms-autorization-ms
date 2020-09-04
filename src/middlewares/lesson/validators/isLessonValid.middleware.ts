@@ -7,16 +7,17 @@ import { IRequestExtended, IUser } from '../../../interfaces';
 import { lessonValidator } from '../../../validators';
 
 export const isLessonValid = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-    const lessonValue = req.body;
-    const {_id} = req.user as IUser;
+  const lessonValue = req.body;
+  const {_id} = req.user as IUser;
 
-    lessonValue.user_id = _id.toString();
+  lessonValue.user_id = _id.toString();
+  lessonValue.tags = lessonValue.tags.split(',');
 
-    const {error} = Joi.validate(lessonValue, lessonValidator);
+  const {error} = Joi.validate(lessonValue, lessonValidator);
 
-    if (error) {
-        return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, error.details[0].message));
-    }
+  if (error) {
+    return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, error.details[0].message));
+  }
 
-    next();
+  next();
 };
