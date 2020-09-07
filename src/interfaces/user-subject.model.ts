@@ -3,6 +3,7 @@ import { ITestResultModel } from './test_result.model';
 export interface IUserSubjectModel {
     _id: string;
     phone_number: string;
+    confirm_token?: string;
     email: string;
     name: string;
     surname: string;
@@ -11,5 +12,6 @@ export interface IUserSubjectModel {
     status_id: number;
     photo_path?: string;
     groups_id?: [string];
+    reset_token?: string;
     passed_tests?: [ITestResultModel];
 }

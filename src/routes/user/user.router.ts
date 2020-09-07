@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { userController } from '../../controllers';
 import {
-  checkAccessTokenMiddleware,
+  checkAccessTokenMiddleware, checkConfirmMailTokenPresent,
   checkIsEmailPresent,
   checkNumberOfUserPhoto,
   isUpdatedUserDataValid,
@@ -14,6 +14,8 @@ import {
 const router = Router();
 
 router.post('/', isUserValid, checkIsEmailPresent, photoCheckMiddleware, checkNumberOfUserPhoto, userController.createUser);
+
+router.patch('/confirm/mail', checkConfirmMailTokenPresent, userController.confirmUserMail);
 
 router.use(checkAccessTokenMiddleware);
 router.get('/info', userController.getUserInfoByToken);

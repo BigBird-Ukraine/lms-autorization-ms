@@ -11,9 +11,11 @@ export enum StatusesEnum {
     WRONG_ACTION_TYPE = 'Wrong action type',
     NO_TOKEN = 'No token',
     INVALID_TOKEN = 'Invalid token',
+    EXPIRED_LINK = 'Expired link',
 
     // 403
     USER_IS_BLOCKED = 'User is blocked',
+    USER_IS_PENDING = 'User is not activated. Please confirm your mail',
     NO_PERMISSIONS_TO_ACTION = 'You have no permissions to this action',
     NOT_YOUR_QUESTION = 'Its not your question',
     NOT_YOUR_LESSON = 'Its not your lesson',

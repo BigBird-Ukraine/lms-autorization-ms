@@ -48,7 +48,7 @@ export const errors = {
         message: StatusesEnum.WRONG_EMAIL_OR_PASSWORD
     },
     // 403
-    FORBIDDEN_USER_BLOCKED: { // When user try to do something with blocked account
+    FORBIDDEN_USER_BLOCKED: {
         message: StatusesEnum.USER_IS_BLOCKED,
         code: 4031
     },
@@ -70,6 +70,11 @@ export const errors = {
     FORBIDDEN_NOT_YOUR_COMMENT: {
         message: StatusesEnum.NOT_YOUR_COMMENT,
         code: 4034
+    },
+
+    FORBIDDEN_USER_PENDING: {
+        message: StatusesEnum.USER_IS_PENDING,
+        code: 4035
     },
 
     // 404

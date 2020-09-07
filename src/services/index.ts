@@ -7,3 +7,4 @@ export * from './course';
 export * from './module';
 export * from './group';
 export * from './comment';
+export * from './mail';

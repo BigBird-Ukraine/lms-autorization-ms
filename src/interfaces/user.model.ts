@@ -14,6 +14,8 @@ export interface IUser {
     created_at: string;
     updated_at?: string;
     groups_id?: [string];
+    confirm_token: string;
+    reset_token: string;
     passed_tests?: [ITestResultModel];
 }
 
@@ -31,5 +33,7 @@ export interface IFullUserTest {
     created_at: string;
     updated_at?: string;
     groups_id?: [string];
+    confirm_token: string;
+    reset_token: string;
     passed_tests?: [ITestResultFullModel];
 }

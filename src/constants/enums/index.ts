@@ -8,3 +8,4 @@ export * from './question-level.enum';
 export * from './statuses.enum';
 export * from './hard-words.enum';
 export * from './google_config.enum';
+export * from './mail-sender.enum';

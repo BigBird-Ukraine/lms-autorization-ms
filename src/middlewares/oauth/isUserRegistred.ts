@@ -29,5 +29,6 @@ export const checkIsUserRegistered = async (req: IRequestExtended, res: Response
     }
 
     req.user = user;
+
     next();
 };
