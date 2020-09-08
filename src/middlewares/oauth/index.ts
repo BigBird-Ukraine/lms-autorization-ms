@@ -4,3 +4,6 @@ export * from './checkIsPasswordCorrect';
 export * from './checkRefreshToken.middleware';
 export * from './checkIsTeacher';
 export * from './isUserBlocked';
+export * from './isUserPending';
+export * from './checkResetPasswordToken.middleware';
+export * from './isPasswordValid.middleware';

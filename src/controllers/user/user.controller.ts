@@ -1,19 +1,25 @@
 import { NextFunction, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 
-import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
-import { googleDeleter, HASH_PASSWORD } from '../../helpers';
-import { googleUploader } from '../../helpers/google-uploader.helper';
+import { config } from '../../configs';
+import { GoogleConfigEnum, MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
+import { googleDeleter, googleUploader, HASH_PASSWORD, tokenizer } from '../../helpers';
 import { IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
-import { userService } from '../../services';
+import { mailService, userService } from '../../services';
 
 class UserController {
 
   async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
     const user = req.body as IUser;
 
+    user.confirm_token = tokenizer(UserActionEnum.CONFIRM_EMAIL);
+    user.status_id = UserStatusEnum.PENDING;
     user.password = await HASH_PASSWORD(user.password);
+
+    const url = `${config.CLIENT_HOST}:${config.CLIENT_PORT}/user/confirm/${user.confirm_token}`;
+
     const id = await userService.createUser(user);
+    await mailService.sendEmail(user.email, MailSender.CONFIRM_EMAIL_SUBJECT, url);
 
     if (req.files) {
       const {files} = req.files;
@@ -96,6 +102,14 @@ class UserController {
     const data = await userService.getMyGroups(_id);
 
     res.json(data);
+  }
+
+  async confirmUserMail(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id} = req.user as IUser;
+
+    await userService.updateUser(_id, {status_id: UserStatusEnum.ACTIVE, confirm_token: ''});
+
+    res.json(ResponseStatusCodesEnum.CREATED);
   }
 }
 

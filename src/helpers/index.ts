@@ -8,3 +8,4 @@ export * from './module';
 export * from './question';
 export * from './checkPassedTestData.helper';
 export * from './google-deleter.helper';
+export * from './google-uploader.helper';
