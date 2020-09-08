@@ -2,11 +2,8 @@ import { NextFunction, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 
 import { config } from '../../configs';
-import { MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
-import { HASH_PASSWORD, tokenizer, updatedUserPhotoMv, userPhotoMv } from '../../helpers';
-import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
-import { googleDeleter, HASH_PASSWORD } from '../../helpers';
-import { googleUploader } from '../../helpers/google-uploader.helper';
+import { GoogleConfigEnum, MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
+import { googleDeleter, googleUploader, HASH_PASSWORD, tokenizer } from '../../helpers';
 import { IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { mailService, userService } from '../../services';
 
@@ -14,17 +11,15 @@ class UserController {
 
   async createUser(req: IRequestExtended, res: Response, next: NextFunction) {
     const user = req.body as IUser;
-    const appRoot = (global as any).appRoot;
-    const [userPhoto] = req.photos as UploadedFile[];
-    const url = `${config.CLIENT_HOST}:${config.CLIENT_PORT}/user/confirm/${user.confirm_token}`;
 
     user.confirm_token = tokenizer(UserActionEnum.CONFIRM_EMAIL);
     user.status_id = UserStatusEnum.PENDING;
     user.password = await HASH_PASSWORD(user.password);
-    const id = await userService.createUser(user);
 
+    const url = `${config.CLIENT_HOST}:${config.CLIENT_PORT}/user/confirm/${user.confirm_token}`;
+
+    const id = await userService.createUser(user);
     await mailService.sendEmail(user.email, MailSender.CONFIRM_EMAIL_SUBJECT, url);
-    const registeredUser = await userService.createUser(user);
 
     if (req.files) {
       const {files} = req.files;
