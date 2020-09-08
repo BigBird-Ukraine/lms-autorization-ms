@@ -4,6 +4,9 @@ import { UploadedFile } from 'express-fileupload';
 import { config } from '../../configs';
 import { MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
 import { HASH_PASSWORD, tokenizer, updatedUserPhotoMv, userPhotoMv } from '../../helpers';
+import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
+import { googleDeleter, HASH_PASSWORD } from '../../helpers';
+import { googleUploader } from '../../helpers/google-uploader.helper';
 import { IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { mailService, userService } from '../../services';
 
@@ -18,13 +21,20 @@ class UserController {
     user.confirm_token = tokenizer(UserActionEnum.CONFIRM_EMAIL);
     user.status_id = UserStatusEnum.PENDING;
     user.password = await HASH_PASSWORD(user.password);
+    const id = await userService.createUser(user);
 
     await mailService.sendEmail(user.email, MailSender.CONFIRM_EMAIL_SUBJECT, url);
     const registeredUser = await userService.createUser(user);
 
-    if (userPhoto) {
-      const {photoDir, photoName, _id} = await userPhotoMv(registeredUser, userPhoto, appRoot);
-      await userService.updateUser(_id, {photo_path: `${photoDir}/${photoName}`});
+    if (req.files) {
+      const {files} = req.files;
+
+      const video_path = await googleUploader(files,
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.PHOTO_GOOGLE_BUCKET_NAME
+      );
+      await userService.updateUser(id, {photo_path: `${video_path}`});
     }
 
     res.status(ResponseStatusCodesEnum.CREATED).end();
@@ -50,14 +60,23 @@ class UserController {
   }
 
   async updateUserByID(req: IRequestExtended, res: Response, next: NextFunction) {
-    const appRoot = (global as any).appRoot;
-
     const {user_id} = req.params;
-    let updateInfo = req.body as IUser;
+    const {photo_path} = req.user as IUser;
     const [userPhoto] = req.photos as UploadedFile[];
+    const updateInfo = req.body as IUser;
 
     if (userPhoto) {
-      updateInfo = await updatedUserPhotoMv(user_id, userPhoto, updateInfo, appRoot);
+      await googleDeleter(
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.PHOTO_GOOGLE_BUCKET_NAME, photo_path as string
+      );
+
+      updateInfo.photo_path = await googleUploader(userPhoto,
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.PHOTO_GOOGLE_BUCKET_NAME
+      );
     }
 
     const updatedUser = await userService.updateUser(user_id, updateInfo);

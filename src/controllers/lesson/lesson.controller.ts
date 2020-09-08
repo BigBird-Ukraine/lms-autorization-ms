@@ -17,8 +17,11 @@ class LessonController {
 
     if (req.files) {
       const {files} = req.files;
-      const video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME);
+      const video_path = await googleUploader(files,
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME
+      );
 
       await lessonService.editLessonById(lesson._id, {video_path}, false);
     }
@@ -119,7 +122,9 @@ class LessonController {
 
     await lessonService.deleteLessonById(lesson_id);
     await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, video_path);
+      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+      GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME,
+      video_path);
 
     res.end();
   }
@@ -176,11 +181,17 @@ class LessonController {
     const {files} = req.files;
 
     if (_id) {
-      await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME, video_path);
+      await googleDeleter(
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME,
+        video_path);
 
-      const uploaded_video_path = await googleUploader(files, GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID, GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME);
+      const uploaded_video_path = await googleUploader(files,
+        GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME
+      );
 
       await lessonService.editLessonById(_id, {video_path: uploaded_video_path}, false);
 

@@ -8,6 +8,7 @@ import { updateDataValidator } from '../../../validators';
 
 export const isUpdatedUserDataValid = async (req: Request, res: Response, next: NextFunction) => {
     const updateInfo = req.body as IUser;
+
     const {error} = Joi.validate(updateInfo, updateDataValidator);
 
     if (error) {
