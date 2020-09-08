@@ -13,5 +13,7 @@ export interface IUserSubjectModel {
     photo_path?: string;
     groups_id?: [string];
     reset_token?: string;
+    change_token?: string;
+    new_password?: string;
     passed_tests?: [ITestResultModel];
 }

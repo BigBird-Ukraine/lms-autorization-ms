@@ -75,6 +75,10 @@ UserSchema = new Schema({
         type: Types.ObjectId,
         ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
     }],
+    new_password: {
+      type: String,
+      required: false
+    },
     confirm_token: {
         type: String,
         required: false
@@ -82,6 +86,10 @@ UserSchema = new Schema({
     reset_token: {
         type: String,
         required: false
+    },
+    change_token: {
+      type: String,
+      required: false
     }
 });
 
