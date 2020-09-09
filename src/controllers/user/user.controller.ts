@@ -4,7 +4,7 @@ import { UploadedFile } from 'express-fileupload';
 import { config } from '../../configs';
 import { GoogleConfigEnum, MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
 import { googleDeleter, googleUploader, HASH_PASSWORD, tokenizer } from '../../helpers';
-import { IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
+import { IChangePassword, IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
 import { mailService, userService } from '../../services';
 
 class UserController {
@@ -108,6 +108,28 @@ class UserController {
     const {_id} = req.user as IUser;
 
     await userService.updateUser(_id, {status_id: UserStatusEnum.ACTIVE, confirm_token: ''});
+
+    res.json(ResponseStatusCodesEnum.CREATED);
+  }
+
+  async confirmPassword(req: IRequestExtended, res: Response, next: NextFunction) {
+    const user = req.user as IUser;
+    const passwords = req.body as IChangePassword;
+
+    const change_token = tokenizer(UserActionEnum.CHANGE_PASSWORD);
+    const url = `${config.CLIENT_HOST}:${config.CLIENT_PORT}/user/change/password/${change_token}`;
+
+    const new_password = await HASH_PASSWORD(passwords.new_password);
+    await userService.updateUser(user._id, {change_token, new_password});
+    await mailService.sendEmail(user.email, MailSender.CHANGE_USER_PASSWORD_SUBJECT, url);
+
+    res.json(ResponseStatusCodesEnum.OK);
+  }
+
+  async changePassword(req: IRequestExtended, res: Response, next: NextFunction) {
+    const {_id, new_password} = req.user as IUser;
+
+    await userService.updateUser(_id, {password: new_password, change_token: '', new_password: ''});
 
     res.json(ResponseStatusCodesEnum.CREATED);
   }

@@ -8,7 +8,7 @@ import { IRequestExtended, IUser } from '../../interfaces';
 export const checkIsPasswordCorrect = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     try {
         const { password: hashPassword } = req.user as IUser;
-        const { password } = req.body as IUser;
+        const { password } = req.body;
 
         const isPasswordCorrect = await CHECK_HASH(password, hashPassword);
 

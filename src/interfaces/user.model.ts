@@ -15,7 +15,9 @@ export interface IUser {
     updated_at?: string;
     groups_id?: [string];
     confirm_token: string;
-    reset_token: string;
+    reset_token?: string;
+    change_token?: string;
+    new_password?: string;
     passed_tests?: [ITestResultModel];
 }
 
@@ -35,5 +37,12 @@ export interface IFullUserTest {
     groups_id?: [string];
     confirm_token: string;
     reset_token: string;
+    change_token: string;
+    new_password: string;
     passed_tests?: [ITestResultFullModel];
+}
+
+export interface IChangePassword {
+    password: string;
+    new_password: string;
 }

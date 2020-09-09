@@ -18,6 +18,9 @@ export const tokenizer = (method: number): any => {
     case UserActionEnum.RESET_PASS:
 
       return jwt.sign({}, config.JWT_EMAIL_VALIDATION_SECRET, {expiresIn: config.EMAIL_VALIDATION_TOKEN_LIFETIME});
+    case UserActionEnum.CHANGE_PASSWORD:
+
+      return jwt.sign({}, config.JWT_EMAIL_VALIDATION_SECRET, {expiresIn: config.EMAIL_VALIDATION_TOKEN_LIFETIME});
     default:
       throw new ErrorHandler(ResponseStatusCodesEnum.SERVER_ERROR, StatusesEnum.WRONG_ACTION_TYPE);
   }

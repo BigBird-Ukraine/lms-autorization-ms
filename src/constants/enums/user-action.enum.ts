@@ -4,5 +4,6 @@ export enum UserActionEnum {
     RESET_PASS,
     SUCCESS_REG,
     ACCOUNT_BLOCKED,
-    ACCOUNT_UNBLOCKED
+    ACCOUNT_UNBLOCKED,
+    CHANGE_PASSWORD
 }

@@ -7,16 +7,16 @@ import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { userService } from '../../services';
 
-export const checkConfirmMailTokenPresent = async (req: IRequestExtended, res: Response, next: NextFunction) => {
+export const checkChangedPasswordTokenPresent = async (req: IRequestExtended, res: Response, next: NextFunction) => {
   const {confirmToken} = req.body;
 
-  jwt.verify(confirmToken, config.JWT_CONFIRM_EMAIL_SECRET, (err: jwt.VerifyErrors) => {
+  jwt.verify(confirmToken, config.JWT_EMAIL_VALIDATION_SECRET, (err: jwt.VerifyErrors) => {
     if (err) {
       return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.INVALID_TOKEN));
     }
   });
 
-  const isUserPresent = await userService.getUserByParams({confirm_token: confirmToken});
+  const isUserPresent = await userService.getUserByParams({change_token: confirmToken});
 
   if (!isUserPresent) {
     return next(
