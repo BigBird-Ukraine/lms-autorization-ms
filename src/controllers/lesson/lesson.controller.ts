@@ -32,7 +32,7 @@ class LessonController {
   async getLessons(req: Request, res: Response, next: NextFunction) {
     try {
       const {
-        limit = 20,
+        limit,
         offset = 0,
         sort = '_id',
         order,
@@ -121,10 +121,13 @@ class LessonController {
     const {video_path} = req.lesson as ILesson;
 
     await lessonService.deleteLessonById(lesson_id);
-    await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
-      GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
-      GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME,
-      video_path);
+
+    if (video_path) {
+      await googleDeleter(GoogleConfigEnum.GOOGLE_VIDEO_KEYS,
+        GoogleConfigEnum.VIDEO_GOOGLE_PROJECT_ID,
+        GoogleConfigEnum.VIDEO_GOOGLE_BUCKET_NAME,
+        video_path);
+    }
 
     res.end();
   }
