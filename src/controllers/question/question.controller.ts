@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, checkPresentPassedQuestions, questionSortingAttributes, regexFilterParams } from '../../helpers';
-import { IPassedTest, IRequestExtended, IUser } from '../../interfaces';
+import {
+  calculationPageCount,
+  checkPresentPassedQuestions, questionCorrectAnswersCount,
+  questionSortingAttributes,
+  regexFilterParams
+} from '../../helpers';
+import { IAnswers, IPassedTest, IRequestExtended, IUser } from '../../interfaces';
 import { lessonService, questionService, userService } from '../../services';
 
 class QuestionController {
@@ -20,13 +25,17 @@ class QuestionController {
       questionSortingAttributes(sort);
       const updatedFilterParams = regexFilterParams(filter);
 
-      const questions = await questionService.getQuestions(+limit, +offset, sort, order, filter);
+      const questions = await questionService.getQuestions(0, +limit, +offset, sort, order, filter);
+      const questionAnswers = await questionService.getQuestions(1, +limit, +offset, sort, order, filter) as IAnswers[];
+
+      const maxMark = await questionCorrectAnswersCount(questionAnswers);
       const count = await questionService.getSizeOfAll(updatedFilterParams) as number;
 
       res.json({
         data: {
           questions,
           count,
+          maxMark: maxMark * 10,
           pageCount: calculationPageCount(count, limit)
         }
       });
@@ -82,7 +91,7 @@ class QuestionController {
 
     const passed_questions_id = await checkPresentPassedQuestions(req.body.questions) as any;
 
-    await userService.addPassedTest(_id, {passed_questions_id, result: pt.result});
+    await userService.addPassedTest(_id, {passed_questions_id, result: pt.result, max_mark: pt.max_mark});
 
     res.json(pt.result);
   }

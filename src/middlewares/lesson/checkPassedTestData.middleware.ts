@@ -8,7 +8,7 @@ export const checkPassedTestData = async (req: IRequestExtended, res: Response, 
     const {lesson_id} = req.params;
     const question_list = req.body.test;
 
-    req.passed_test = await checkPassedTestDataHelper(lesson_id, question_list) as any;
+    req.passed_test = await checkPassedTestDataHelper(lesson_id, question_list, req.body.max_mark) as any;
 
     next();
   } catch (e) {

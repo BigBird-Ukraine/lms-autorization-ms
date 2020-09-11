@@ -52,6 +52,10 @@ UserSchema = new Schema({
         required: false,
         ref: DatabaseTablesEnum.PASSED_QUESTION_COLLECTION_NAME
       }],
+      max_mark: {
+        type: Number,
+        required: true
+      },
       result: {
         type: Number,
         required: true

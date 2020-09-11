@@ -83,7 +83,12 @@ class UserController {
     const {_id} = req.user as IUser;
     const pt = req.passed_test as IPassedTest;
 
-    await userService.addPassedTest(_id, {passed_lesson_id: req.passed_lesson_id, result: pt.result});
+    await userService.addPassedTest(_id,
+      {
+        passed_lesson_id: req.passed_lesson_id,
+        result: pt.result,
+        max_mark: pt.max_mark
+      });
 
     res.json(pt.result);
   }

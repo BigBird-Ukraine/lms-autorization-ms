@@ -9,3 +9,4 @@ export * from './question';
 export * from './checkPassedTestData.helper';
 export * from './google-deleter.helper';
 export * from './google-uploader.helper';
+export * from './check-deleted-objects.helper';

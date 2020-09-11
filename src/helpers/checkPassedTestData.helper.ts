@@ -1,6 +1,6 @@
 import { questionService } from '../services/question';
 
-export const checkPassedTestDataHelper = async (lesson_id: string, question_list: any) => {
+export const checkPassedTestDataHelper = async (lesson_id: string, question_list: any, max_mark: number) => {
   const questions_id = [];
   let testResult = 0;
 
@@ -32,9 +32,11 @@ export const checkPassedTestDataHelper = async (lesson_id: string, question_list
   lesson_id ? (passed_data = {
     lesson_id,
     result: testResult,
-    questions_id
+    questions_id,
+    max_mark
   }) : (passed_data = {
     result: testResult,
+    max_mark,
     questions_id
   });
 
