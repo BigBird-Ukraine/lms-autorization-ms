@@ -6,6 +6,7 @@ import { ILesson } from './lesson.model';
 import { IModule } from './module.model';
 
 import { IQuestion } from './question.model';
+import { IRoom } from './room.model';
 import { IPassedTest } from './test_result.model';
 import { IUser } from './user.model';
 
@@ -22,4 +23,5 @@ export interface IRequestExtended extends Request {
     module?: IModule;
     refresh_token?: any;
     passed_lesson_id?: string;
+    room?: IRoom;
 }

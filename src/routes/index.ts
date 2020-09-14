@@ -9,3 +9,4 @@ export * from './lesson';
 export * from './course';
 export * from './module';
 export * from './group';
+export * from './room';

@@ -42,6 +42,11 @@ export const errors = {
         message: `Lesson can contain only ${config.MAX_QUESTION_LIMIT} questions`
     },
 
+    BAD_REQUEST_ROOM_ALREADY_EXIST: {
+        code: 4008,
+        message: StatusesEnum.ROOM_ALREADY_EXIST
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,
@@ -75,6 +80,16 @@ export const errors = {
     FORBIDDEN_USER_PENDING: {
         message: StatusesEnum.USER_IS_PENDING,
         code: 4035
+    },
+
+    FORBIDDEN_NOT_YOUR_ROOM: {
+        message: StatusesEnum.NOT_YOUR_ROOM,
+        code: 4036
+    },
+
+    FORBIDDEN_ROOM_HAS_USERS: {
+        message: StatusesEnum.ROOM_HAS_USERS,
+        code: 4036
     },
 
     // 404
@@ -112,8 +127,14 @@ export const errors = {
         message: StatusesEnum.GROUP_NOT_FOUND,
         code: 4046
     },
+
     NOT_FOUND_VISIT_LOG_NOT_PRESENT:  {
         message: StatusesEnum.VISIT_LOG_NOT_FOUND,
         code: 4047
+    },
+
+    NOT_FOUND_ROOM_NOT_PRESENT: {
+        message: StatusesEnum.ROOM_NOT_FOUND,
+        code: 4048
     }
 };

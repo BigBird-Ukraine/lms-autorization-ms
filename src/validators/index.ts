@@ -7,3 +7,4 @@ export * from './module';
 export * from './group';
 export * from './question';
 export * from './user';
+export * from './room';

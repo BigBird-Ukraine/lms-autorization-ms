@@ -11,3 +11,4 @@ export * from './test_result.model';
 export * from './group.model';
 export * from './course.model';
 export * from './comment.model';
+export * from './room.model';
