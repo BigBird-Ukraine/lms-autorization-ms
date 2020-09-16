@@ -11,14 +11,14 @@ export const isRoomOccupiedMiddleware = async (req: IRequestExtended, res: Respo
   const roomByParams = {
     label,
     start_at: {
-      $gte: start_at.getTime(),
-      $lte: close_at.getTime()
+      $gte: Date.parse(start_at),
+      $lte: Date.parse(close_at)
     }
   };
 
-  const rooms = await roomService.findRooms(roomByParams) as IRoom[];
+  const [room] = await roomService.findRooms(roomByParams) as IRoom[];
 
-  if (rooms) {
+  if (room) {
     return next(new ErrorHandler(
       ResponseStatusCodesEnum.BAD_REQUEST,
       errors.BAD_REQUEST_ROOM_ALREADY_EXIST.message,

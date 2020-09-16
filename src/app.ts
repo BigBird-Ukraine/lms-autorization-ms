@@ -63,6 +63,7 @@ class App {
       time: new Date(),
       massage: err.message
     });
+
     next(err);
   }
 

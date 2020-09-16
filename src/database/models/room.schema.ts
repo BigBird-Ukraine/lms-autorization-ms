@@ -12,6 +12,10 @@ RoomSchema = new Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
   count_all_places: {
     type: Number,
     required: true
@@ -27,13 +31,16 @@ RoomSchema = new Schema({
     type: Date,
     required: true
   },
+  city: {
+    type: String,
+    required: true
+  },
   groups: [{
     type: Types.ObjectId,
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
   }],
   booked_users: [{
     id: Types.ObjectId,
-    ref: DatabaseTablesEnum.USER_COLLECTION_NAME,
     rent_start: Date,
     rent_end: Date
   }],

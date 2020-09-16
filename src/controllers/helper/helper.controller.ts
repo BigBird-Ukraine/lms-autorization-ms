@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { courseService, groupService, helperService } from '../../services';
+import { cityService, courseService, groupService, helperService } from '../../services';
 
 class HelperController {
 
@@ -38,6 +38,16 @@ class HelperController {
     async getGroups(req: Request, res: Response, next: NextFunction) {
         try {
             const groupsArray = await groupService.getAllGroupsLabel();
+
+            res.json(groupsArray);
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async getCities(req: Request, res: Response, next: NextFunction) {
+        try {
+            const groupsArray = await cityService.getCities();
 
             res.json(groupsArray);
         } catch (e) {

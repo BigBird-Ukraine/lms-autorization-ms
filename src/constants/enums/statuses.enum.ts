@@ -5,7 +5,7 @@ export enum StatusesEnum {
     CANT_UPLOAD_MORE_THAN_ONE_USER_PHOTO = `You can't upload more than one userPhotos`,
     CANT_SORT_BY_THIS_PARAM = 'You can\'t sort by this parameter',
     QUESTION_ALREADY_EXIST = 'This question already exist',
-    ROOM_ALREADY_EXIST = 'This room already question',
+    ROOM_ALREADY_EXIST = 'This room already exist',
 
     // 401
     WRONG_EMAIL_OR_PASSWORD = 'Wrong email or password',

@@ -7,7 +7,9 @@ import { roomService } from '../../services';
 class RoomController {
 
   async getRooms(req: IRequestExtended, res: Response, next: NextFunction) {
-    const rooms = await roomService.findRooms();
+    const {...filter} = req.query;
+
+    const rooms = await roomService.findRooms(filter);
 
     res.json(rooms);
   }
@@ -18,6 +20,12 @@ class RoomController {
     const rooms = await roomService.findRooms({owner_id: _id});
 
     res.json(rooms);
+  }
+
+  async getSingleRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+    const room: IRoom = req.room as IRoom;
+
+    res.json(room);
   }
 
   async createRoom(req: IRequestExtended, res: Response, next: NextFunction) {

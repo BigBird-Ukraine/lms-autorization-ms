@@ -15,7 +15,11 @@ class RoomService {
   async findRooms(filter?: any): Promise<IRoom[]> {
     const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
 
-    return RoomModel.find(filter) as any;
+    return RoomModel.find(filter)
+      .populate({
+        path: 'groups',
+        select: {label: 1, _id: 0}
+      }) as any;
   }
 
   updateRoom(room_id: string, room: Partial<IRoom>): Promise<IRoom> {

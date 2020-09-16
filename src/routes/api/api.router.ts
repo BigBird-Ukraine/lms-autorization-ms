@@ -23,6 +23,6 @@ router.use('/lessons', lessonRouter);
 router.use('/courses', courseRouter);
 router.use('/modules' , moduleRouter);
 router.use('/groups', groupRouter);
-router.use('/room', roomRouter);
+router.use('/rooms', roomRouter);
 
 export const apiRouter = router;

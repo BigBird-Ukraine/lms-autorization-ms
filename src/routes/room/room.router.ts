@@ -18,6 +18,7 @@ router.post('/', isRoomValid, isRoomOccupiedMiddleware, roomController.createRoo
 router.get('/my', roomController.getMyRooms);
 
 router.use('/:room_id', isRoomPresentMiddleware, isRoomOwnerMiddleware);
+router.get('/:room_id', roomController.getSingleRoom);
 router.put('/:room_id', isRoomUpdatedDataValid, checkDateAndUsersPresentMiddleware, roomController.updateRoom);
 router.delete('/:room_id', roomController.deleteRoom);
 
