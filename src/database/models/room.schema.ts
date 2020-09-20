@@ -41,8 +41,8 @@ RoomSchema = new Schema({
   }],
   booked_users: [{
     id: Types.ObjectId,
-    rent_start: Date,
-    rent_end: Date
+    rent_start: String,
+    rent_end: String
   }],
   created_at: {
     type: Date,

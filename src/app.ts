@@ -43,7 +43,7 @@ class App {
     this.app.use(this.customErrorHandler);
   }
 
-  private setupDB(): void {
+  private setupDB = (): void => {
     mongoose.connect(encodeURI(config.MONGO_URL), {useNewUrlParser: true, useUnifiedTopology: true});
     mongoose.set('useFindAndModify', false);
     const db = mongoose.connection;
@@ -55,7 +55,7 @@ class App {
     this.app.use('*', notFoundRouter);
   }
 
-  private logErrors(err: any, req: Request, res: Response, next: NextFunction): void {
+  private logErrors = (err: any, req: Request, res: Response, next: NextFunction): void => {
     logger.error({
       method: req.method,
       url: req.path,
@@ -67,7 +67,7 @@ class App {
     next(err);
   }
 
-  private customErrorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
+  private customErrorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
     if (err.parent) {
       err.message = err.parent.sqlMessage;
     }
@@ -83,7 +83,7 @@ class App {
       });
   }
 
-  private clientErrorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
+  private clientErrorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
     if (req.xhr) {
       res
         .status(ResponseStatusCodesEnum.SERVER_ERROR)

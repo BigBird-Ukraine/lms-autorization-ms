@@ -6,8 +6,8 @@ export interface IRoom {
   description: string;
   count_all_places: number;
   free_places: number;
-  start_at: string;
-  close_at: string;
+  start_at: Date;
+  close_at: Date;
   city: string;
   groups: Array<Partial<IGroup>>;
   booked_users: IBookUser[];
@@ -16,6 +16,6 @@ export interface IRoom {
 
 export interface IBookUser {
   id: string;
-  rent_start: string;
-  rent_end: string;
+  rent_start: Date;
+  rent_end: Date;
 }
