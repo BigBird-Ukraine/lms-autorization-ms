@@ -1,58 +1,93 @@
 import { NextFunction, Response } from 'express';
 
 import { ResponseStatusCodesEnum } from '../../constants';
-import { IRequestExtended, IRoom, IUser } from '../../interfaces';
+import { countFreePlaces, getBookTables } from '../../helpers/room';
+import { IBookUser, ICutRoom, IRequestExtended, IRoom, IUser } from '../../interfaces';
 import { roomService } from '../../services';
 
 class RoomController {
 
-  async getRooms(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {...filter} = req.query;
+    async getRooms(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {...filter} = req.query;
 
-    const rooms = await roomService.findRooms(filter);
+        const rooms = await roomService.findRooms(filter, null, {
+            path: 'groups',
+            select: {label: 1, _id: 0}
+        });
 
-    res.json(rooms);
-  }
+        res.json(rooms);
+    }
 
-  async getMyRooms(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {_id} = req.user as IUser;
+    async getMyRooms(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {_id} = req.user as IUser;
 
-    const rooms = await roomService.findRooms({owner_id: _id});
+        const rooms = await roomService.findRooms({owner_id: _id}, null, {
+            path: 'groups',
+            select: {label: 1, _id: 0}
+        });
 
-    res.json(rooms);
-  }
+        res.json(rooms);
+    }
 
-  async getSingleRoom(req: IRequestExtended, res: Response, next: NextFunction) {
-    const room: IRoom = req.room as IRoom;
+    async getSingleRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+        const room: IRoom = req.room as IRoom;
 
-    res.json(room);
-  }
+        const cutRoom: ICutRoom = countFreePlaces(room);
 
-  async createRoom(req: IRequestExtended, res: Response, next: NextFunction) {
-    const room = req.body as IRoom;
-    const {_id} = req.user as IUser;
+        res.json(cutRoom);
+    }
 
-    await roomService.createRoom({...room, owner_id: _id});
+    async createRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+        const room = req.body as IRoom;
+        const {_id} = req.user as IUser;
 
-    res.json(ResponseStatusCodesEnum.CREATED);
-  }
+        await roomService.createRoom({...room, owner_id: _id});
 
-  async deleteRoom(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {room_id} = req.params;
+        res.json(ResponseStatusCodesEnum.CREATED);
+    }
 
-    await roomService.deleteRoom(room_id);
+    async deleteRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {room_id} = req.params;
 
-    res.json(ResponseStatusCodesEnum.NO_CONTENT);
-  }
+        await roomService.deleteRoom(room_id);
 
-  async updateRoom(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {room_id} = req.params;
-    const room = req.body as Partial<IRoom>;
+        res.json(ResponseStatusCodesEnum.NO_CONTENT);
+    }
 
-    const updatedRoom = await roomService.updateRoom(room_id, room);
+    async updateRoom(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {room_id} = req.params;
+        const room = req.body as Partial<IRoom>;
 
-    res.json(updatedRoom);
-  }
+        const updatedRoom = await roomService.updateRoom(room_id, room);
+
+        res.json(updatedRoom);
+    }
+
+    async getSettingRooms(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {select, ...filter} = req.query;
+
+        const rooms = await roomService.findSettingRooms(filter, select && JSON.parse(select));
+
+        res.json(rooms);
+    }
+
+    async bookTable(req: IRequestExtended, res: Response, next: NextFunction) {
+        const tableBookData = req.body as IBookUser;
+        const {room_id} = req.params;
+
+        await roomService.bookTable(tableBookData, room_id);
+
+        res.json(ResponseStatusCodesEnum.CREATED);
+    }
+
+    async getBookTable(req: IRequestExtended, res: Response, next: NextFunction) {
+        const room = req.room as IRoom;
+        const {table_number} = req.params;
+
+        const bookTables = getBookTables(room, table_number);
+        res.json(bookTables);
+    }
+
 }
 
 export const roomController = new RoomController();

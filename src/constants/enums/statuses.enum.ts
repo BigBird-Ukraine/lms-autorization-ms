@@ -6,6 +6,7 @@ export enum StatusesEnum {
     CANT_SORT_BY_THIS_PARAM = 'You can\'t sort by this parameter',
     QUESTION_ALREADY_EXIST = 'This question already exist',
     ROOM_ALREADY_EXIST = 'This room already exist',
+    INVALID_DATE = 'Invalid date',
 
     // 401
     WRONG_EMAIL_OR_PASSWORD = 'Wrong email or password',

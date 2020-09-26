@@ -40,7 +40,11 @@ RoomSchema = new Schema({
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
   }],
   booked_users: [{
-    id: Types.ObjectId,
+    user_id: {
+      type: Types.ObjectId,
+      ref: DatabaseTablesEnum.USER_COLLECTION_NAME
+    },
+    table_number: Number,
     rent_start: String,
     rent_end: String
   }],

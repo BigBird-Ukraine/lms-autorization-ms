@@ -47,6 +47,11 @@ export const errors = {
         message: StatusesEnum.ROOM_ALREADY_EXIST
     },
 
+    BAD_REQUEST_INVALID_DATE: {
+        code: 4009,
+        message: StatusesEnum.INVALID_DATE
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,

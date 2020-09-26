@@ -11,5 +11,6 @@ export enum DatabaseTablesEnum {
   PASSED_LESSON_COLLECTION_NAME = 'Passed_lesson',
   PASSED_QUESTION_COLLECTION_NAME = 'Passed_question',
   ROOM_COLLECTION_NAME = 'Room',
-  CITY_COLLECTION_NAME = 'City'
+  CITY_COLLECTION_NAME = 'City',
+  SETTING_ROOM_COLLECTION_NAME = 'Setting_room'
 }

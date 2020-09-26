@@ -10,3 +10,4 @@ export * from './passed_question.schema';
 export * from './comment.schema';
 export * from './room.schema';
 export * from './city.schema';
+export * from './settingRoom.schema';
