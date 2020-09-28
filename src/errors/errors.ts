@@ -102,6 +102,11 @@ export const errors = {
         code: 4036
     },
 
+    FORBIDDEN_NOT_YOUR_PLACE: {
+        message: StatusesEnum.NOT_YOUR_PLACE,
+        code: 4037
+    },
+
     // 404
     NOT_FOUND_USER_NOT_PRESENT: { // When user wants login, but email not found in DB
         message: StatusesEnum.USER_NOT_FOUND,

@@ -35,6 +35,7 @@ class RoomService {
     async bookTable(tableBookData: IBookUser, room_id: string): Promise<void> {
         const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
 
+        // @ts-ignore
         await RoomModel.findByIdAndUpdate(room_id, {$push: {booked_users: tableBookData}});
     }
 

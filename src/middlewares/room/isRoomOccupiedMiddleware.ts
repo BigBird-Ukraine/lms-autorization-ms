@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 
-import { ResponseStatusCodesEnum } from '../../constants/enums';
+import { HardWordsEnum, ResponseStatusCodesEnum } from '../../constants/enums';
 import { ErrorHandler, errors } from '../../errors';
 import { checkDateExist, getYesterday } from '../../helpers/room';
 import { IRequestExtended, IRoom } from '../../interfaces';
@@ -20,7 +20,7 @@ export const isRoomOccupiedMiddleware = async (req: IRequestExtended, res: Respo
     };
 
     const rooms = await roomService.findRooms(roomByParams) as IRoom[];
-    const status = rooms.length && checkDateExist(rooms, start_at, close_at, 0) || false;
+    const status = rooms.length && checkDateExist(rooms, start_at, close_at, HardWordsEnum.falsyValue) || false;
 
     if (status) {
         return next(new ErrorHandler(

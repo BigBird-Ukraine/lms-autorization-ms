@@ -1,18 +1,16 @@
 import { IBookUser } from '../../interfaces';
+import { checkFunctionLogic } from './checkDateLogic.helper';
 
-export const checkUserTablePlaceExist = (booked_users: IBookUser[], userId: string, rent_start: Date) => {
-    const rentStart = new Date(rent_start);
+export const checkUserTablePlaceExist = (booked_users: IBookUser[], userId: string, rent_start: Date, rent_end: Date) => {
     let statusExist = false;
 
-    booked_users.forEach(bu => {
-        const BUStart = new Date(bu.rent_start);
-        const BUEnd = new Date(bu.rent_end);
+    const filteredBU = booked_users.filter(bu => bu.user_id.toString() === userId.toString());
 
-        if (rentStart >= BUStart && rentStart < BUEnd) {
-            statusExist = true;
-            return;
-        }
-    });
+    if (!statusExist) {
+        filteredBU.forEach(bu => {
+            statusExist = checkFunctionLogic(rent_start, rent_end, bu.rent_start, bu.rent_end);
+        });
+    }
 
     return statusExist;
 };

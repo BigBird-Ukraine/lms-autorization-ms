@@ -3,3 +3,4 @@ export * from './getYesterday.helper';
 export * from './countFreePlaces.helper';
 export * from './getBookTables.helper';
 export * from './checkUserTablePlaceExist';
+export * from './checkDateLogic.helper';

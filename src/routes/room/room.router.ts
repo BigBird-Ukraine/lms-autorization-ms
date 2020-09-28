@@ -6,7 +6,7 @@ import {
     checkDateAndUsersPresentMiddleware,
     checkIsTeacher,
     isBookTableDataValid,
-    isDateValid,
+    isDateValid, isRentOwner,
     isRoomOccupiedMiddleware,
     isRoomOwnerMiddleware,
     isRoomPresentMiddlewareWrapper,
@@ -29,7 +29,7 @@ router.post('/:room_id/:table_number',
     isTableOccupiedMiddleware,
     roomController.bookTable);
 router.get('/:room_id/:table_number', isRoomPresentMiddlewareWrapper(true), roomController.getBookTable);
-router.delete('/:room_id/:rent_id', isRoomPresentMiddlewareWrapper(false), roomController.deleteBookedUser);
+router.delete('/:room_id/:rent_id', isRoomPresentMiddlewareWrapper(false), isRentOwner, roomController.deleteBookedUser);
 
 router.use(checkIsTeacher);
 router.post('/', isRoomValid, isDateValid, isRoomOccupiedMiddleware, roomController.createRoom);

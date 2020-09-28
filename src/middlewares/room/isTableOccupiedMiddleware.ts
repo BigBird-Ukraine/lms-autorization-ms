@@ -8,8 +8,7 @@ import { IBookUser, IRequestExtended, IRoom, IUser } from '../../interfaces';
 export const isTableOccupiedMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
     const {_id} = req.user as IUser;
     const {rent_end, rent_start, table_number} = req.body as IBookUser;
-    const room = req.room as IRoom;
-    const arrayOfRoom = [room];
+    const arrayOfRoom = [req.room] as IRoom[];
 
     const statusExist = checkDateExist(arrayOfRoom, rent_start, rent_end, table_number);
 
@@ -20,7 +19,7 @@ export const isTableOccupiedMiddleware = async (req: IRequestExtended, res: Resp
             errors.BAD_REQUEST_TABLE_ALREADY_EXIST.code));
     }
 
-    const statusUserTableExist = checkUserTablePlaceExist(room.booked_users, _id, rent_start);
+    const statusUserTableExist = checkUserTablePlaceExist(arrayOfRoom[0].booked_users, _id, rent_start, rent_end);
     if (statusUserTableExist) {
         return next(new ErrorHandler(
             ResponseStatusCodesEnum.BAD_REQUEST,

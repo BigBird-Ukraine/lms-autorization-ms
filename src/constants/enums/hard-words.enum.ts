@@ -1,3 +1,4 @@
 export enum HardWordsEnum {
-    AUTHORIZATION = 'Authorization'
+    AUTHORIZATION = 'Authorization',
+    falsyValue = 0
 }
