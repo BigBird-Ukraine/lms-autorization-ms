@@ -25,7 +25,7 @@ export function isRoomPresentMiddlewareWrapper(groupStatus: boolean) {
                     select: {user_id: 1},
                     populate: {
                         path: 'user_id',
-                        select: {name: 1, surname: 1, _id: 0}
+                        select: {name: 1, surname: 1}
                     }
                 }) :
                 room = await roomService.findRooms({_id: room_id});

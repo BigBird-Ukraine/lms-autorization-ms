@@ -38,6 +38,19 @@ class RoomService {
         await RoomModel.findByIdAndUpdate(room_id, {$push: {booked_users: tableBookData}});
     }
 
+    async deleteBookedUser(room_id: string, rent_id: string): Promise<void> {
+        const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
+
+        await RoomModel.update({_id: room_id}, {
+            // @ts-ignore
+            $pull: {
+                booked_users: {
+                    _id: rent_id
+                }
+            }
+        });
+    }
+
     findSettingRooms(filter?: any, select?: any): Promise<ISettingRoom[]> {
         const SettingRoomModel = model<SettingRoomType>(DatabaseTablesEnum.SETTING_ROOM_COLLECTION_NAME, SettingRoomScheme);
 

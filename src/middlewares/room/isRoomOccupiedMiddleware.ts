@@ -20,7 +20,7 @@ export const isRoomOccupiedMiddleware = async (req: IRequestExtended, res: Respo
     };
 
     const rooms = await roomService.findRooms(roomByParams) as IRoom[];
-    const status = rooms.length && checkDateExist(rooms, start_at, close_at) || false;
+    const status = rooms.length && checkDateExist(rooms, start_at, close_at, 0) || false;
 
     if (status) {
         return next(new ErrorHandler(

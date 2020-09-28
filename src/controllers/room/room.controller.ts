@@ -85,9 +85,17 @@ class RoomController {
         const {table_number} = req.params;
 
         const bookTables = getBookTables(room, table_number);
+
         res.json(bookTables);
     }
 
+    async deleteBookedUser(req: IRequestExtended, res: Response, next: NextFunction) {
+        const {room_id, rent_id} = req.params;
+
+        await roomService.deleteBookedUser(room_id, rent_id);
+
+        res.json(ResponseStatusCodesEnum.NO_CONTENT);
+    }
 }
 
 export const roomController = new RoomController();

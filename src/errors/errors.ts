@@ -52,6 +52,11 @@ export const errors = {
         message: StatusesEnum.INVALID_DATE
     },
 
+    BAD_REQUEST_TABLE_ALREADY_EXIST: {
+        code: 4010,
+        message: StatusesEnum.TABLE_ALREADY_EXIST
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4011,
