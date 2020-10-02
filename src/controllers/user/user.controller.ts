@@ -1,11 +1,11 @@
-import { NextFunction, Response } from 'express';
-import { UploadedFile } from 'express-fileupload';
+import {NextFunction, Response} from 'express';
+import {UploadedFile} from 'express-fileupload';
 
-import { config } from '../../configs';
-import { GoogleConfigEnum, MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum } from '../../constants';
-import { googleDeleter, googleUploader, HASH_PASSWORD, tokenizer } from '../../helpers';
-import { IChangePassword, IPassedTest, IRequestExtended, IUser, IUserSubjectModel } from '../../interfaces';
-import { mailService, userService } from '../../services';
+import {config} from '../../configs';
+import {GoogleConfigEnum, MailSender, ResponseStatusCodesEnum, UserActionEnum, UserStatusEnum} from '../../constants';
+import {googleDeleter, googleUploader, HASH_PASSWORD, tokenizer} from '../../helpers';
+import {IChangePassword, IPassedTest, IRequestExtended, IUser, IUserSubjectModel} from '../../interfaces';
+import {mailService, userService} from '../../services';
 
 class UserController {
 
@@ -138,6 +138,11 @@ class UserController {
 
     res.json(ResponseStatusCodesEnum.CREATED);
   }
+
+  // SocketIO
+    async getUserByParams(params: Partial<IUser>) {
+        return userService.getUserByParams(params);
+    }
 }
 
 export const userController = new UserController();

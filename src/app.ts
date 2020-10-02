@@ -27,7 +27,6 @@ class App {
     (global as any).appRoot = resolvePath(__dirname, '../');
 
     this.app.use(morgan('dev'));
-    // @ts-ignore
     this.app.use(helmet());
     this.app.use(cors());
     this.app.use(serverRequestLimiter);

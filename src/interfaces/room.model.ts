@@ -50,3 +50,9 @@ export interface ICutRoom {
     numbersPlaces?: number[];
     idPlaces?: number[];
 }
+
+export interface ITableEvent {
+    bookUserTable: IBookUser;
+    room_id: string;
+    room: string;
+}

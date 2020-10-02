@@ -13,3 +13,4 @@ export * from './course.model';
 export * from './comment.model';
 export * from './room.model';
 export * from './city.model';
+export * from './response-socket-model';
