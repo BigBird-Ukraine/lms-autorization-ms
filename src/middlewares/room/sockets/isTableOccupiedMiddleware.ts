@@ -1,11 +1,13 @@
+import { Socket } from 'socket.io';
 import { ResponseStatusCodesEnum } from '../../../constants/enums';
 import { errors } from '../../../errors';
 import { checkDateExist, checkUserTablePlaceExist } from '../../../helpers/room';
-import { IBookUser, IRoom, IUser } from '../../../interfaces';
+import { IBookUser, ITableEvent, IUser } from '../../../interfaces';
 
-export const isTableOccupiedMiddleware = async (user: IUser, body: IBookUser, room: IRoom[]) => {
+export const isTableOccupiedMiddleware = async (socket: Socket, events: ITableEvent) => {
+    const { user, room} = socket.handshake.query;
     const {_id} = user as IUser;
-    const {rent_end, rent_start, table_number} = body as IBookUser;
+    const {rent_end, rent_start, table_number} = events.bookUserTable as IBookUser;
 
     const statusExist = checkDateExist(room, rent_start, rent_end, table_number);
 
@@ -26,4 +28,6 @@ export const isTableOccupiedMiddleware = async (user: IUser, body: IBookUser, ro
             code: errors.BAD_REQUEST_TABLE_ALREADY_EXIST.code
         };
     }
+
+    return socket;
 };

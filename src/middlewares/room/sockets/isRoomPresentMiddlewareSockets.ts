@@ -1,13 +1,15 @@
 import { ObjectID } from 'mongodb';
+import { Socket } from 'socket.io';
+
 import { ResponseStatusCodesEnum } from '../../../constants/enums';
 import {  errors } from '../../../errors';
-import { IRoom } from '../../../interfaces';
+import { IRoom, ITableEvent } from '../../../interfaces';
 import { roomService } from '../../../services/room';
 
-export const isRoomPresentMiddlewareSockets = async (room_id: string) => {
+export const isRoomPresentMiddlewareSockets = async (socket: Socket, events: ITableEvent) => {
     let room: IRoom[];
 
-    if (!ObjectID.isValid(room_id)) {
+    if (!ObjectID.isValid(events.room_id)) {
         return {
             status: ResponseStatusCodesEnum.NOT_FOUND,
             code: errors.BAD_REQUEST_WRONG_PARAMS.code,
@@ -15,7 +17,7 @@ export const isRoomPresentMiddlewareSockets = async (room_id: string) => {
         };
     }
 
-    room = await roomService.findRooms({_id: room_id});
+    room = await roomService.findRooms({_id: events.room_id});
 
     if (!room[0]) {
         return {
@@ -25,5 +27,5 @@ export const isRoomPresentMiddlewareSockets = async (room_id: string) => {
         };
     }
 
-    return {room};
+    return socket.handshake.query.room = room;
 };

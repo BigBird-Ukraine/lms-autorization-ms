@@ -5,3 +5,4 @@ export * from './getBookTables.helper';
 export * from './checkUserTablePlaceExist';
 export * from './checkDateLogic.helper';
 export * from './getMyRoomSockets';
+export * from './socketsMiddlewareManager';

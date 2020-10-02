@@ -1,9 +1,9 @@
-import { IRoom } from './room.model';
+import { Socket } from 'socket.io';
 
 export interface IResponseSocket {
-    status?: number;
-    code?: number;
-    message?: string;
+    status: number;
+    code: number;
+    message: string;
 
-    room?: IRoom[];
+    socket?: Socket;
 }

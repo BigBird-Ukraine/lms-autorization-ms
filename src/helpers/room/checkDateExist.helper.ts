@@ -3,7 +3,6 @@ import { checkFunctionLogic } from './checkDateLogic.helper';
 
 export const checkDateExist = (rooms: IRoom[], currentS: Date, currentE: Date, table_number: number) => {
     let existStatus = false;
-    console.log(rooms);
 
     rooms.forEach((room) => {
         if (table_number > 0 && !existStatus) {

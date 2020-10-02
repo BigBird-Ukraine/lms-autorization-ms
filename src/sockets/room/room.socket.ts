@@ -9,9 +9,10 @@ export default () => {
 
     io.on('connection', async (socket: Socket) => {
         const user: IUserFromTokenModel = await checkAccessTokenMiddlewareSockets(socket);
+        socket.handshake.query.user = user.user_id;
 
         socket.on('table.join', (room: string) => tableJoin(socket, room));
 
-        socket.on('book_table', async (e: ITableEvent) => await bookTable(socket, e, user.user_id));
+        socket.on('book_table', async (e: ITableEvent) => await bookTable(socket, e));
     });
 };
