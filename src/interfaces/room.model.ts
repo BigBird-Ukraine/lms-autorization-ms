@@ -55,4 +55,7 @@ export interface ITableEvent {
     bookUserTable: IBookUser;
     room_id: string;
     room: string;
+
+    rent_id: string;
+    rent_start: Date;
 }

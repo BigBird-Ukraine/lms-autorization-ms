@@ -57,9 +57,14 @@ export const errors = {
         message: StatusesEnum.TABLE_ALREADY_EXIST
     },
 
+    BAD_REQUEST_USER_ALREADY_HAS_PLACE: {
+        code: 4011,
+        message: StatusesEnum.USER_ALREADY_HAS_PLACE
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
-        code: 4011,
+        code: 4030,
         message: StatusesEnum.WRONG_EMAIL_OR_PASSWORD
     },
     // 403

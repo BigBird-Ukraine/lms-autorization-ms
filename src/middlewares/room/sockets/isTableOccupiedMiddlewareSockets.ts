@@ -4,7 +4,7 @@ import { errors } from '../../../errors';
 import { checkDateExist, checkUserTablePlaceExist } from '../../../helpers/room';
 import { IBookUser, ITableEvent, IUser } from '../../../interfaces';
 
-export const isTableOccupiedMiddleware = async (socket: Socket, events: ITableEvent) => {
+export const isTableOccupiedMiddlewareSockets = async (socket: Socket, events: ITableEvent) => {
     const { user, room} = socket.handshake.query;
     const {_id} = user as IUser;
     const {rent_end, rent_start, table_number} = events.bookUserTable as IBookUser;
@@ -24,8 +24,8 @@ export const isTableOccupiedMiddleware = async (socket: Socket, events: ITableEv
     if (statusUserTableExist) {
         return {
             status: ResponseStatusCodesEnum.BAD_REQUEST,
-            message: errors.BAD_REQUEST_TABLE_ALREADY_EXIST.message,
-            code: errors.BAD_REQUEST_TABLE_ALREADY_EXIST.code
+            message: errors.BAD_REQUEST_USER_ALREADY_HAS_PLACE.message,
+            code: errors.BAD_REQUEST_USER_ALREADY_HAS_PLACE.code
         };
     }
 

@@ -1,3 +1,4 @@
 export * from './isBookTableDataValid.middleware';
 export * from './isRoomPresentMiddlewareSockets';
-export * from './isTableOccupiedMiddleware';
+export * from './isTableOccupiedMiddlewareSockets';
+export * from './isRentOwnerSockets.middleware';

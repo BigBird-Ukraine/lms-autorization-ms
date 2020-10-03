@@ -4,16 +4,17 @@ import { roomController, userController } from '../../../controllers';
 import { errorHandlerSockets } from '../../../errors';
 import { socketsMiddlewaresManager } from '../../../helpers';
 import { IResponseSocket, ITableEvent } from '../../../interfaces';
-import { isBookTableDataValid, isRoomPresentMiddlewareSockets, isTableOccupiedMiddleware } from '../../../middlewares';
+import {
+    isBookTableDataValid,
+    isRoomPresentMiddlewareSockets,
+    isTableOccupiedMiddlewareSockets
+} from '../../../middlewares';
 
 export const bookTable = async (socket: Socket, event: ITableEvent) => {
-    const errorStatus: IResponseSocket | undefined = await socketsMiddlewaresManager([
-        isBookTableDataValid,
-        isRoomPresentMiddlewareSockets,
-        isTableOccupiedMiddleware
-    ], socket, event);
+    const middlewares = [isBookTableDataValid, isRoomPresentMiddlewareSockets, isTableOccupiedMiddlewareSockets];
+    const errorStatus: IResponseSocket | undefined = await socketsMiddlewaresManager(middlewares, socket, event);
 
-    if (errorStatus && errorStatus.status) {
+    if (errorStatus?.status) {
         errorHandlerSockets(errorStatus.message, errorStatus.code, socket);
     } else {
         await roomController.bookTable(event.bookUserTable, event.room_id);

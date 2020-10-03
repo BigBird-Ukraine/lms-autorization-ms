@@ -80,17 +80,13 @@ class RoomController {
         res.json(bookTables);
     }
 
-    async deleteBookedUser(req: IRequestExtended, res: Response, next: NextFunction) {
-        const {room_id, rent_id} = req.params;
-
-        await roomService.deleteBookedUser(room_id, rent_id);
-
-        res.json(ResponseStatusCodesEnum.NO_CONTENT);
-    }
-
     // SocketIO
     async bookTable(tableBookData: IBookUser, room_id: string) {
         await roomService.bookTable(tableBookData, room_id);
+    }
+
+    async deleteBookedUser(room_id: string, rent_id: string) {
+        await roomService.deleteBookedUser(room_id, rent_id);
     }
 }
 

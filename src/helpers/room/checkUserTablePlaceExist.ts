@@ -6,11 +6,11 @@ export const checkUserTablePlaceExist = (booked_users: IBookUser[], userId: stri
 
     const filteredBU = booked_users.filter(bu => bu.user_id.toString() === userId.toString());
 
-    if (!statusExist) {
-        filteredBU.forEach(bu => {
+    filteredBU.forEach(bu => {
+        if (!statusExist) {
             statusExist = checkFunctionLogic(rent_start, rent_end, bu.rent_start, bu.rent_end);
-        });
-    }
+        }
+    });
 
     return statusExist;
 };
