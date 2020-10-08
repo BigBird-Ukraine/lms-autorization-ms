@@ -112,6 +112,11 @@ export const errors = {
         code: 4037
     },
 
+    FORBIDDEN_USER_BOOKING: {
+        message: StatusesEnum.USER_BOOKING_IS_BLOCKED,
+        code: 4038
+    },
+
     // 404
     NOT_FOUND_USER_NOT_PRESENT: { // When user wants login, but email not found in DB
         message: StatusesEnum.USER_NOT_FOUND,

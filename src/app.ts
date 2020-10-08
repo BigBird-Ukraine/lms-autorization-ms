@@ -7,7 +7,9 @@ import * as RateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
+
 import { resolve as resolvePath } from 'path';
+import { connection } from './node-cron';
 
 dotEnv.config();
 
@@ -36,6 +38,7 @@ class App {
     this.app.use(express.static(resolvePath((global as any).appRoot, 'static')));
     this.mountRoutes();
     this.setupDB();
+    this.mountCronJobs();
 
     this.app.use(this.logErrors);
     this.app.use(this.clientErrorHandler);
@@ -52,6 +55,10 @@ class App {
   private mountRoutes(): void {
     this.app.use('/api', apiRouter);
     this.app.use('*', notFoundRouter);
+  }
+
+  private mountCronJobs(): void {
+      connection();
   }
 
   private logErrors = (err: any, req: Request, res: Response, next: NextFunction): void => {

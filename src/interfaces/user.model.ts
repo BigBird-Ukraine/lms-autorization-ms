@@ -19,6 +19,10 @@ export interface IUser {
     change_token?: string;
     new_password?: string;
     passed_tests?: [ITestResultModel];
+    booking_ban_status: {
+        status: number,
+        date: Date | null
+    };
 }
 
 export interface IFullUserTest {
@@ -40,6 +44,10 @@ export interface IFullUserTest {
     change_token: string;
     new_password: string;
     passed_tests?: [ITestResultFullModel];
+    booking_ban_status: {
+        status: number,
+        date: Date | null
+    };
 }
 
 export interface IChangePassword {

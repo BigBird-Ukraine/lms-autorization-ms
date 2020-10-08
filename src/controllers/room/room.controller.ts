@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 
-import { ResponseStatusCodesEnum } from '../../constants';
+import { ResponseStatusCodesEnum, UserRoleEnum } from '../../constants';
 import { countFreePlaces, getBookTables } from '../../helpers/room';
 import { IBookUser, ICutRoom, IRequestExtended, IRoom, IUser } from '../../interfaces';
 import { roomService } from '../../services';
@@ -8,7 +8,12 @@ import { roomService } from '../../services';
 class RoomController {
 
     async getRooms(req: IRequestExtended, res: Response, next: NextFunction) {
-        const {...filter} = req.query;
+        const user = req.user as IUser;
+        let {...filter} = req.query;
+
+        if (user.role_id === UserRoleEnum.STUDENT) {
+            filter = {...filter, groups: {$in: user.groups_id}};
+        }
 
         const rooms = await roomService.findRooms(filter, null, {
             path: 'groups',
@@ -85,8 +90,8 @@ class RoomController {
         await roomService.bookTable(tableBookData, room_id);
     }
 
-    async deleteBookedUser(room_id: string, rent_id: string) {
-        await roomService.deleteBookedUser(room_id, rent_id);
+    async deleteBookedUser(room_id: string, rent_id: string, user: IUser) {
+        await roomService.deleteBookedUser(room_id, rent_id, user);
     }
 }
 

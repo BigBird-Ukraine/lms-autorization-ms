@@ -1,4 +1,5 @@
 import { IGroup } from './group.model';
+import { IUser } from './user.model';
 
 export interface IRoom {
     _id: string;
@@ -17,7 +18,7 @@ export interface IRoom {
 
 export interface IBookUser {
     _id?: string;
-    user_id: string;
+    user_id: string | Partial<IUser>;
     table_number: number;
     rent_start: Date;
     rent_end: Date;

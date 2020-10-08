@@ -16,4 +16,8 @@ export interface IUserSubjectModel {
     change_token?: string;
     new_password?: string;
     passed_tests?: [ITestResultModel];
+    booking_ban_status: {
+        status: number,
+        date: Date | null
+    };
 }

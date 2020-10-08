@@ -28,6 +28,7 @@ export enum StatusesEnum {
     NOT_YOUR_ROOM = 'Its not your room',
     ROOM_HAS_USERS = 'This room has users, you cant update date',
     NOT_YOUR_PLACE = 'Its not your place',
+    USER_BOOKING_IS_BLOCKED = 'User booking is blocked',
 
     // 404
     USER_NOT_FOUND = 'User is not found',

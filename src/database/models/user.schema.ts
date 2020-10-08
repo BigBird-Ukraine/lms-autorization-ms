@@ -79,6 +79,14 @@ UserSchema = new Schema({
     type: Types.ObjectId,
     ref: DatabaseTablesEnum.GROUP_COLLECTION_NAME
   }],
+  booking_ban_status: {
+    status: {
+      type: Number,
+      required: true,
+      default: UserStatusEnum.ACTIVE
+    },
+    date: Date
+  },
   new_password: {
     type: String,
     required: false

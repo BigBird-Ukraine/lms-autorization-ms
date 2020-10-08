@@ -9,3 +9,4 @@ export * from './statuses.enum';
 export * from './hard-words.enum';
 export * from './google_config.enum';
 export * from './mail-sender.enum';
+export * from './node-crone.schedule.enum';
