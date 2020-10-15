@@ -1,7 +1,7 @@
+import * as moment from 'moment';
 import { model } from 'mongoose';
 
-import * as moment from 'moment';
-import { DatabaseTablesEnum, RegExpEnum, UserStatusEnum } from '../../constants/enums';
+import { DatabaseTablesEnum, HardWordsEnum, RegExpEnum, UserStatusEnum } from '../../constants/enums';
 import {
     Room,
     RoomSchema,
@@ -33,6 +33,25 @@ class RoomService {
             .select(params) as any;
     }
 
+    async findRoomsWithBookingTable(roomId: string): Promise<IRoom[]> {
+        const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
+        const currentDate = new Date();
+
+        return RoomModel.find({
+            _id: roomId,
+            close_at: {
+                $gt: currentDate
+            }
+        }).populate({
+            path: 'booked_users',
+            select: {user_id: 1},
+            populate: {
+                path: 'user_id',
+                select: {name: 1, surname: 1}
+            }
+        }).select({booked_users: 1}) as any;
+    }
+
     updateRoom(room_id: string, room: Partial<IRoom>): Promise<IRoom> {
         const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
 
@@ -52,48 +71,73 @@ class RoomService {
         await RoomModel.findByIdAndUpdate(room_id, {$push: {booked_users: tableBookData}});
     }
 
-    async deleteBookedUser(room_id: string, rent_id: string, user: IUser): Promise<void> {
+    async deleteBookedUser(room_id: string, rent_start: Date, table_number: number, user: IUser): Promise<void> {
         const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
 
-        await RoomModel.update({_id: room_id}, {
-                $pull: {booked_users: {_id: rent_id}}
-            },
-            async () => {
-                switch (user.booking_ban_status.status) {
-                    case UserStatusEnum.ACTIVE: {
-                        await User.update(
-                            {_id: user._id},
-                            {$set: {'booking_ban_status.status': UserStatusEnum.FOREWARNED}},
-                            {multi: true}
-                        ).exec();
-                        break;
-                    }
-
-                    case UserStatusEnum.FOREWARNED: {
-                        const date = new Date(moment().format(RegExpEnum.date_format));
-                        date.setDate(date.getDate() + 10);
-
-                        await User.update(
-                            {_id: user._id},
-                            {$set: {booking_ban_status: {status: UserStatusEnum.BOOKING_BAN, date}}},
-                            {multi: true}
-                        ).exec();
-
-                        date.setDate(date.getDate() - 10);
-                        await Room.update({
-                            'booked_users.user_id': user._id,
-                            'start_at': {$gte: date}
-                        }, {$pull: {booked_users: {user_id: user._id}}});
-                        break;
-                    }
+        await RoomModel.findByIdAndUpdate(room_id, {
+            $pull: {
+                booked_users: {
+                    user_id: user._id,
+                    rent_start,
+                    table_number
                 }
-            });
+            }
+        }, async () => {
+            switch (user.booking_ban_status.status) {
+                case UserStatusEnum.ACTIVE: {
+                    await User.update(
+                        {_id: user._id},
+                        {$set: {'booking_ban_status.status': UserStatusEnum.FOREWARNED}},
+                        {multi: true}
+                    ).exec();
+                    break;
+                }
+
+                case UserStatusEnum.FOREWARNED: {
+                    await User.update(
+                        {_id: user._id},
+                        {$set: {'booking_ban_status.status': UserStatusEnum.FOREWARNED2}},
+                        {multi: true}
+                    ).exec();
+                    break;
+                }
+
+                case UserStatusEnum.FOREWARNED2: {
+                    const date = new Date(moment().format(RegExpEnum.date_format));
+                    date.setDate(date.getDate() + 14);
+
+                    await User.update(
+                        {_id: user._id},
+                        {$set: {booking_ban_status: {status: UserStatusEnum.BOOKING_BAN, date}}},
+                        {multi: true}
+                    ).exec();
+
+                    date.setDate(date.getDate() - 14);
+                    await Room.update({
+                        'booked_users.user_id': user._id,
+                        'start_at': {$gte: date}
+                    }, {$pull: {booked_users: {user_id: user._id}}});
+                    break;
+                }
+            }
+        });
     }
 
     findSettingRooms(filter?: any, select?: any): Promise<ISettingRoom[]> {
         const SettingRoomModel = model<SettingRoomType>(DatabaseTablesEnum.SETTING_ROOM_COLLECTION_NAME, SettingRoomScheme);
 
         return SettingRoomModel.find(filter).select(select) as any;
+    }
+
+    async confirmStatus(room_id: string, _id: string): Promise<void> {
+        const RoomModel = model<RoomType>(DatabaseTablesEnum.ROOM_COLLECTION_NAME, RoomSchema);
+
+        await RoomModel.update({
+                '_id': room_id,
+                'booked_users._id': _id
+            }, {$set: {'booked_users.$.confirm_status': HardWordsEnum.CONFIRM_BOOKING}},
+            {multi: true}
+            );
     }
 }
 

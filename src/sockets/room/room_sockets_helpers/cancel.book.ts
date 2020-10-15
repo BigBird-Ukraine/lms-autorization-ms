@@ -20,7 +20,7 @@ export const cancelBook = async (socket: Socket, event: ITableEvent) => {
     if (errorStatus?.status) {
         errorHandlerSockets(errorStatus.message, errorStatus.code, socket);
     } else {
-        await roomController.deleteBookedUser(event.room_id, event.rent_id, currentUser);
+        await roomController.deleteBookedUser(event.room_id, event.rent_start, event.table_number, currentUser);
         io.in(event.room).emit('cancel_book', event);
     }
 };

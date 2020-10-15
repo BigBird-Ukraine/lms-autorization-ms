@@ -6,4 +6,5 @@ export * from './isRoomOccupiedMiddleware';
 export * from './isDateValid.middleware';
 export * from './sockets/isTableOccupiedMiddlewareSockets';
 export * from './sockets/isRentOwnerSockets.middleware';
+export * from './checkUserLocation.middleware';
 export * from './sockets';

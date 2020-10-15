@@ -27,6 +27,7 @@ export const bookTable = async (socket: Socket, event: ITableEvent) => {
             name: bookedUser?.name,
             surname: bookedUser?.surname
         } as Partial<IUser>;
+
         io.in(event.room).emit('book_table', event);
     }
 };

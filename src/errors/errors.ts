@@ -62,6 +62,11 @@ export const errors = {
         message: StatusesEnum.USER_ALREADY_HAS_PLACE
     },
 
+    BAD_REQUEST_INVALID_LOCATION: {
+        code: 4012,
+        message: StatusesEnum.INVALID_LOCATION
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
         code: 4030,

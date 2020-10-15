@@ -1,13 +1,8 @@
 import { Socket } from 'socket.io';
+import { ITableEvent } from '../../../interfaces';
 
-import { getMyRoomSockets } from '../../../helpers/room';
-
-export const tableJoin = (socket: Socket, room: string) => {
-    socket = getMyRoomSockets(socket);
-
+export const tableJoin = async (socket: Socket, event?: ITableEvent) => {
     setTimeout(() => {
-        socket.join(room);
-        socket.emit('book_table', 'Joined table ' + room);
-        socket.broadcast.to(room).emit('book_table', 'Someone joined to table ' + room);
+        socket.join(event?.room as string);
     }, 0);
 };

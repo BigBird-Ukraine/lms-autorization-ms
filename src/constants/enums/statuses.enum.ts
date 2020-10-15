@@ -9,6 +9,7 @@ export enum StatusesEnum {
     INVALID_DATE = 'Invalid date',
     TABLE_ALREADY_EXIST = 'This table already exist',
     USER_ALREADY_HAS_PLACE = 'User already has place',
+    INVALID_LOCATION = 'Invalid location',
 
     // 401
     WRONG_EMAIL_OR_PASSWORD = 'Wrong email or password',

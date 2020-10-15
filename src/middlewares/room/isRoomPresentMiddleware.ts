@@ -19,15 +19,7 @@ export function isRoomPresentMiddlewareWrapper(groupStatus: boolean) {
                     errors.BAD_REQUEST_WRONG_PARAMS.code
                 ));
             }
-
-            groupStatus ? room = await roomService.findRooms({_id: room_id}, null, {
-                    path: 'booked_users',
-                    select: {user_id: 1},
-                    populate: {
-                        path: 'user_id',
-                        select: {name: 1, surname: 1}
-                    }
-                }) :
+            groupStatus ? room = await roomService.findRoomsWithBookingTable(room_id) :
                 room = await roomService.findRooms({_id: room_id});
 
             if (!room[0]) {

@@ -3,5 +3,6 @@ export enum UserStatusEnum {
     BLOCKED,
     PENDING,
     FOREWARNED,
-    BOOKING_BAN
+    BOOKING_BAN,
+    FOREWARNED2
 }

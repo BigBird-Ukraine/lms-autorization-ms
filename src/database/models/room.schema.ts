@@ -45,9 +45,23 @@ RoomSchema = new Schema({
       ref: DatabaseTablesEnum.USER_COLLECTION_NAME
     },
     table_number: Number,
-    rent_start: String,
-    rent_end: String
+    rent_start: Date,
+    rent_end: Date,
+    confirm_status: {
+      type: Number,
+      default: 0
+    }
   }],
+  address: {
+    latitude: {
+      type: Number,
+      required: true
+    },
+    longitude: {
+      type: Number,
+      required: true
+    }
+  },
   created_at: {
     type: Date,
     default: Date.now(),

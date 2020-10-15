@@ -14,6 +14,10 @@ export interface IRoom {
     booked_users: IBookUser[];
     owner_id: string;
     created_at: Date;
+    address: {
+        latitude: number,
+        longitude: number
+    };
 }
 
 export interface IBookUser {
@@ -22,6 +26,7 @@ export interface IBookUser {
     table_number: number;
     rent_start: Date;
     rent_end: Date;
+    confirm_status: number;
 }
 
 export interface ISettingRoom {
@@ -57,6 +62,6 @@ export interface ITableEvent {
     room_id: string;
     room: string;
 
-    rent_id: string;
+    table_number: number;
     rent_start: Date;
 }

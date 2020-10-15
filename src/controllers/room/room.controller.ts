@@ -1,7 +1,8 @@
 import { NextFunction, Response } from 'express';
+import * as moment from 'moment';
 
-import { ResponseStatusCodesEnum, UserRoleEnum } from '../../constants';
-import { countFreePlaces, getBookTables } from '../../helpers/room';
+import { RegExpEnum, ResponseStatusCodesEnum, UserRoleEnum } from '../../constants';
+import { countFreePlaces, getBookTables, sortUserBooking } from '../../helpers/room';
 import { IBookUser, ICutRoom, IRequestExtended, IRoom, IUser } from '../../interfaces';
 import { roomService } from '../../services';
 
@@ -85,13 +86,36 @@ class RoomController {
         res.json(bookTables);
     }
 
+    async getMyBooking(req: IRequestExtended, res: Response, next: NextFunction) {
+        const user = req.user as IUser;
+        const date = new Date(moment().format(RegExpEnum.date_format));
+
+        const myBooking = await roomService.findRooms({
+            'booked_users.user_id': user._id,
+            'booked_users.rent_end': {$gte: date}
+        }, {booked_users: 1, label: 1, start_at: 1, close_at: 1});
+
+        const sortedRooms = sortUserBooking(myBooking, user._id);
+
+        res.json(sortedRooms);
+    }
+
+    async updateConfirmStatus(req: IRequestExtended, res: Response, next: NextFunction) {
+        // const {_id} = req.body as Partial<IBookUser>;
+        // const room = req.room as IRoom;
+
+        // await roomService.confirmStatus(room._id, _id as string);
+
+        res.json(ResponseStatusCodesEnum.OK);
+    }
+
     // SocketIO
     async bookTable(tableBookData: IBookUser, room_id: string) {
         await roomService.bookTable(tableBookData, room_id);
     }
 
-    async deleteBookedUser(room_id: string, rent_id: string, user: IUser) {
-        await roomService.deleteBookedUser(room_id, rent_id, user);
+    async deleteBookedUser(room_id: string, rent_start: Date, table_number: number,  user: IUser) {
+        await roomService.deleteBookedUser(room_id, rent_start, table_number, user);
     }
 }
 
