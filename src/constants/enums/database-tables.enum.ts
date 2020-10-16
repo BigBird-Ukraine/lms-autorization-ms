@@ -12,5 +12,6 @@ export enum DatabaseTablesEnum {
   PASSED_QUESTION_COLLECTION_NAME = 'Passed_question',
   ROOM_COLLECTION_NAME = 'Room',
   CITY_COLLECTION_NAME = 'City',
-  SETTING_ROOM_COLLECTION_NAME = 'Setting_room'
+  SETTING_ROOM_COLLECTION_NAME = 'Setting_room',
+  IP_COLLECTION_NAME = 'Api'
 }

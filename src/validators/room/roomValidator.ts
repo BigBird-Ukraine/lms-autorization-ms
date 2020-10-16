@@ -18,5 +18,6 @@ export const roomValidator = Joi.object().keys({
   address: Joi.object().keys( {
     latitude: Joi.number().required(),
     longitude: Joi.number().required()
-  })
+  }),
+  ip: Joi.string().max(255).trim().required()
 });

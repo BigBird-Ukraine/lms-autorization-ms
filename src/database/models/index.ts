@@ -11,3 +11,4 @@ export * from './comment.schema';
 export * from './room.schema';
 export * from './city.schema';
 export * from './settingRoom.schema';
+export * from './ip.schema';

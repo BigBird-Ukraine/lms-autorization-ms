@@ -18,6 +18,7 @@ export interface IRoom {
         latitude: number,
         longitude: number
     };
+    ip: string;
 }
 
 export interface IBookUser {

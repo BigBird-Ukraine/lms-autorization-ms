@@ -5,6 +5,7 @@ import { courseRouter } from '../course';
 import { downloadRouter } from '../download';
 import { groupRouter } from '../group';
 import { helperRouter } from '../helper';
+import { ipRouter } from '../ip-address';
 import { lessonRouter } from '../lesson';
 import { moduleRouter } from '../module';
 import { questionRouter } from '../question';
@@ -24,5 +25,6 @@ router.use('/courses', courseRouter);
 router.use('/modules' , moduleRouter);
 router.use('/groups', groupRouter);
 router.use('/rooms', roomRouter);
+router.use('/ips', ipRouter);
 
 export const apiRouter = router;
