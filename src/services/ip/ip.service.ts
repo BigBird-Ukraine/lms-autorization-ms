@@ -2,13 +2,14 @@ import { model } from 'mongoose';
 
 import { DatabaseTablesEnum } from '../../constants/enums';
 import { IPScheme, IPType } from '../../database/models';
+import { IIp } from '../../interfaces';
 
 class IpService {
-  getApis(): Promise<any> {
-    const ApiModel = model<IPType>(DatabaseTablesEnum.IP_COLLECTION_NAME, IPScheme);
+  getIps(): Promise<IIp> {
+    const IpModel = model<IPType>(DatabaseTablesEnum.IP_COLLECTION_NAME, IPScheme);
 
-    return ApiModel.find() as any;
+    return IpModel.find() as any;
   }
 }
 
-export const apiService = new IpService();
+export const ipService = new IpService();

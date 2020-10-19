@@ -3,12 +3,11 @@ import * as Joi from 'joi';
 
 import { ResponseStatusCodesEnum } from '../../../constants/enums';
 import { ErrorHandler } from '../../../errors';
-import { IRoom } from '../../../interfaces';
+import { IIpAddress } from '../../../interfaces';
 import { isConfirmDataValid } from '../../../validators';
 
 export const isConfirmDataValidMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const body = req.body as Partial<IRoom>;
-  console.log(body);
+  const body = req.body as IIpAddress;
 
   const {error} = Joi.validate(body, isConfirmDataValid);
 

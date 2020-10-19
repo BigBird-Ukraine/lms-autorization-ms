@@ -101,10 +101,10 @@ class RoomController {
     }
 
     async updateConfirmStatus(req: IRequestExtended, res: Response, next: NextFunction) {
-        // const {_id} = req.body as Partial<IBookUser>;
-        // const room = req.room as IRoom;
+        const {_id} = req.body as Partial<IBookUser>;
+        const room = req.room as IRoom;
 
-        // await roomService.confirmStatus(room._id, _id as string);
+        await roomService.confirmStatus(room._id, _id as string);
 
         res.json(ResponseStatusCodesEnum.OK);
     }

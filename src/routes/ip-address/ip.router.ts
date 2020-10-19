@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { apiController } from '../../controllers/ip';
+import { ipController } from '../../controllers/ip';
 import { checkAccessTokenMiddleware, checkIsTeacher } from '../../middlewares/oauth';
 
 const router = Router();
@@ -8,6 +8,6 @@ const router = Router();
 router.use(checkAccessTokenMiddleware);
 router.use(checkIsTeacher);
 
-router.get('/', apiController.getIp);
+router.get('/', ipController.getIp);
 
 export const ipRouter = router;

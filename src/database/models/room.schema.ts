@@ -52,18 +52,9 @@ RoomSchema = new Schema({
       default: 0
     }
   }],
-  address: {
-    latitude: {
-      type: Number,
-      required: true
-    },
-    longitude: {
-      type: Number,
-      required: true
-    }
-  },
-  ip: {
-    type: String
+  ip_address: {
+    type: Types.ObjectId,
+    ref: DatabaseTablesEnum.IP_COLLECTION_NAME
   },
   created_at: {
     type: Date,

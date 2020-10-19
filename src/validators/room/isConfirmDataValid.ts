@@ -5,5 +5,6 @@ export const isConfirmDataValid = Joi.object().keys({
     address: Joi.object().keys( {
         latitude: Joi.number().required(),
         longitude: Joi.number().required()
-    })
+    }),
+    ip: Joi.string().trim().required()
 });

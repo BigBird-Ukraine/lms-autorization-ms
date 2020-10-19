@@ -23,5 +23,5 @@ export interface IRequestExtended extends Request {
     module?: IModule;
     refresh_token?: any;
     passed_lesson_id?: string;
-    room?: IRoom;
+    room?: IRoom ;
 }

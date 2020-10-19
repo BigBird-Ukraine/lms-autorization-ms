@@ -1,4 +1,5 @@
 import { IGroup } from './group.model';
+import { IIp } from './ip.model';
 import { IUser } from './user.model';
 
 export interface IRoom {
@@ -14,13 +15,11 @@ export interface IRoom {
     booked_users: IBookUser[];
     owner_id: string;
     created_at: Date;
-    address: {
-        latitude: number,
-        longitude: number
-    };
-    ip: string;
+    ip_address: string | IIp;
 }
-
+export interface IIpRoom extends IRoom {
+    ip_address: IIp;
+}
 export interface IBookUser {
     _id?: string;
     user_id: string | Partial<IUser>;

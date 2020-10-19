@@ -19,7 +19,7 @@ IPScheme = new Schema({
   }
 });
 
-export const IP: Model<IPType> = model<IPType>
+export const Ip: Model<IPType> = model<IPType>
 (
   DatabaseTablesEnum.IP_COLLECTION_NAME,
   IPScheme,

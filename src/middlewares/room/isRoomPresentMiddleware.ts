@@ -1,12 +1,12 @@
 import { NextFunction, Response } from 'express';
 import { ObjectID } from 'mongodb';
 
-import { ResponseStatusCodesEnum } from '../../constants';
+import { ResponseStatusCodesEnum, RouterActionsEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended, IRoom } from '../../interfaces';
 import { roomService } from '../../services';
 
-export function isRoomPresentMiddlewareWrapper(groupStatus: boolean) {
+export function isRoomPresentMiddlewareWrapper(status: string | null) {
     return async (req: IRequestExtended, res: Response, next: NextFunction) => {
         try {
             const {room_id} = req.params;
@@ -19,8 +19,17 @@ export function isRoomPresentMiddlewareWrapper(groupStatus: boolean) {
                     errors.BAD_REQUEST_WRONG_PARAMS.code
                 ));
             }
-            groupStatus ? room = await roomService.findRoomsWithBookingTable(room_id) :
-                room = await roomService.findRooms({_id: room_id});
+
+            switch (status) {
+                case RouterActionsEnum.FIND_ROOM_WITH_BOOKING_TABLE:
+                    room = await roomService.findRoomsWithBookingTable(room_id);
+                    break;
+                case RouterActionsEnum.FIND_ROOM_WITH_IP_ADDRESS:
+                    room = await roomService.findRooms({ _id: room_id}, null, 'ip_address');
+                    break;
+                default:
+                    room = await roomService.findRooms({_id: room_id});
+            }
 
             if (!room[0]) {
                 return next(new ErrorHandler(

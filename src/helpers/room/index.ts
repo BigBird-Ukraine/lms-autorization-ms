@@ -8,3 +8,4 @@ export * from './socketsMiddlewareManager';
 export * from './sortUserBooking.helper';
 export * from './getBookTables.helper';
 export * from './checkIPAddress.helper';
+export * from './checkUserLocation.helper';

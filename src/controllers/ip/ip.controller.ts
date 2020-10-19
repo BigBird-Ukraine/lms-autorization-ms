@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { apiService } from '../../services';
+import { ipService } from '../../services';
 
 export class IpController {
   async getIp(req: Request, res: Response, next: NextFunction) {
-    const apis = await apiService.getApis();
-
-    res.json(apis);
+    const ips = await ipService.getIps();
+    console.log(ips);
+    res.json(ips);
   }
 }
 
-export const apiController = new IpController();
+export const ipController = new IpController();
