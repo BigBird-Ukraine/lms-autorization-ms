@@ -4,7 +4,7 @@ import { ResponseStatusCodesEnum } from '../../constants/enums';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended, IRoom } from '../../interfaces';
 
-export const checkDateAndUsersPresentMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
+export const checkUsersPresentMiddleware = (req: IRequestExtended, res: Response, next: NextFunction) => {
     const lastVersionRoom = req.room as IRoom;
 
     if (lastVersionRoom.booked_users.length) {

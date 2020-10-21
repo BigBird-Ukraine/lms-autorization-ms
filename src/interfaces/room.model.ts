@@ -17,15 +17,18 @@ export interface IRoom {
     created_at: Date;
     ip_address: string | IIp;
 }
+
 export interface IIpRoom extends IRoom {
     ip_address: IIp;
 }
+
 export interface IBookUser {
     _id?: string;
     user_id: string | Partial<IUser>;
     table_number: number;
     rent_start: Date;
     rent_end: Date;
+    cron_job_touched: number;
     confirm_status: number;
 }
 
@@ -34,7 +37,6 @@ export interface ISettingRoom {
     start_at: ITime;
     close_at: ITime;
     count_places: number;
-    period_time_to_sign_up: number; // h
     cities: string[];
 }
 

@@ -13,5 +13,8 @@ export const roomUpdatedDataValidator = Joi.object().keys({
     table_number: Joi.string().trim().required(),
     rent_start: Joi.date().required(),
     rent_end: Joi.date().required()
-  })
+  }),
+  confirm_status: Joi.number().integer(),
+  cron_job_touched: Joi.number().integer(),
+  ip_address: Joi.string().trim()
 });

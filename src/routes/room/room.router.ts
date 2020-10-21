@@ -5,8 +5,9 @@ import { roomController } from '../../controllers';
 import { RouterActionsEnum } from '../../constants/enums';
 import {
     checkAccessTokenMiddleware,
-    checkDateAndUsersPresentMiddleware,
-    checkIsTeacher, checkUserLocationMiddleware,
+    checkIsTeacher,
+    checkUserLocationMiddleware,
+    checkUsersPresentMiddleware,
     isConfirmDataValidMiddleware,
     isDateValidWrapper,
     isRoomOccupiedMiddleware,
@@ -40,7 +41,7 @@ router.patch('/:room_id/:table_number',
 router.use(checkIsTeacher);
 router.post('/', isRoomValid, isDateValidWrapper(RouterActionsEnum.CREATE_ROOM), isRoomOccupiedMiddleware, roomController.createRoom);
 router.use('/:room_id', isRoomPresentMiddlewareWrapper(null));
-router.put('/:room_id', isRoomOwnerMiddleware, isRoomUpdatedDataValid, checkDateAndUsersPresentMiddleware, roomController.updateRoom);
+router.put('/:room_id', isRoomOwnerMiddleware, isRoomUpdatedDataValid, checkUsersPresentMiddleware, roomController.updateRoom);
 router.delete('/:room_id', isRoomOwnerMiddleware, roomController.deleteRoom);
 
 export const roomRouter = router;

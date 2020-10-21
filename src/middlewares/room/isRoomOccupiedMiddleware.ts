@@ -1,18 +1,19 @@
 import { NextFunction, Response } from 'express';
 
-import { HardWordsEnum, ResponseStatusCodesEnum } from '../../constants/enums';
+import { ResponseStatusCodesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
-import { checkDateExist, getYesterday } from '../../helpers/room';
+import { getYesterday } from '../../helpers';
 import { IRequestExtended, IRoom } from '../../interfaces';
 import { roomService } from '../../services';
 
 export const isRoomOccupiedMiddleware = async (req: IRequestExtended, res: Response, next: NextFunction) => {
-    const {label, city, start_at, close_at} = req.body as IRoom;
+    const {label, ip_address, start_at, close_at} = req.body as IRoom;
+
     const yesterday = getYesterday(start_at);
 
     const roomByParams = {
         label,
-        city,
+        ip_address,
         start_at: {
             $lte: new Date(close_at),
             $gte: yesterday
@@ -20,9 +21,8 @@ export const isRoomOccupiedMiddleware = async (req: IRequestExtended, res: Respo
     };
 
     const rooms = await roomService.findRooms(roomByParams) as IRoom[];
-    const status = rooms.length && checkDateExist(rooms, start_at, close_at, HardWordsEnum.falsyValue) || false;
 
-    if (status) {
+    if (rooms.length) {
         return next(new ErrorHandler(
             ResponseStatusCodesEnum.BAD_REQUEST,
             errors.BAD_REQUEST_ROOM_ALREADY_EXIST.message,

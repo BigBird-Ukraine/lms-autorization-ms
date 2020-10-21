@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { ObjectID } from 'mongodb';
 
-import { ResponseStatusCodesEnum, RouterActionsEnum } from '../../constants';
+import { HardWordsEnum, ResponseStatusCodesEnum, RouterActionsEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended, IRoom } from '../../interfaces';
 import { roomService } from '../../services';
@@ -25,7 +25,7 @@ export function isRoomPresentMiddlewareWrapper(status: string | null) {
                     room = await roomService.findRoomsWithBookingTable(room_id);
                     break;
                 case RouterActionsEnum.FIND_ROOM_WITH_IP_ADDRESS:
-                    room = await roomService.findRooms({ _id: room_id}, null, 'ip_address');
+                    room = await roomService.findRooms({ _id: room_id}, null, HardWordsEnum.IP_ADDRESS);
                     break;
                 default:
                     room = await roomService.findRooms({_id: room_id});
@@ -39,6 +39,7 @@ export function isRoomPresentMiddlewareWrapper(status: string | null) {
             }
 
             req.room = room[0];
+
             next();
         } catch (e) {
             next(e);

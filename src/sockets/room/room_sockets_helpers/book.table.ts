@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 
+import { SocketEventsEnum } from '../../../constants/enums';
 import { roomController, userController } from '../../../controllers';
 import { errorHandlerSockets } from '../../../errors';
 import { socketsMiddlewaresManager } from '../../../helpers';
@@ -28,6 +29,6 @@ export const bookTable = async (socket: Socket, event: ITableEvent) => {
             surname: bookedUser?.surname
         } as Partial<IUser>;
 
-        io.in(event.room).emit('book_table', event);
+        io.in(event.room).emit(SocketEventsEnum.BOOK_TABLE, event);
     }
 };

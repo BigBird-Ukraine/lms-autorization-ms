@@ -14,7 +14,6 @@ export const isBookTableDataValid = async (socket: Socket, events: ITableEvent) 
             status: ResponseStatusCodesEnum.BAD_REQUEST,
             code: errors.BAD_REQUEST_WRONG_PARAMS.code,
             message: errors.BAD_REQUEST_WRONG_PARAMS.message};
-
     }
 
     return socket;

@@ -6,7 +6,7 @@ import { ErrorHandler, errors } from '../../errors';
 import { IBookUser, IRequestExtended, IRoom } from '../../interfaces';
 
 export function isDateValidWrapper(type: string) {
-    return async (req: IRequestExtended, res: Response, next: NextFunction) => {
+    return (req: IRequestExtended, res: Response, next: NextFunction) => {
         const {start_at, close_at, _id} = req.body as Partial<IRoom>;
         const room = req.room as IRoom;
 

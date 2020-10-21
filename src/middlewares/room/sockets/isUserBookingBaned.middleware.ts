@@ -8,7 +8,7 @@ import { ITableEvent, IUser } from '../../../interfaces';
 export const isUserBookingBaned = async (socket: Socket, events: ITableEvent) => {
     const {user} = socket.handshake.query;
 
-    const currentUser = await User.findById(user?._id) as any;
+    const currentUser = await User.findById(user?._id) as IUser;
     const {booking_ban_status} = currentUser as IUser;
 
     if (booking_ban_status.status === UserStatusEnum.BOOKING_BAN) {
