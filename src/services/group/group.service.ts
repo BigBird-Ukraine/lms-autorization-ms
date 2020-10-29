@@ -59,7 +59,7 @@ class GroupService {
   getAllGroupsLabel(): Promise<Partial<IGroup[]>> {
     const GroupModel = model<GroupType>(DatabaseTablesEnum.GROUP_COLLECTION_NAME, GroupSchema);
 
-    return GroupModel.find().select({label: 1, _id: 0}) as any;
+    return GroupModel.find().select({label: 1}) as any;
   }
 
   async deleteVisitLog(group_id: string, attendance_id: string) {

@@ -7,7 +7,9 @@ import * as RateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import * as mongoose from 'mongoose';
 import * as morgan from 'morgan';
+
 import { resolve as resolvePath } from 'path';
+import { connection } from './node-cron';
 
 dotEnv.config();
 
@@ -27,7 +29,6 @@ class App {
     (global as any).appRoot = resolvePath(__dirname, '../');
 
     this.app.use(morgan('dev'));
-    // @ts-ignore
     this.app.use(helmet());
     this.app.use(cors());
     this.app.use(serverRequestLimiter);
@@ -37,13 +38,14 @@ class App {
     this.app.use(express.static(resolvePath((global as any).appRoot, 'static')));
     this.mountRoutes();
     this.setupDB();
+    this.mountCronJobs();
 
     this.app.use(this.logErrors);
     this.app.use(this.clientErrorHandler);
     this.app.use(this.customErrorHandler);
   }
 
-  private setupDB(): void {
+  private setupDB = (): void => {
     mongoose.connect(encodeURI(config.MONGO_URL), {useNewUrlParser: true, useUnifiedTopology: true});
     mongoose.set('useFindAndModify', false);
     const db = mongoose.connection;
@@ -55,7 +57,11 @@ class App {
     this.app.use('*', notFoundRouter);
   }
 
-  private logErrors(err: any, req: Request, res: Response, next: NextFunction): void {
+  private mountCronJobs(): void {
+      connection();
+  }
+
+  private logErrors = (err: any, req: Request, res: Response, next: NextFunction): void => {
     logger.error({
       method: req.method,
       url: req.path,
@@ -63,10 +69,11 @@ class App {
       time: new Date(),
       massage: err.message
     });
+
     next(err);
   }
 
-  private customErrorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
+  private customErrorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
     if (err.parent) {
       err.message = err.parent.sqlMessage;
     }
@@ -82,7 +89,7 @@ class App {
       });
   }
 
-  private clientErrorHandler(err: any, req: Request, res: Response, next: NextFunction): void {
+  private clientErrorHandler = (err: any, req: Request, res: Response, next: NextFunction): void => {
     if (req.xhr) {
       res
         .status(ResponseStatusCodesEnum.SERVER_ERROR)

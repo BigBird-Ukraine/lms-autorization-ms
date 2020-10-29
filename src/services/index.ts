@@ -8,3 +8,6 @@ export * from './module';
 export * from './group';
 export * from './comment';
 export * from './mail';
+export * from './room';
+export * from './city';
+export * from './ip';

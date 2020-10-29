@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { verify, VerifyErrors } from 'jsonwebtoken';
 
 import { config } from '../../configs';
-import { ResponseStatusCodesEnum } from '../../constants';
+import { ResponseStatusCodesEnum, StatusesEnum } from '../../constants';
 import { ErrorHandler, errors } from '../../errors';
 import { IRequestExtended } from '../../interfaces';
 import { oauthService } from '../../services';
@@ -11,12 +11,12 @@ export const checkAccessTokenMiddleware = async (req: IRequestExtended, res: Res
     try {
         const authToken = req.get('Authorization') as string;
         if (!authToken) {
-            return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, 'No token'));
+            return next(new ErrorHandler(ResponseStatusCodesEnum.BAD_REQUEST, StatusesEnum.NO_TOKEN));
         }
 
         verify(authToken, config.JWT_SECRET, (err: VerifyErrors) => {
             if (err) {
-                return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, 'Invalid token'));
+                return next(new ErrorHandler(ResponseStatusCodesEnum.UNAUTHORIZED, StatusesEnum.INVALID_TOKEN));
             }
         });
 

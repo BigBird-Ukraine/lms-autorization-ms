@@ -6,6 +6,7 @@ export interface ITestResultModel {
   passed_lesson_id?: string;
   passed_questions_id?: string[];
   result: number;
+  max_mark: number;
   passed_at?: Date;
 }
 
@@ -14,11 +15,13 @@ export interface ITestResultFullModel {
   passed_lesson_id?: IPassedLessonFull;
   passed_questions_id?: IPassedQuestion[];
   result: number;
+  max_mark: number;
   passed_at?: Date;
 }
 
 export interface IPassedTest {
   lesson_id: string;
   result: number;
+  max_mark: number;
   questions_id: string[];
 }

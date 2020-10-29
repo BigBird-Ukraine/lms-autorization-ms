@@ -36,7 +36,10 @@ class UserController {
   }
 
   getUserInfoByToken(req: IRequestExtended, res: Response, next: NextFunction) {
-    const {_id, email, phone_number, name, surname, role_id, status_id, photo_path, groups_id, population_point} = req.user as IUser;
+    const {
+      _id, email, phone_number, name, surname, role_id, status_id, photo_path,
+      groups_id, population_point, booking_ban_status
+    } = req.user as IUser;
 
     const user: IUserSubjectModel = {
       _id,
@@ -48,7 +51,8 @@ class UserController {
       status_id,
       photo_path,
       groups_id,
-      population_point
+      population_point,
+      booking_ban_status
     };
 
     res.json(user);
@@ -83,7 +87,12 @@ class UserController {
     const {_id} = req.user as IUser;
     const pt = req.passed_test as IPassedTest;
 
-    await userService.addPassedTest(_id, {passed_lesson_id: req.passed_lesson_id, result: pt.result});
+    await userService.addPassedTest(_id,
+      {
+        passed_lesson_id: req.passed_lesson_id,
+        result: pt.result,
+        max_mark: pt.max_mark
+      });
 
     res.json(pt.result);
   }
@@ -133,6 +142,11 @@ class UserController {
 
     res.json(ResponseStatusCodesEnum.CREATED);
   }
+
+  // SocketIO
+    async getUserByParams(params: Partial<IUser>) {
+        return userService.getUserByParams(params);
+    }
 }
 
 export const userController = new UserController();

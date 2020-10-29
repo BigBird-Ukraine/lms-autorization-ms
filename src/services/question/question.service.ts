@@ -9,7 +9,7 @@ import {
   QuestionSchema,
   QuestionType
 } from '../../database';
-import { IQuestion } from '../../interfaces';
+import { IAnswers, IQuestion } from '../../interfaces';
 import { IPassedQuestion } from '../../interfaces/passed_question.model';
 
 class QuestionService {
@@ -26,13 +26,13 @@ class QuestionService {
       .findByIdAndUpdate(question._id, question) as any;
   }
 
-  getQuestions(limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<IQuestion[]> {
+  getQuestions(statusAnswers: number, limit: number, offset: number, sort: string, order?: string, filter?: any): Promise<IAnswers[]> {
     const QuestionModel = model<QuestionType>(DatabaseTablesEnum.QUESTION_COLLECTION_NAME, QuestionSchema);
     order = order === 'ASC' ? 'ASC' : 'DESC';
 
     return QuestionModel
       .find(filter)
-      .select({'answers.correct': 0})
+      .select({'answers.correct': statusAnswers})
       .limit(limit)
       .skip(offset)
       .sort({

@@ -5,6 +5,11 @@ export enum StatusesEnum {
     CANT_UPLOAD_MORE_THAN_ONE_USER_PHOTO = `You can't upload more than one userPhotos`,
     CANT_SORT_BY_THIS_PARAM = 'You can\'t sort by this parameter',
     QUESTION_ALREADY_EXIST = 'This question already exist',
+    ROOM_ALREADY_EXIST = 'This room already exist',
+    INVALID_DATE = 'Invalid date',
+    TABLE_ALREADY_EXIST = 'This table already exist',
+    USER_ALREADY_HAS_PLACE = 'User already has place',
+    INVALID_LOCATION = 'Invalid location',
 
     // 401
     WRONG_EMAIL_OR_PASSWORD = 'Wrong email or password',
@@ -21,6 +26,10 @@ export enum StatusesEnum {
     NOT_YOUR_LESSON = 'Its not your lesson',
     CONTROLLER_ERROR = 'Controller Error',
     NOT_YOUR_COMMENT = 'Its not your comment',
+    NOT_YOUR_ROOM = 'Its not your room',
+    ROOM_HAS_USERS = 'This room has users, you cant update date',
+    NOT_YOUR_PLACE = 'Its not your place',
+    USER_BOOKING_IS_BLOCKED = 'User booking is blocked',
 
     // 404
     USER_NOT_FOUND = 'User is not found',
@@ -30,5 +39,6 @@ export enum StatusesEnum {
     MODULE_NOT_FOUND = 'Module is not found',
     GROUP_NOT_FOUND = 'Group is not found',
     API_ROUTE_NOT_FOUND = 'API route not found',
-    VISIT_LOG_NOT_FOUND = 'Visit log nog found'
+    VISIT_LOG_NOT_FOUND = 'Visit log nog found',
+    ROOM_NOT_FOUND = 'Room not found'
 }

@@ -1,9 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { GoogleConfigEnum, ResponseStatusCodesEnum } from '../../constants';
-import { calculationPageCount, googleDeleter, lessonSortingAttributes, questionCorrectAnswersCount } from '../../helpers';
-import { checkDeletedObjects } from '../../helpers/check-deleted-objects.helper';
-import { googleUploader } from '../../helpers/google-uploader.helper';
+import {
+  calculationPageCount,
+  checkDeletedObjects,
+  googleDeleter,
+  googleUploader,
+  lessonSortingAttributes,
+  questionCorrectAnswersCount
+} from '../../helpers';
 import { ILesson, IRequestExtended, IUser } from '../../interfaces';
 import { commentService, lessonService, questionService } from '../../services';
 
@@ -111,7 +116,8 @@ class LessonController {
     const {lesson_id} = req.params;
 
     const {questions_id} = await lessonService.getQuestionsForTestByLessonId(lesson_id, 0);
-    const maxMark = await questionCorrectAnswersCount(lesson_id);
+    const questions = await lessonService.getQuestionsForTestByLessonId(lesson_id, 1);
+    const maxMark = await questionCorrectAnswersCount(questions.questions_id);
 
     res.json({data: {questions: [...questions_id], maxMark: maxMark * 10}});
   }

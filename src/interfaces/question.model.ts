@@ -16,10 +16,8 @@ export interface IQuestion {
 }
 
 export interface IAnswers {
-  questions_id: [{
-    _id: string,
+    _id: string;
     answers: IAnswer[];
-  }];
 }
 
 export interface IAnswer {

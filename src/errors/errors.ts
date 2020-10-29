@@ -42,9 +42,34 @@ export const errors = {
         message: `Lesson can contain only ${config.MAX_QUESTION_LIMIT} questions`
     },
 
+    BAD_REQUEST_ROOM_ALREADY_EXIST: {
+        code: 4008,
+        message: StatusesEnum.ROOM_ALREADY_EXIST
+    },
+
+    BAD_REQUEST_INVALID_DATE: {
+        code: 4009,
+        message: StatusesEnum.INVALID_DATE
+    },
+
+    BAD_REQUEST_TABLE_ALREADY_EXIST: {
+        code: 4010,
+        message: StatusesEnum.TABLE_ALREADY_EXIST
+    },
+
+    BAD_REQUEST_USER_ALREADY_HAS_PLACE: {
+        code: 4011,
+        message: StatusesEnum.USER_ALREADY_HAS_PLACE
+    },
+
+    BAD_REQUEST_INVALID_LOCATION: {
+        code: 4012,
+        message: StatusesEnum.INVALID_LOCATION
+    },
+
     // 401
     UNAUTHORIZED_WRONG_CREDENTIALS: {
-        code: 4011,
+        code: 4030,
         message: StatusesEnum.WRONG_EMAIL_OR_PASSWORD
     },
     // 403
@@ -75,6 +100,26 @@ export const errors = {
     FORBIDDEN_USER_PENDING: {
         message: StatusesEnum.USER_IS_PENDING,
         code: 4035
+    },
+
+    FORBIDDEN_NOT_YOUR_ROOM: {
+        message: StatusesEnum.NOT_YOUR_ROOM,
+        code: 4036
+    },
+
+    FORBIDDEN_ROOM_HAS_USERS: {
+        message: StatusesEnum.ROOM_HAS_USERS,
+        code: 4036
+    },
+
+    FORBIDDEN_NOT_YOUR_PLACE: {
+        message: StatusesEnum.NOT_YOUR_PLACE,
+        code: 4037
+    },
+
+    FORBIDDEN_USER_BOOKING: {
+        message: StatusesEnum.USER_BOOKING_IS_BLOCKED,
+        code: 4038
     },
 
     // 404
@@ -112,8 +157,14 @@ export const errors = {
         message: StatusesEnum.GROUP_NOT_FOUND,
         code: 4046
     },
+
     NOT_FOUND_VISIT_LOG_NOT_PRESENT:  {
         message: StatusesEnum.VISIT_LOG_NOT_FOUND,
         code: 4047
+    },
+
+    NOT_FOUND_ROOM_NOT_PRESENT: {
+        message: StatusesEnum.ROOM_NOT_FOUND,
+        code: 4048
     }
 };
