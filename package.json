@@ -29,7 +29,7 @@
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
     "mime-types": "latest",
-    "moment": "^2.28.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.9.28",
     "node-cron": "^2.0.3",
     "nodemailer": "latest",
